@@ -1,0 +1,14 @@
+.vscode/
+node_modules/
+npm-debug.log
+dist/
+test/
+.env
+# Linters
+.eslintrc.js
+.eslintignore
+
+.gitignore
+
+# Readme
+README.md

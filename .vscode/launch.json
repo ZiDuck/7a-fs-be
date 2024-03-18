@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Nest Debug",
+            "runtimeExecutable": "C:\\Users\\ADMIN\\AppData\\Roaming\\fnm\\node-versions\\v18.19.1\\installation\\npm",
+            "runtimeArgs": ["run", "start:debug", "--", "--inspect-brk"],
+            "console": "integratedTerminal",
+            "restart": true,
+            "protocol": "auto",
+            "port": 9229,
+            "autoAttachChildProcesses": true
+        },
+        {
+            "address": "127.0.0.1",
+            "localRoot": "${workspaceFolder}/dist",
+            "name": "Attach to Remote",
+            "port": 9221,
+            "remoteRoot": "/app/dist",
+            "request": "attach",
+            "skipFiles": ["<node_internals>/**"],
+            "type": "node",
+            "sourceMapPathOverrides": {
+                "/app/dist/": "${workspaceFolder}/dist/"
+            },
+            "autoAttachChildProcesses": true
+        }
+    ]
+}

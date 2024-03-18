@@ -1,0 +1,72 @@
+version: '3.8'
+services:
+    7a-fs-api-prod:
+        container_name: 7a-fs-api-prod
+        image: qkitsoftware/7a-fs-api:${IMAGE_PROD_TAG}
+        restart: always
+        networks:
+            - app-network
+            - web
+        ports:
+            - 8510:${PORT}
+            - 8511:9229
+        depends_on:
+            - postgres-fs-prod
+        environment:
+            # POSTGRES
+            - POSTGRES_HOST=postgres-fs-prod
+            - POSTGRES_USER=${POSTGRES_USER}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+            - POSTGRES_DATABASE=${POSTGRES_DATABASE}
+            - POSTGRES_PORT=${POSTGRES_PORT}
+            - POSTGRES_SCHEMA=${POSTGRES_SCHEMA}
+            - PORT=${PORT}
+            - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
+            - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+            - ACCESS_TOKEN_EXPIRE_TIME=${ACCESS_TOKEN_EXPIRE_TIME}
+            - REFRESH_TOKEN_EXPIRE_TIME=${REFRESH_TOKEN_EXPIRE_TIME}
+
+            # mail
+            - MAIL_HOST=${MAIL_HOST}
+            - MAIL_PORT=${MAIL_PORT}
+            - MAIL_FROM=${MAIL_FROM}
+            - MAIL_USER=${MAIL_USER}
+            - MAIL_PASSWORD=${MAIL_PASSWORD}
+
+        labels:
+            - traefik.enable=true
+            - traefik.docker.network=web
+            - traefik.http.routers.fs-api-http.rule=Host(`fsapi.qkit.vn`) || (Host(`fsapi.qkit.vn`) && PathPrefix(`/docs`))
+            - traefik.http.routers.fs-api-http.entrypoints=web
+            #- traefik.http.routers.qet-api-http.priority=5
+
+            - traefik.http.routers.fs-api-https.rule=(Host(`fsapi.qkit.vn`)) || (Host(`fsapi.qkit.vn`) && PathPrefix(`/docs`))
+            - traefik.http.routers.fs-api-https.entrypoints=websecure
+            - traefik.http.routers.fs-api-https.service=fs-api
+            - traefik.http.services.fs-api.loadbalancer.server.port=${PORT}
+            #- traefik.http.routers.qet-api-https.priority=5
+
+    postgres-fs-prod:
+        container_name: postgres-fs-prod
+        image: postgres:15
+        restart: always
+        environment:
+            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+            POSTGRES_USER: ${POSTGRES_USER}
+            POSTGRES_DB: ${POSTGRES_DATABASE}
+        ports:
+            - 5411:5432
+        volumes:
+            - fs-data-prod:/var/lib/postgresql/data
+        networks:
+            - app-network
+
+volumes:
+    fs-data-prod:
+        name: fs-data
+
+networks:
+    app-network:
+        name: app-network
+    web:
+        external: true

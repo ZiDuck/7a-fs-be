@@ -1,0 +1,2 @@
+#!/bin/bash
+yarn migration:create "src/persistence/migrations/$1"

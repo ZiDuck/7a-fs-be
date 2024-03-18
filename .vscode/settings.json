@@ -1,0 +1,4 @@
+{
+    "typescript.preferences.importModuleSpecifier": "relative",
+    "cSpell.words": ["dtos", "Mqqt", "websockets"]
+}
