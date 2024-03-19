@@ -25,11 +25,14 @@
         "migration:revert": "yarn typeorm:cli -d src/migration.config.ts migration:revert",
         "seed:config": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js config -r src -n ormconfig.ts",
         "seed:run": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js seed -r src -n ormconfig.ts",
+        "seed:run:prod": "ts-node -r tsconfig-paths/register ./node_modules/typeorm-seeding/dist/cli.js seed -r dist -n ormconfig.js",
         "db:refresh": "yarn typeorm:cli schema:drop && yarn migration:run && yarn seed:run",
         "docker:stag:build": "docker build -t qkitsoftware/7a-fs-api:latest .",
         "docker:stag:push": "docker push qkitsoftware/7a-fs-api:latest",
         "docker:prod:build": "docker build -t qkitsoftware/7a-fs-api:latest .",
-        "docker:prod:push": "docker push qkitsoftware/7a-fs-api:latest"
+        "docker:prod:push": "docker push qkitsoftware/7a-fs-api:latest",
+        "docker:prod:seed": "docker exec -it 7a-fs-api-prod yarn seed:run:prod",
+        "docker:stag:seed": "docker exec -it 7a-fs-api-stag yarn seed:run:prod"
     },
     "dependencies": {
         "@nestjs-modules/mailer": "1.9.1",
@@ -52,7 +55,9 @@
         "reflect-metadata": "^0.2.0",
         "rxjs": "^7.8.1",
         "typeorm": "^0.3.20",
-        "typeorm-transactional": "^0.5.0"
+        "typeorm-seeding": "^1.6.1",
+        "typeorm-transactional": "^0.5.0",
+        "uuid": "^9.0.1"
     },
     "devDependencies": {
         "@nestjs/cli": "^10.0.0",

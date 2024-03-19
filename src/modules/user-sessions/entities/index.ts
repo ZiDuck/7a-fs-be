@@ -1,4 +1,4 @@
 import { UserSession } from './user-session.entity';
 
-const refreshTokenEntities = [UserSession];
-export default refreshTokenEntities;
+const userSessionEntities = [UserSession];
+export default userSessionEntities;
