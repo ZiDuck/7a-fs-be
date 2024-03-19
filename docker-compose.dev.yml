@@ -17,7 +17,7 @@ services:
 
 volumes:
     fs-data-dev:
-        name: fs-data
+        name: fs-data-dev
 networks:
     app-network:
         name: app-network

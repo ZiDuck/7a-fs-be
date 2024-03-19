@@ -63,7 +63,7 @@ services:
 
 volumes:
     fs-data-prod:
-        name: fs-data
+        name: fs-data-prod
 
 networks:
     app-network:

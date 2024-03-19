@@ -49,7 +49,7 @@ services:
 
 volumes:
     fs-data-stag:
-        name: fs-data
+        name: fs-data-stag
 networks:
     app-network:
         name: app-network
