@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 import { PasswordService } from '../auth/password.service';
 import { RolesService } from '../roles/roles.service';
@@ -54,17 +54,25 @@ export class UsersService {
         return results;
     }
 
-    async findAllAdminAndUserRoles(): Promise<User[]> {
-        const results = await this.usersRepository.find({
-            relations: { role: true },
-            where: { role: { value: In[(RoleType.ADMIN, RoleType.USER)] } },
-        });
+    // async findAllAdminAndUserRoles(): Promise<User[]> {
+    //     const results = await this.usersRepository.find({
+    //         relations: { role: true },
+    //         where: { role: { value: In[(RoleType.ADMIN, RoleType.USER)] } },
+    //     });
 
-        return results;
+    //     return results;
+    // }
+
+    async findOneDeleted(id: string): Promise<User> {
+        const result = await this.usersRepository.findOne({ where: { id: id }, relations: { role: true }, withDeleted: true });
+
+        if (!result) throw new UserNotExistException(id);
+
+        return result;
     }
 
     async findOne(id: string): Promise<User> {
-        const result = await this.usersRepository.findOne({ where: { id: id }, relations: { role: true }, withDeleted: true });
+        const result = await this.usersRepository.findOne({ where: { id: id }, relations: { role: true } });
 
         if (!result) throw new UserNotExistException(id);
 
@@ -140,6 +148,18 @@ export class UsersService {
         const hashedPassword: string = await this.passwordService.hashPassword(newPassword);
 
         await this.usersRepository.update({ email }, { hashedPassword });
+
+        return true;
+    }
+
+    async decentralize(userId: string, roleId: string) {
+        const user = await this.findOne(userId);
+
+        const role = await this.rolesService.findById(roleId);
+
+        user.role = role;
+
+        await this.usersRepository.save(user);
 
         return true;
     }
