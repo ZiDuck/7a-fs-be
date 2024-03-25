@@ -19,6 +19,7 @@ import { ResetPasswordInput } from './dto/reset-password.input';
 import { Errors } from '../../common/errors';
 import { ClsService } from 'nestjs-cls';
 import { PassWordIncorrectException } from '../../common/exceptions/business.exception';
+import { RoleType } from '../../cores/constants';
 
 @Injectable()
 export class AuthService {
@@ -53,6 +54,8 @@ export class AuthService {
         const user = await this.validateUser(data.email, data.password);
 
         if (user) {
+            if (user.role.value === RoleType.GUEST) throw new ForbiddenException(`The user does not have permission to perform the login function`);
+
             const tokenSession = await this.generateToken({ sub: user.id, email: user.email });
 
             await this.userService.createRefreshToken(user.id, tokenSession.token.refreshToken, tokenSession.sessionId);
@@ -119,8 +122,6 @@ export class AuthService {
         if (data.email && data.currentPassword) {
             const user = await this.userService.findOneByEmail(data.email);
 
-            this.cls.set('UserUpdateId', user.id);
-
             const isValidPassword = await this.passwordService.validatePassword(user.hashedPassword, data.currentPassword);
 
             if (isValidPassword) {
@@ -134,8 +135,6 @@ export class AuthService {
             });
 
             const user = await this.userService.findOneByEmail(forgottenPassword.email);
-
-            this.cls.set('UserUpdateId', user.id);
 
             if (forgottenPassword && forgottenPassword.expiredDate && forgottenPassword.expiredDate > new Date()) {
                 isNewPasswordChanged = await this.userService.setPassword(forgottenPassword.email, data.newPassword);

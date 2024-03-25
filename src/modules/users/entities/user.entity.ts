@@ -1,7 +1,7 @@
 import { Entity, Column, DeleteDateColumn, OneToMany, JoinColumn, ManyToOne, Relation, OneToOne } from 'typeorm';
 import { Role } from '../../roles/entities/role.entity';
 import { AppBaseEntity } from '../../../common/entities/base.entity';
-import { UserSession } from 'src/modules/user-sessions/entities/user-session.entity';
+import { UserSession } from '../../user-sessions/entities/user-session.entity';
 
 @Entity()
 export class User extends AppBaseEntity {

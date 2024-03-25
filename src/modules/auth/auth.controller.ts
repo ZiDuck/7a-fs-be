@@ -43,7 +43,6 @@ export class AuthController {
     @Post('login')
     async login(@Body() data: LoginInput, @Req() req: any): Promise<Token | null> {
         const result = await this.authService.login(data);
-        this.cls.set('userId', result.userId);
         return result.token;
     }
 

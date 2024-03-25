@@ -8,6 +8,11 @@ import { RolesModule } from './modules/roles/roles.module';
 import { UserSessionsModule } from './modules/user-sessions/user-sessions.module';
 import { EmailModule } from './modules/email/email.module';
 import { ClsModule } from 'nestjs-cls';
+import { CloudinaryModule } from './modules/cloudinary/cloudinary.module';
+import { CloudinaryService } from './modules/cloudinary/cloudinary.service';
+import { UploadFileModule } from './modules/upload-file/upload-file.module';
+import { ImagesModule } from './modules/images/images.module';
+import { ValidatorModule } from './common/validator/validator.module';
 
 @Module({
     imports: [
@@ -25,8 +30,12 @@ import { ClsModule } from 'nestjs-cls';
                 mount: true,
             },
         }),
+        CloudinaryModule,
+        UploadFileModule,
+        ImagesModule,
+        ValidatorModule,
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [AppService, CloudinaryService],
 })
 export class AppModule {}

@@ -1,0 +1,11 @@
+import { Entity, Column } from 'typeorm';
+import { AppBaseEntity } from '../../../common/entities/base.entity';
+
+@Entity()
+export class Image extends AppBaseEntity {
+    @Column('varchar', { length: 320, unique: true })
+    publicId: string;
+
+    @Column('varchar', { length: 1000 })
+    url: string;
+}

@@ -9,8 +9,8 @@ import { RoleNotExistException } from '../../common/exceptions/business.exceptio
 export class RolesService {
     constructor(@InjectRepository(Role) private roleRepository: Repository<Role>) {}
 
-    async create(createRoleDto: CreateRoleDto): Promise<Role> {
-        const result = this.roleRepository.create(createRoleDto);
+    async create(data: CreateRoleDto): Promise<Role> {
+        const result = this.roleRepository.create(data);
 
         await this.roleRepository.save(result);
 
