@@ -17,7 +17,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EmailService } from '../email/email.service';
 import { ResetPasswordInput } from './dto/reset-password.input';
 import { Errors } from '../../common/errors';
-import { ClsService } from 'nestjs-cls';
 import { PassWordIncorrectException } from '../../common/exceptions/business.exception';
 import { RoleType } from '../../cores/constants';
 
@@ -29,7 +28,6 @@ export class AuthService {
         private passwordService: PasswordService,
         private jwtService: JwtService,
         private emailService: EmailService,
-        private readonly cls: ClsService,
     ) {}
 
     async register(data: CreateUserInput): Promise<User> {
@@ -39,8 +37,6 @@ export class AuthService {
 
     async validateUser(email: string, password: string) {
         const result = await this.userService.findOneByEmail(email);
-
-        // this.cls.set('userId', result.id);
 
         const validPassword = await this.passwordService.validatePassword(result.hashedPassword, password);
 
@@ -117,7 +113,7 @@ export class AuthService {
     }
 
     async resetPassword(data: ResetPasswordInput) {
-        var isNewPasswordChanged: boolean = false;
+        let isNewPasswordChanged: boolean = false;
 
         if (data.email && data.currentPassword) {
             const user = await this.userService.findOneByEmail(data.email);

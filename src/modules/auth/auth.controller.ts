@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { plainToInstance } from 'class-transformer';
 import { LoginInput } from './dto/login.input';
 import { Token } from './dto/auth.output';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { CreateUserInput } from '../users/dto/create-user.input';
 import { GetUserDto } from '../users/dto/get-user.dto';
 import { AdminRole } from '../../cores/decorators/role.decorator';
@@ -29,7 +29,7 @@ export class AuthController {
     @AdminRole()
     @Transactional()
     @Post('register')
-    async signup(@CurrentUser() userId: string, @Body() data: CreateUserInput, @Req() req: any): Promise<GetUserDto> {
+    async signup(@CurrentUser() userId: string, @Body() data: CreateUserInput): Promise<GetUserDto> {
         try {
             const result = await this.userService.create(data);
             return plainToInstance(GetUserDto, result);
@@ -41,7 +41,7 @@ export class AuthController {
 
     @Transactional()
     @Post('login')
-    async login(@Body() data: LoginInput, @Req() req: any): Promise<Token | null> {
+    async login(@Body() data: LoginInput): Promise<Token | null> {
         const result = await this.authService.login(data);
         return result.token;
     }
@@ -83,7 +83,7 @@ export class AuthController {
 
     @Transactional()
     @Post('reset-password')
-    async resetPasswordToken(@Body() data: ResetPasswordInput, @Req() req: Request): Promise<void> {
+    async resetPasswordToken(@Body() data: ResetPasswordInput): Promise<void> {
         try {
             await this.authService.resetPassword(data);
         } catch (error) {
