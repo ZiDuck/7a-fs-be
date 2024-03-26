@@ -10,6 +10,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
 import { BusinessExceptionFilter, HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { UnauthorizedExceptionFilter } from './common/filters/unauthorized-exception.filter';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
     initializeTransactionalContext({
@@ -42,6 +43,7 @@ async function bootstrap() {
 
     // allows class-validator to use NestJS dependency injection container
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
+    app.useGlobalPipes(new ValidationPipe());
 
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('docs', app, document);

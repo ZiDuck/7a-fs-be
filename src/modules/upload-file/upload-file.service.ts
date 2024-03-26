@@ -1,21 +1,45 @@
 import { Injectable } from '@nestjs/common';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
-import { CloudinaryResponse } from '../cloudinary/cloudinary-response';
+import { CloudinaryApiResponse, CloudinaryErrorResponse } from '../cloudinary/dto/cloudinary-api-response.dto';
 import { CheckResourceExits } from '../cloudinary/dto/check-resource-exits.dto';
 import { ResourceType } from '../../cores/enums/resource-type.enum';
 import { ImagesService } from '../images/images.service';
+import { DeleteImageInput } from '../images/dto/delete-image.input';
+import { ImageUploadOutput } from './dto/image-upload.output';
 
 @Injectable()
 export class UploadFileService {
-    constructor(private cloudinaryService: CloudinaryService) {}
+    constructor(
+        private cloudinaryService: CloudinaryService,
+        private imageService: ImagesService,
+    ) {}
 
-    async uploadImage(file: Express.Multer.File, folder: string): Promise<CloudinaryResponse> {
+    async uploadImage(file: Express.Multer.File, folder: string): Promise<ImageUploadOutput> {
         const cloudinaryResult = await this.cloudinaryService.uploadFile(file, folder);
 
-        return cloudinaryResult;
+        if (!cloudinaryResult?.public_id) {
+            return {
+                imageCloudResponse: cloudinaryResult,
+                image: null,
+            };
+        }
+
+        const imageResult = await this.imageService.create({
+            publicId: cloudinaryResult.public_id,
+            url: cloudinaryResult.secure_url,
+        });
+
+        return {
+            image: {
+                id: imageResult.id,
+                publicId: cloudinaryResult.public_id,
+                url: cloudinaryResult.secure_url,
+            },
+            imageCloudResponse: cloudinaryResult,
+        };
     }
 
-    async uploadImages(file: Express.Multer.File, folder: string): Promise<CloudinaryResponse> {
+    async uploadImages(file: Express.Multer.File, folder: string): Promise<CloudinaryApiResponse | CloudinaryErrorResponse> {
         return await this.cloudinaryService.uploadFile(file, folder);
     }
 
@@ -23,7 +47,7 @@ export class UploadFileService {
         return this.cloudinaryService.checkResourcesExists(params);
     }
 
-    async deleteResources(publicIds: string[], resourceType: ResourceType): Promise<boolean> {
-        return this.cloudinaryService.deleteResources(publicIds, resourceType);
+    async deleteOneImage(data: DeleteImageInput) {
+        await this.imageService.deleteOne(data);
     }
 }

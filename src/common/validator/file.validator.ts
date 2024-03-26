@@ -19,7 +19,7 @@ export class FilePublicIdExistsConstraint implements ValidatorConstraintInterfac
     }
 
     defaultMessage(args: ValidationArguments): string {
-        return `${args.property} doesn't exist.`;
+        return `${args.property} "${args.value}" doesn't exist.`;
     }
 }
 

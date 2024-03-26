@@ -12,16 +12,4 @@ export class ImagesController {
     async getAllImages(): Promise<ImageOutput[]> {
         return await this.imageService.getAll();
     }
-
-    @Delete()
-    @Transactional()
-    async deleteImage(@Body() data: DeleteImageInput): Promise<void> {
-        try {
-            await this.imageService.deleteOneImage(data);
-        } catch (error) {
-            if (error instanceof HttpException) throw error;
-
-            throw new InternalServerErrorException(error.message);
-        }
-    }
 }

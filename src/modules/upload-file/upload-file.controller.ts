@@ -1,17 +1,49 @@
-import { Controller, Get, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, InternalServerErrorException, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UploadFileService } from './upload-file.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ArchiveFolder } from './enums/archive-folder.enum';
 import { env } from '../../cores/utils/env.util';
+import { Transactional } from 'typeorm-transactional';
+import { DeleteImageInput } from '../images/dto/delete-image.input';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiNoContentResponse, ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
+import { CloudinaryApiResponse, CloudinaryErrorResponse } from '../cloudinary/dto/cloudinary-api-response.dto';
+import { ApiOkResponseDto } from '../../cores/decorators/api-ok-dto.decorator';
+import { FileUploadDto } from './enums/file-upload.dto';
+import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
+import { ApiException } from '../../cores/decorators/api-exception.decorator';
+import { ImageUploadOutput } from './dto/image-upload.output';
+import { plainToClass } from 'class-transformer';
 
+@ApiTags('upload-file')
+@ApiBearerAuth()
+@UseRoleGuard()
 @Controller('upload-file')
 export class UploadFileController {
     constructor(private readonly uploadFileService: UploadFileService) {}
 
     @Post('image')
     @UseInterceptors(FileInterceptor('file'))
-    async uploadImage(@UploadedFile() file: Express.Multer.File) {
-        return this.uploadFileService.uploadImage(file, ArchiveFolder.images);
+    @ApiConsumes('multipart/form-data')
+    @ApiBody({
+        description: 'Image file to upload to cloudinary',
+        type: FileUploadDto,
+    })
+    @ApiOkResponse({
+        description: 'The image has been uploaded to cloudinary',
+        type: ImageUploadOutput,
+    })
+    @ApiException(() => InternalServerErrorException, {
+        description: 'Error when uploading image to cloudinary',
+    })
+    @Transactional()
+    async uploadImage(@UploadedFile() file: Express.Multer.File): Promise<ImageUploadOutput> {
+        try {
+            return plainToClass(ImageUploadOutput, await this.uploadFileService.uploadImage(file, ArchiveFolder.images));
+            // return await this.uploadFileService.uploadImage(file, ArchiveFolder.images);
+        } catch (error) {
+            throw new InternalServerErrorException(error.message);
+        }
     }
 
     @Post('images')
@@ -27,5 +59,18 @@ export class UploadFileController {
             publicId: 'public/feedback-system/images/brptjxsioywsffrcspov',
             resourceType: 'image',
         });
+    }
+
+    @Delete('image')
+    @ApiNoContentResponse({ description: 'Delete image successfully' })
+    @Transactional()
+    async deleteImage(@Body() data: DeleteImageInput): Promise<void> {
+        try {
+            await this.uploadFileService.deleteOneImage(data);
+        } catch (error) {
+            if (error instanceof HttpException) throw error;
+
+            throw new InternalServerErrorException(error.message);
+        }
     }
 }

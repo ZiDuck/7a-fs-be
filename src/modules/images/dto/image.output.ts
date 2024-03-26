@@ -1,12 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 
 export class ImageOutput {
     @ApiProperty()
     id: string;
 
-    @ApiProperty()
+    @Exclude()
     url: string;
 
-    @ApiProperty()
+    @Exclude()
     publicId: string;
 }

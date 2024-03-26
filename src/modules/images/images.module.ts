@@ -7,7 +7,7 @@ import { ImagesService } from './images.service';
 import { ValidatorModule } from '../../common/validator/validator.module';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Image]), CloudinaryModule, ValidatorModule],
+    imports: [TypeOrmModule.forFeature([Image]), CloudinaryModule],
     providers: [ImagesService],
     exports: [ImagesService],
     controllers: [ImagesController],

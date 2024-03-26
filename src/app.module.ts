@@ -36,6 +36,6 @@ import { ValidatorModule } from './common/validator/validator.module';
         ValidatorModule,
     ],
     controllers: [AppController],
-    providers: [AppService, CloudinaryService],
+    providers: [AppService],
 })
 export class AppModule {}

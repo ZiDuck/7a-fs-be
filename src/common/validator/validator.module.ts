@@ -7,6 +7,6 @@ import { CloudinaryModule } from '../../modules/cloudinary/cloudinary.module';
 @Module({
     imports: [DatabaseModule, CloudinaryModule],
     providers: [UuidExistsConstraint, FilePublicIdExistsConstraint],
-    exports: [],
+    exports: [UuidExistsConstraint, FilePublicIdExistsConstraint],
 })
 export class ValidatorModule {}
