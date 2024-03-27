@@ -32,6 +32,20 @@ services:
             - MAIL_USER=${MAIL_USER}
             - MAIL_PASSWORD=${MAIL_PASSWORD}
 
+            - FRONT_END_URL=http://localhost:3000
+
+            # Docker image version
+            - IMAGE_STAG_TAG=latest
+            - IMAGE_PROD_TAG=latest
+
+            # Cloudinary
+            - CLOUDINARY_CLOUDNAME=dtxtzn5ii
+            - CLOUDINARY_CLOUD_APIKEY=797967155671386
+            - CLOUDINARY_CLOUD_APISECRET=B7vCMeaP2OSRr6Q19jetHOYIQr8
+            - CLOUDINARY_CLOUD_PUBLICDIR=public/feedback-system
+            - CLOUDINARY_CLOUD_PRIVATEDIR=private/feedback-system
+
+            - MINUTE_WAIT_FORGOT_PASSWORD=1
     postgres-fs-stag:
         container_name: postgres-fs-stag
         image: postgres:15
