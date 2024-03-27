@@ -5,7 +5,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryApiResponse, CloudinaryErrorResponse } from './dto/cloudinary-api-response.dto';
 import { env } from '../../cores/utils/env.util';
 import { CheckResourceExits } from './dto/check-resource-exits.dto';
-const streamifier = require('streamifier');
+import streamifier from 'streamifier';
 
 export type ResourceType = 'image' | 'video' | 'raw';
 
