@@ -13,6 +13,10 @@ import { CloudinaryService } from './modules/cloudinary/cloudinary.service';
 import { UploadFileModule } from './modules/upload-file/upload-file.module';
 import { ImagesModule } from './modules/images/images.module';
 import { ValidatorModule } from './common/validator/validator.module';
+import { FormsModule } from './modules/forms/forms.module';
+import { FormQuestionsModule } from './modules/form-questions/form-questions.module';
+import { SingleQuestionsModule } from './modules/single-questions/single-questions.module';
+import { GroupQuestionsModule } from './modules/group-questions/group-questions.module';
 
 @Module({
     imports: [
@@ -34,6 +38,10 @@ import { ValidatorModule } from './common/validator/validator.module';
         UploadFileModule,
         ImagesModule,
         ValidatorModule,
+        FormsModule,
+        FormQuestionsModule,
+        SingleQuestionsModule,
+        GroupQuestionsModule,
     ],
     controllers: [AppController],
     providers: [AppService],
