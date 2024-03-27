@@ -17,10 +17,10 @@
             "autoAttachChildProcesses": true
         },
         {
-            "address": "127.0.0.1",
+            "address": "27.0.15.115",
             "localRoot": "${workspaceFolder}/dist",
             "name": "Attach to Remote",
-            "port": 9221,
+            "port": 8513,
             "remoteRoot": "/app/dist",
             "request": "attach",
             "skipFiles": ["<node_internals>/**"],

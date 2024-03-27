@@ -85,7 +85,8 @@ export class AuthService {
     async createForgottenPasswordToken(email: string, userId: string): Promise<ForgottenPassword> {
         const forgottenPassword = await this.forgottenPasswordRepository.findOne({ where: { email, userId } });
 
-        if (forgottenPassword && (new Date().getTime() - forgottenPassword.createdDate.getTime()) / 60000 < 15) throw Errors.TokenJustSend();
+        if (forgottenPassword && (new Date().getTime() - forgottenPassword.updatedDate.getTime()) / 60000 < env.Int('MINUTE_WAIT_FORGOT_PASSWORD', 1))
+            throw Errors.TokenJustSend(env.Int('MINUTE_WAIT_FORGOT_PASSWORD', 1));
 
         const data = {
             email,

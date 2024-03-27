@@ -12,8 +12,8 @@ import {
 } from '../exceptions/business.exception';
 
 export class Errors {
-    static TokenJustSend() {
-        return new TokenJustSendException();
+    static TokenJustSend(minuteWait: number) {
+        return new TokenJustSendException(minuteWait);
     }
     static TokenInvalid() {
         return new TokenInvalidException();
