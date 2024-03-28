@@ -1,7 +1,6 @@
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { env } from '../../cores/utils/env.util';
-import { join } from 'path';
 
 @Injectable()
 export class EmailService {
@@ -28,7 +27,7 @@ export class EmailService {
     }
 
     async sendUserForgotPassword(email: string, token: string) {
-        const resetPasswordLink = `${env.String('FRONT_END_URL')}/auth/resetpassword?token=${token}`;
+        const resetPasswordLink = `${env.String('FRONT_END_URL')}/reset-password?token=${token}`;
         await this.mailerService.sendMail({
             to: email,
             subject: 'Reset Password',
