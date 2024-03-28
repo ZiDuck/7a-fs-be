@@ -23,7 +23,7 @@ export class TokenJustSendException extends BusinessException {
             {
                 message: `Yêu cầu đặt lại mật khẩu đã được gửi. Vui lòng kiểm tra email của bạn. Nếu bạn không nhận được email, hãy chờ ít nhất ${minuteWait} phút trước khi thử gửi yêu cầu mới`,
             },
-            HttpStatus.BAD_REQUEST,
+            HttpStatus.TOO_MANY_REQUESTS,
         );
     }
 }
