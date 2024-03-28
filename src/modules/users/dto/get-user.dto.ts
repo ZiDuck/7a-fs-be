@@ -5,6 +5,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 @Expose()
 export class GetUserDto extends User {
+    @ApiProperty()
     id: string;
 
     @ApiProperty()

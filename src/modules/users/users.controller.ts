@@ -9,6 +9,8 @@ import {
     Param,
     ParseUUIDPipe,
     Patch,
+    Post,
+    Query,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { GetUserDto } from './dto/get-user.dto';
@@ -23,6 +25,9 @@ import { ClsService } from 'nestjs-cls';
 import { ApiOkResponseDto } from '../../cores/decorators/api-ok-dto.decorator';
 import { ApiException } from '../../cores/decorators/api-exception.decorator';
 import { DecentralizeInput } from './dto/decentralize.input';
+import { CreateUserInput } from './dto/create-user.input';
+import { PageQueryDto } from '../../common/dtos/page-query.dto';
+import { ApiPaginatedResponse } from '../../cores/decorators/api-paginated-dto.decorator';
 
 @ApiTags('users')
 @ApiBearerAuth()
@@ -40,11 +45,17 @@ export class UsersController {
         return plainToInstance(GetUserDto, await this.userService.findOne(userId));
     }
 
-    @ApiOkResponseDto(GetUserDto)
+    @ApiPaginatedResponse(GetUserDto)
     @AdminRole()
     @Get()
-    async findAll(): Promise<GetUserDto[]> {
-        return plainToInstance(GetUserDto, await this.userService.findAll());
+    async findAll(@Query() query: PageQueryDto) {
+        const result = await this.userService.findAll(query);
+
+        result.items = plainToInstance(GetUserDto, result.items);
+
+        return result;
+        // return { items: plainToInstance(GetUserDto, result.items), ...result };
+        // return plainToInstance(GetUserDto, await this.userService.findAll(query));
     }
 
     @ApiOkResponseDto(GetUserDto)
@@ -114,6 +125,20 @@ export class UsersController {
     async Decentralize(@Param('userId', ParseUUIDPipe) userId: string, @Body() role: DecentralizeInput): Promise<void> {
         try {
             await this.userService.decentralize(userId, role.roleId);
+        } catch (error) {
+            if (error instanceof HttpException) throw error;
+            throw new InternalServerErrorException(error.message);
+        }
+    }
+
+    @ApiBearerAuth()
+    @AdminRole()
+    @Transactional()
+    @Post()
+    async signup(@CurrentUser() userId: string, @Body() data: CreateUserInput): Promise<GetUserDto> {
+        try {
+            const result = await this.userService.create(data);
+            return plainToInstance(GetUserDto, result);
         } catch (error) {
             if (error instanceof HttpException) throw error;
             throw new InternalServerErrorException(error.message);

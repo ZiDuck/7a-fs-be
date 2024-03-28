@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { Role } from './entities/role.entity';
 import { RoleNotExistException } from '../../common/exceptions/business.exception';
+import { RoleType } from '../../cores/constants';
 
 @Injectable()
 export class RolesService {
@@ -27,6 +28,14 @@ export class RolesService {
 
     async findAll(): Promise<Role[]> {
         const results = await this.roleRepository.find();
+
+        return results;
+    }
+
+    async findUserRole() {
+        const results = await this.roleRepository.findOneBy({
+            value: RoleType.USER,
+        });
 
         return results;
     }

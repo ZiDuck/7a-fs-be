@@ -1,7 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Role } from '../../roles/entities/role.entity';
 import { IsEmail, IsNotEmpty, IsString, MinLength, MaxLength } from 'class-validator';
-import { IdExists } from '../../../common/validator/uuid.validator';
 
 export class CreateUserInput {
     @ApiProperty()
@@ -31,9 +29,4 @@ export class CreateUserInput {
     @ApiProperty()
     @IsString()
     address: string;
-
-    @ApiProperty()
-    @IsNotEmpty()
-    @IdExists(Role)
-    roleId: string;
 }

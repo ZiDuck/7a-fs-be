@@ -13,6 +13,9 @@ import { UpdateUserInput } from './dto/update-user.input';
 import { Role } from '../roles/entities/role.entity';
 import { EmailExistException, EmailNotExistException, UserNotExistException } from '../../common/exceptions/business.exception';
 import { RoleType } from '../../cores/constants';
+import { paginate } from '../../cores/utils/paginate.util';
+import { PageDto } from '../../common/dtos/page.dto';
+import { PageQueryDto } from '../../common/dtos/page-query.dto';
 
 @Injectable()
 export class UsersService {
@@ -23,26 +26,28 @@ export class UsersService {
         private userSessionService: UserSessionsService,
     ) {}
 
-    async create(data: CreateUserInput): Promise<User> {
-        let result = await this.usersRepository.findOneBy({ email: data.email });
+    async create(data: CreateUserInput): Promise<boolean> {
+        const userExists = await this.usersRepository.findOneBy({ email: data.email });
 
-        if (result) throw new EmailExistException(data.email);
+        if (userExists) throw new EmailExistException(data.email);
 
         const hashedPassword: string = await this.passwordService.hashPassword(data.password);
 
-        const role: Role = await this.rolesService.findById(data.roleId);
+        const role: Role = await this.rolesService.findUserRole();
 
-        result = this.usersRepository.create({ ...data, hashedPassword, role });
+        const user = this.usersRepository.create({ ...data, hashedPassword, role });
 
-        await this.usersRepository.save(result);
+        const result = await this.usersRepository.save(user);
 
-        return result;
+        return result ? true : false;
     }
 
-    async findAll(): Promise<User[]> {
-        const results = await this.usersRepository.find({ relations: { role: true } });
+    async findAll(query: PageQueryDto): Promise<PageDto<User>> {
+        const builder = this.usersRepository.createQueryBuilder('user').leftJoinAndSelect('user.role', 'role');
+        const result = await paginate(builder, query);
+        // const results = await this.usersRepository.find({ relations: { role: true } });
 
-        return results;
+        return result;
     }
 
     async findAllAdmin(): Promise<User[]> {

@@ -1,15 +1,10 @@
 import { BadRequestException, Body, Controller, HttpException, InternalServerErrorException, Post, Req } from '@nestjs/common';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { plainToInstance } from 'class-transformer';
 import { LoginInput } from './dto/login.input';
 import { Token } from './dto/auth.output';
 import { Request } from 'express';
-import { CreateUserInput } from '../users/dto/create-user.input';
-import { GetUserDto } from '../users/dto/get-user.dto';
-import { AdminRole } from '../../cores/decorators/role.decorator';
 import { UseAccessRefreshGuard } from '../../cores/decorators/use-access-refresh.decorator';
-import { CurrentUser } from '../../cores/decorators/user.decorator';
 import { ForgotPasswordInput } from './dto/forgot-password.input';
 import { ResetPasswordInput } from './dto/reset-password.input';
 import { UsersService } from '../users/users.service';
@@ -24,20 +19,6 @@ export class AuthController {
         private userService: UsersService,
         private readonly cls: ClsService,
     ) {}
-
-    @ApiBearerAuth()
-    @AdminRole()
-    @Transactional()
-    @Post('register')
-    async signup(@CurrentUser() userId: string, @Body() data: CreateUserInput): Promise<GetUserDto> {
-        try {
-            const result = await this.userService.create(data);
-            return plainToInstance(GetUserDto, result);
-        } catch (error) {
-            if (error instanceof HttpException) throw error;
-            throw new InternalServerErrorException(error.message);
-        }
-    }
 
     @Transactional()
     @Post('login')

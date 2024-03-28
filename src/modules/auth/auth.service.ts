@@ -8,8 +8,6 @@ import { LoginInput } from './dto/login.input';
 import { Token } from './dto/auth.output';
 import { Repository } from 'typeorm';
 import { env } from '../../cores/utils/env.util';
-import { CreateUserInput } from '../users/dto/create-user.input';
-import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { ForgotPasswordInput } from './dto/forgot-password.input';
 import { ForgottenPassword } from '../users/entities/forgotten-password.entity';
@@ -18,7 +16,6 @@ import { EmailService } from '../email/email.service';
 import { ResetPasswordInput } from './dto/reset-password.input';
 import { Errors } from '../../common/errors';
 import { PassWordIncorrectException } from '../../common/exceptions/business.exception';
-import { RoleType } from '../../cores/constants';
 
 @Injectable()
 export class AuthService {
@@ -29,11 +26,6 @@ export class AuthService {
         private jwtService: JwtService,
         private emailService: EmailService,
     ) {}
-
-    async register(data: CreateUserInput): Promise<User> {
-        const result = await this.userService.create(data);
-        return result;
-    }
 
     async validateUser(email: string, password: string) {
         const result = await this.userService.findOneByEmail(email);
@@ -50,8 +42,6 @@ export class AuthService {
         const user = await this.validateUser(data.email, data.password);
 
         if (user) {
-            if (user.role.value === RoleType.GUEST) throw new ForbiddenException(`The user does not have permission to perform the login function`);
-
             const tokenSession = await this.generateToken({ sub: user.id, email: user.email });
 
             await this.userService.createRefreshToken(user.id, tokenSession.token.refreshToken, tokenSession.sessionId);
@@ -131,7 +121,7 @@ export class AuthService {
                 where: { newPasswordToken: data.newPasswordToken },
             });
 
-            const user = await this.userService.findOneByEmail(forgottenPassword.email);
+            // const user = await this.userService.findOneByEmail(forgottenPassword.email);
 
             if (forgottenPassword && forgottenPassword.expiredDate && forgottenPassword.expiredDate > new Date()) {
                 isNewPasswordChanged = await this.userService.setPassword(forgottenPassword.email, data.newPassword);
