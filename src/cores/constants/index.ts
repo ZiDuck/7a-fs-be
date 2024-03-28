@@ -3,12 +3,11 @@ export const TEST = 'test';
 export const PRODUCTION = 'production';
 
 export enum RoleType {
-  ADMIN = 'ADMIN',
-  USER = 'USER',
-  GUEST = 'GUEST',
+    ADMIN = 'ADMIN',
+    USER = 'USER',
 }
 
 export enum OrderByDirection {
-  ASC = 'ASC',
-  DESC = 'DESC',
+    ASC = 'ASC',
+    DESC = 'DESC',
 }

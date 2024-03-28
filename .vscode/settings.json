@@ -1,4 +1,11 @@
 {
     "typescript.preferences.importModuleSpecifier": "relative",
-    "cSpell.words": ["dtos", "Mqqt", "websockets"]
+    "cSpell.words": [
+        "cloudinary",
+        "dtos",
+        "Mqqt",
+        "PUBLICDIR",
+        "streamifier",
+        "websockets"
+    ]
 }

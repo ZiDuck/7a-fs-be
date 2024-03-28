@@ -15,7 +15,6 @@ export default class InitialDatabaseSeed implements Seeder {
             const roleData = [
                 { value: RoleType.ADMIN, description: RoleType.ADMIN },
                 { value: RoleType.USER, description: RoleType.USER },
-                { value: RoleType.GUEST, description: RoleType.GUEST },
             ];
             await roleRepository.save(roleData);
             console.log('Roles have been seeded');
