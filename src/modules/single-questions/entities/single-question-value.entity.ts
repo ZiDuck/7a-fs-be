@@ -11,6 +11,9 @@ export class SingleQuestionValue extends AppBaseEntity {
     @Column('uuid', { nullable: true })
     imageId: Image['id'];
 
+    @Column('boolean', { nullable: true })
+    isCorrect: boolean;
+
     @Column('uuid')
     attributeId: SingleQuestionAttribute['id'];
 

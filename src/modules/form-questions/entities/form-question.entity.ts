@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, Relation } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, Relation } from 'typeorm';
 import { AppBaseEntity } from '../../../common/entities/base.entity';
 import { AttributeType } from '../enums/attribute-type.enum';
 import { Form } from '../../forms/entities/form.entity';
@@ -32,6 +32,6 @@ export class FormQuestion extends AppBaseEntity {
     @ManyToOne(() => Form, (form: Form) => form.formQuestions)
     form: Relation<Form>;
 
-    @OneToOne(() => SingleQuestionAttribute, (formQuestion: SingleQuestionAttribute) => formQuestion.question)
+    @OneToOne(() => SingleQuestionAttribute, (formQuestion: SingleQuestionAttribute) => formQuestion.question, { cascade: ['insert'] })
     formSingleAttribute?: Relation<SingleQuestionAttribute>;
 }

@@ -13,10 +13,10 @@ export class Form extends AppBaseEntity {
     @Column('varchar', { length: 2000, nullable: true })
     description: string;
 
-    @Column('timestamp')
+    @Column('timestamp', { nullable: true })
     startSurvey: Date;
 
-    @Column('enum', { enum: FormStatus })
+    @Column('enum', { enum: FormStatus, default: FormStatus.PENDING })
     status: FormStatus;
 
     @Column('boolean', { default: false })

@@ -29,7 +29,7 @@ export class UuidExistsConstraint implements ValidatorConstraintInterface {
         if (!isUUID(args.value)) {
             return `${args.value} is not a valid UUID`;
         }
-        return `Id ${args.value} does not exist in ${args.constraints[0]}`;
+        return `Id ${args.value} does not exist in table ${args.constraints[0].name}`;
     }
 }
 

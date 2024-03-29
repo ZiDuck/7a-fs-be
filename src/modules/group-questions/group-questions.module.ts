@@ -3,7 +3,7 @@ import { GroupQuestionsService } from './group-questions.service';
 import { GroupQuestionsController } from './group-questions.controller';
 
 @Module({
-  controllers: [GroupQuestionsController],
-  providers: [GroupQuestionsService],
+    controllers: [GroupQuestionsController],
+    providers: [GroupQuestionsService],
 })
 export class GroupQuestionsModule {}
