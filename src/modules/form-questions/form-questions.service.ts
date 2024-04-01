@@ -78,7 +78,7 @@ export class FormQuestionsService {
     async findOne(id: string) {
         const result = await this.formQuestionRepository.findOne({ where: { id } });
 
-        if (!result) throw new UserNotExistException(id);
+        // if (!result) throw new UserNotExistException(id);
 
         return result;
     }

@@ -4,6 +4,7 @@ import { AttributeType } from '../enums/attribute-type.enum';
 import { Form } from '../../forms/entities/form.entity';
 import { Image } from '../../images/entites/image.entity';
 import { SingleQuestionAttribute } from '../../single-questions/entities/single-question-attribute.entity';
+import { GroupQuestionAttribute } from '../../group-questions/entities/group-question-attribute.entity';
 
 @Entity()
 export class FormQuestion extends AppBaseEntity {
@@ -32,6 +33,12 @@ export class FormQuestion extends AppBaseEntity {
     @ManyToOne(() => Form, (form: Form) => form.formQuestions)
     form: Relation<Form>;
 
-    @OneToOne(() => SingleQuestionAttribute, (formQuestion: SingleQuestionAttribute) => formQuestion.question, { cascade: ['insert'] })
+    @OneToOne(() => SingleQuestionAttribute, (singleQuestion: SingleQuestionAttribute) => singleQuestion.question, {
+        cascade: ['insert'],
+        eager: true,
+    })
     formSingleAttribute?: Relation<SingleQuestionAttribute>;
+
+    @OneToOne(() => GroupQuestionAttribute, (groupQuestion: GroupQuestionAttribute) => groupQuestion.question, { cascade: ['insert'], eager: true })
+    formGroupAttribute?: Relation<GroupQuestionAttribute>;
 }

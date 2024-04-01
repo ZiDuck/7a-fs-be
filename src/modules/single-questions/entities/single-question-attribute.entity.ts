@@ -20,6 +20,7 @@ export class SingleQuestionAttribute extends AppBaseEntity {
 
     @OneToMany(() => SingleQuestionValue, (singleQuestionValue: SingleQuestionValue) => singleQuestionValue.singleQuestionAttribute, {
         cascade: ['insert'],
+        eager: true,
     })
     singleQuestionValues: Relation<SingleQuestionValue>[];
 }

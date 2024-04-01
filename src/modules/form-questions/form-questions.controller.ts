@@ -27,7 +27,7 @@ export class FormQuestionsController {
 
     @Get(':id')
     findOne(@Param('id') id: string) {
-        return this.formQuestionsService.findOne(+id);
+        return this.formQuestionsService.findOne(id);
     }
 
     @Patch(':id')
