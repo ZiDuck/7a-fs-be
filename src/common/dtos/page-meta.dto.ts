@@ -13,6 +13,9 @@ export abstract class PageMetaDto<T> {
     readonly take: number;
 
     @ApiProperty()
+    readonly itemCount: number;
+
+    @ApiProperty()
     readonly pageCount: number;
 
     @ApiProperty()
@@ -25,6 +28,7 @@ export abstract class PageMetaDto<T> {
         this.page = page;
         this.take = take;
         this.items = items;
+        this.itemCount = count;
         this.pageCount = Math.ceil(count / this.take);
         this.hasPreviousPage = this.page > 1;
         this.hasNextPage = this.page < this.pageCount;
