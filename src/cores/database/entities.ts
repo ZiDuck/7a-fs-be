@@ -6,6 +6,7 @@ import formQuestionEntities from '../../modules/form-questions/entities';
 import formEntities from '../../modules/forms/entities';
 import singleQuestionEntities from '../../modules/single-questions/entities';
 import groupQuestionEntities from '../../modules/group-questions/entities';
+import notificationEntities from '../../modules/notifications/entities';
 
 const entities = [
     ...roleEntities,
@@ -16,5 +17,6 @@ const entities = [
     ...formQuestionEntities,
     ...singleQuestionEntities,
     ...groupQuestionEntities,
+    ...notificationEntities,
 ];
 export default entities;
