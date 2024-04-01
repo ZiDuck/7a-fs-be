@@ -28,6 +28,9 @@ import { DecentralizeInput } from './dto/decentralize.input';
 import { CreateUserInput } from './dto/create-user.input';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { ApiPaginatedResponse } from '../../cores/decorators/api-paginated-dto.decorator';
+import { User } from './entities/user.entity';
+import { PageDto } from '../../common/dtos/page.dto';
+import { QueryDto } from '../../common/dtos/query.dto';
 
 @ApiTags('users')
 @ApiBearerAuth()
@@ -48,7 +51,7 @@ export class UsersController {
     @ApiPaginatedResponse(GetUserDto)
     @AdminRole()
     @Get()
-    async findAll(@Query() query: PageQueryDto) {
+    async findAll(@Query() query: PageQueryDto): Promise<PageDto<User>> {
         const result = await this.userService.findAll(query);
 
         result.items = plainToInstance(GetUserDto, result.items);
@@ -56,6 +59,30 @@ export class UsersController {
         return result;
         // return { items: plainToInstance(GetUserDto, result.items), ...result };
         // return plainToInstance(GetUserDto, await this.userService.findAll(query));
+    }
+
+    @ApiOkResponseDto(GetUserDto)
+    @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
+    @AdminRole()
+    @Get('/is-deleted')
+    async findAllDeleted(@Query() query: PageQueryDto): Promise<PageDto<User>> {
+        const result = await this.userService.findAllDeleted(query);
+
+        result.items = plainToInstance(GetUserDto, result.items);
+
+        return result;
+    }
+
+    @ApiOkResponseDto(GetUserDto)
+    @ApiException(() => BadRequestException, { description: 'The ${email} is not exists!' })
+    @AdminRole()
+    @Get('email')
+    async findOneByEmail(@Query() query: QueryDto): Promise<PageDto<User>> {
+        const result = await this.userService.findAllByEmail(query);
+
+        result.items = plainToInstance(GetUserDto, result.items);
+
+        return result;
     }
 
     @ApiOkResponseDto(GetUserDto)
@@ -72,14 +99,6 @@ export class UsersController {
     @Get(':id/is-deleted')
     async findOneDeleted(@Param('id', ParseUUIDPipe) id: string): Promise<GetUserDto> {
         return plainToInstance(GetUserDto, await this.userService.findOneDeleted(id));
-    }
-
-    @ApiOkResponseDto(GetUserDto)
-    @ApiException(() => BadRequestException, { description: 'The ${email} is not exists!' })
-    @AdminRole()
-    @Get(':id/email')
-    async findOneByEmail(@Param('email') email: string): Promise<GetUserDto> {
-        return plainToInstance(GetUserDto, await this.userService.findOneByEmail(email));
     }
 
     @AdminRole()

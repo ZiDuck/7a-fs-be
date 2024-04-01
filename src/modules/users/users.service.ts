@@ -16,6 +16,7 @@ import { RoleType } from '../../cores/constants';
 import { paginate } from '../../cores/utils/paginate.util';
 import { PageDto } from '../../common/dtos/page.dto';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
+import { QueryDto } from '../../common/dtos/query.dto';
 
 @Injectable()
 export class UsersService {
@@ -76,6 +77,18 @@ export class UsersService {
         return result;
     }
 
+    async findAllDeleted(query: PageQueryDto): Promise<PageDto<User>> {
+        const builder = this.usersRepository
+            .createQueryBuilder('user')
+            .leftJoinAndSelect('user.role', 'role')
+            .withDeleted()
+            .where('user.deletedDate is not null');
+
+        const result = await paginate(builder, query);
+
+        return result;
+    }
+
     async findOne(id: string): Promise<User> {
         const result = await this.usersRepository.findOne({ where: { id: id }, relations: { role: true } });
 
@@ -88,6 +101,18 @@ export class UsersService {
         const result = await this.usersRepository.findOne({ where: { email: email }, relations: { role: true } });
 
         if (!result) throw new EmailNotExistException(email);
+
+        return result;
+    }
+
+    async findAllByEmail(query: QueryDto): Promise<PageDto<User>> {
+        const builder = this.usersRepository.createQueryBuilder('user').leftJoinAndSelect('user.role', 'role');
+
+        if (String(query.isDeleted).toLowerCase() === 'true') {
+            builder.withDeleted().andWhere('user.deletedDate is not null');
+        }
+        builder.andWhere('user.email like :email', { email: `%${query.q}%` });
+        const result = await paginate(builder, query);
 
         return result;
     }
@@ -140,7 +165,7 @@ export class UsersService {
     }
 
     async restore(id: string): Promise<void> {
-        const restoreUser = await this.findOne(id);
+        const restoreUser = await this.findOneDeleted(id);
 
         const result = await this.usersRepository.recover(restoreUser);
 
