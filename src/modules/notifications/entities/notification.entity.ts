@@ -11,12 +11,6 @@ type NotificationInfo = {
 @Entity()
 @TableInheritance({ column: { name: 'type', type: 'enum', enum: NotificationType } })
 export class Notification extends AppBaseEntity {
-    @Column('varchar', { length: 100, nullable: true })
-    title: string;
-
-    @Column('varchar', { length: 100, nullable: true })
-    description: string;
-
     @Column('enum', { enum: NotificationStatus, nullable: true })
     status: NotificationStatus;
 
@@ -25,6 +19,12 @@ export class Notification extends AppBaseEntity {
 
     @Column('boolean', { default: false })
     isRead: boolean;
+
+    @Column('uuid', { nullable: true })
+    formId: string;
+
+    @Column('uuid', { nullable: true })
+    userId: string;
 
     @Column('uuid', { nullable: true })
     sentByUserId: User['id'];
@@ -47,9 +47,6 @@ export class Notification extends AppBaseEntity {
 
 @ChildEntity(NotificationType.CREATE_USER)
 export class CreateUserNotification extends Notification {
-    @Column('uuid')
-    userId: string;
-
     getNotificationInfo(): NotificationInfo {
         if (this.status === NotificationStatus.SUCCESS) {
             if (this.userSent.id === this.userReceived.id) {
@@ -69,9 +66,6 @@ export class CreateUserNotification extends Notification {
 
 @ChildEntity(NotificationType.UPDATE_USER)
 export class UpdateUserNotification extends Notification {
-    @Column('uuid')
-    userId: string;
-
     getNotificationInfo(): NotificationInfo {
         if (this.status === NotificationStatus.SUCCESS) {
             if (this.userSent.id === this.userReceived.id) {
@@ -91,9 +85,6 @@ export class UpdateUserNotification extends Notification {
 
 @ChildEntity(NotificationType.DElETE_USER)
 export class DeleteUserNotification extends Notification {
-    @Column('uuid')
-    userId: string;
-
     getNotificationInfo(): NotificationInfo {
         if (this.status === NotificationStatus.SUCCESS) {
             if (this.userSent.id === this.userReceived.id) {
@@ -113,9 +104,6 @@ export class DeleteUserNotification extends Notification {
 
 @ChildEntity(NotificationType.RESTORE_USER)
 export class RestoreUserNotification extends Notification {
-    @Column('uuid')
-    userId: string;
-
     getNotificationInfo(): NotificationInfo {
         if (this.status === NotificationStatus.SUCCESS) {
             if (this.userSent.id === this.userReceived.id) {
@@ -147,9 +135,6 @@ export class DataUpdateNotification extends Notification {
 
 @ChildEntity(NotificationType.CREATE_FORM)
 export class CreateFormNotification extends Notification {
-    @Column('uuid')
-    formId: string;
-
     getNotificationInfo(): NotificationInfo {
         if (this.status === NotificationStatus.SUCCESS) {
             if (this.userSent.id === this.userReceived.id) {
@@ -169,9 +154,6 @@ export class CreateFormNotification extends Notification {
 
 @ChildEntity(NotificationType.UPDATE_FORM)
 export class UpdateFormNotification extends Notification {
-    @Column('uuid')
-    formId: string;
-
     getNotificationInfo(): NotificationInfo {
         if (this.status === NotificationStatus.SUCCESS) {
             if (this.userSent.id === this.userReceived.id) {
@@ -191,9 +173,6 @@ export class UpdateFormNotification extends Notification {
 
 @ChildEntity(NotificationType.DELETE_FORM)
 export class DeleteFormNotification extends Notification {
-    @Column('uuid')
-    formId: string;
-
     getNotificationInfo(): NotificationInfo {
         if (this.status === NotificationStatus.SUCCESS) {
             if (this.userSent.id === this.userReceived.id) {
@@ -213,9 +192,6 @@ export class DeleteFormNotification extends Notification {
 
 @ChildEntity(NotificationType.ACCEPTED_FORM)
 export class AcceptedFormNotification extends Notification {
-    @Column('uuid')
-    formId: string;
-
     getNotificationInfo(): NotificationInfo {
         if (this.status === NotificationStatus.SUCCESS) {
             if (this.userSent.id === this.userReceived.id) {
@@ -235,9 +211,6 @@ export class AcceptedFormNotification extends Notification {
 
 @ChildEntity(NotificationType.CANCEL_FORM)
 export class CancelFormNotification extends Notification {
-    @Column('uuid')
-    formId: string;
-
     getNotificationInfo(): NotificationInfo {
         if (this.status === NotificationStatus.SUCCESS) {
             if (this.userSent.id === this.userReceived.id) {
@@ -257,9 +230,6 @@ export class CancelFormNotification extends Notification {
 
 @ChildEntity(NotificationType.REJECTED_FORM)
 export class RejectedFormNotification extends Notification {
-    @Column('uuid')
-    formId: string;
-
     getNotificationInfo(): NotificationInfo {
         if (this.status === NotificationStatus.SUCCESS) {
             if (this.userSent.id === this.userReceived.id) {
@@ -279,9 +249,6 @@ export class RejectedFormNotification extends Notification {
 
 @ChildEntity(NotificationType.REJECTED_FORM)
 export class RestoreFormNotification extends Notification {
-    @Column('uuid')
-    formId: string;
-
     getNotificationInfo(): NotificationInfo {
         if (this.status === NotificationStatus.SUCCESS) {
             if (this.userSent.id === this.userReceived.id) {
