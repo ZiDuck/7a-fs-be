@@ -9,17 +9,20 @@ export class GroupQuestionAnswer extends AppBaseEntity {
     rowId: GroupQuestionRow['id'];
 
     @JoinColumn({ referencedColumnName: 'id', name: 'rowId' })
-    @ManyToOne(() => GroupQuestionRow, (singleQuestionValue: GroupQuestionRow) => singleQuestionValue.groupQuestionAnswer, {
+    @ManyToOne(() => GroupQuestionRow, (singleQuestionValue: GroupQuestionRow) => singleQuestionValue.groupQuestionAnswers, {
         onDelete: 'CASCADE',
     })
-    groupQuestionRow: Relation<GroupQuestionRow>[];
+    groupQuestionRow: Relation<GroupQuestionRow>;
 
     @Column('uuid')
     columnId: GroupQuestionColumn['id'];
 
     @JoinColumn({ referencedColumnName: 'id', name: 'columnId' })
-    @ManyToOne(() => GroupQuestionRow, (singleQuestionValue: GroupQuestionColumn) => singleQuestionValue.groupQuestionAnswer, {
+    @ManyToOne(() => GroupQuestionColumn, (singleQuestionValue: GroupQuestionColumn) => singleQuestionValue.groupQuestionAnswers, {
         onDelete: 'CASCADE',
     })
-    groupQuestionColumn: Relation<GroupQuestionRow>[];
+    groupQuestionColumn: Relation<GroupQuestionColumn>;
+
+    @Column('boolean', { nullable: true })
+    isCorrect: boolean;
 }

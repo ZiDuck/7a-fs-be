@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, Relation } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
 import { AppBaseEntity } from '../../../common/entities/base.entity';
 import { GroupQuestionAttribute } from './group-question-attribute.entity';
 import { GroupQuestionAnswer } from './group-question-answer.entity';
@@ -14,13 +14,16 @@ export class GroupQuestionRow extends AppBaseEntity {
     @Column('uuid')
     groupId: GroupQuestionAttribute['id'];
 
+    @Column('integer')
+    order: number;
+
     @JoinColumn({ referencedColumnName: 'id', name: 'groupId' })
-    @OneToOne(() => GroupQuestionAttribute, (formQuestion: GroupQuestionAttribute) => formQuestion.groupQuestionValues, { onDelete: 'CASCADE' })
+    @ManyToOne(() => GroupQuestionAttribute, (formQuestion: GroupQuestionAttribute) => formQuestion.groupQuestionRows, { onDelete: 'CASCADE' })
     group: Relation<GroupQuestionAttribute>;
 
     @OneToMany(() => GroupQuestionAnswer, (answer: GroupQuestionAnswer) => answer.groupQuestionRow, {
         cascade: ['insert'],
         eager: true,
     })
-    groupQuestionAnswer: Relation<GroupQuestionAnswer>[];
+    groupQuestionAnswers: Relation<GroupQuestionAnswer>[];
 }

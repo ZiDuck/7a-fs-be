@@ -2,6 +2,7 @@ import { Column, Entity, JoinColumn, OneToMany, OneToOne, Relation } from 'typeo
 import { AppBaseEntity } from '../../../common/entities/base.entity';
 import { FormQuestion } from '../../form-questions/entities/form-question.entity';
 import { GroupQuestionRow } from './group-question-row.entity';
+import { GroupQuestionColumn } from './group-question-column.entity';
 
 @Entity()
 export class GroupQuestionAttribute extends AppBaseEntity {
@@ -12,9 +13,15 @@ export class GroupQuestionAttribute extends AppBaseEntity {
     @OneToOne(() => FormQuestion, (formQuestion: FormQuestion) => formQuestion.formGroupAttribute, { onDelete: 'CASCADE' })
     question: Relation<FormQuestion>;
 
-    @OneToMany(() => GroupQuestionRow, (singleQuestionValue: GroupQuestionRow) => singleQuestionValue.group, {
+    @OneToMany(() => GroupQuestionRow, (groupQuestionRow: GroupQuestionRow) => groupQuestionRow.group, {
         cascade: ['insert'],
         eager: true,
     })
-    groupQuestionValues: Relation<GroupQuestionRow>[];
+    groupQuestionRows: Relation<GroupQuestionRow>[];
+
+    @OneToMany(() => GroupQuestionColumn, (groupQuestionColumn: GroupQuestionColumn) => groupQuestionColumn.group, {
+        cascade: ['insert'],
+        eager: true,
+    })
+    groupQuestionColumns: Relation<GroupQuestionColumn>[];
 }
