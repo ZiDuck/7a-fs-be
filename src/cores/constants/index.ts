@@ -32,3 +32,19 @@ export enum NotificationStatus {
     FAILED = 'FAILED',
     WARNING = 'WARNING',
 }
+
+export enum ActionType {
+    CREATE_USER = 'CREATE_USER',
+    UPDATE_USER = 'UPDATE_USER',
+    DElETE_USER = 'DElETE_USER',
+    RESTORE_USER = 'RESTORE_USER',
+}
+
+export enum ActionStatus {
+    SUCCESS = 'SUCCESS',
+    FAILED = 'FAILED',
+    WARNING = 'WARNING',
+}
+
+export const AUTH_LOGGING_DATA = 'AUTH_LOGGING_DATA';
+export const USER_AUDIT = 'USER_AUDIT';

@@ -96,3 +96,9 @@ export class RefreshTokenInvalidException extends BusinessException {
         super({ message: 'Refresh token is invalid' }, HttpStatus.BAD_REQUEST, options);
     }
 }
+
+export class InternalServerErrorBusinessException extends BusinessException {
+    constructor(response?: Record<string, any>, options?: HttpExceptionOptions) {
+        super({ message: 'Lỗi hệ thống', ...response }, HttpStatus.INTERNAL_SERVER_ERROR, options);
+    }
+}

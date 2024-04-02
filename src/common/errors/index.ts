@@ -1,6 +1,7 @@
 import {
     EmailExistException,
     EmailNotExistException,
+    InternalServerErrorBusinessException,
     PassWordIncorrectException,
     RefreshTokenInvalidException,
     RefreshTokenNotFoundException,
@@ -42,5 +43,9 @@ export class Errors {
     }
     static RefreshTokenInvalid() {
         return new RefreshTokenInvalidException();
+    }
+
+    static InternalServerErrorBusiness(errMessage: string) {
+        return new InternalServerErrorBusinessException({ errMessage });
     }
 }

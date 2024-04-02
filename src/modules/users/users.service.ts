@@ -43,7 +43,7 @@ export class UsersService {
         return result ? true : false;
     }
 
-    async findAll(query: PageQueryDto): Promise<PageDto<User>> {
+    async findAllPagination(query: PageQueryDto): Promise<PageDto<User>> {
         const builder = this.usersRepository.createQueryBuilder('user').leftJoinAndSelect('user.role', 'role');
         const result = await paginate(builder, query);
         // const results = await this.usersRepository.find({ relations: { role: true } });
@@ -56,6 +56,12 @@ export class UsersService {
             relations: { role: true },
             where: { role: { value: RoleType.ADMIN } },
         });
+
+        return results;
+    }
+
+    async findAllUser(): Promise<User[]> {
+        const results = await this.usersRepository.find();
 
         return results;
     }

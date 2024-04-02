@@ -18,9 +18,13 @@ import { SingleQuestionsModule } from './modules/single-questions/single-questio
 import { GroupQuestionsModule } from './modules/group-questions/group-questions.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { CoreModule } from './cores/core.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { CurrentUserContextInterceptor } from './cores/interceptors/current-user-context.interceptor';
 
 @Module({
     imports: [
+        CoreModule.forRoot({ isGlobal: true }),
         DatabaseModule,
         UsersModule,
         AuthModule,
@@ -47,6 +51,13 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
         EventEmitterModule.forRoot(),
     ],
     controllers: [AppController],
-    providers: [AppService],
+    providers: [
+        AppService,
+        {
+            provide: APP_INTERCEPTOR,
+            useClass: CurrentUserContextInterceptor,
+        },
+        // CurrentUserContext,
+    ],
 })
 export class AppModule {}

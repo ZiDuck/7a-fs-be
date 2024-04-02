@@ -11,6 +11,7 @@ import {
     Patch,
     Post,
     Query,
+    UseInterceptors,
 } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { GetUserDto } from './dto/get-user.dto';
@@ -31,6 +32,9 @@ import { ApiPaginatedResponse } from '../../cores/decorators/api-paginated-dto.d
 import { User } from './entities/user.entity';
 import { PageDto } from '../../common/dtos/page.dto';
 import { QueryDto } from '../../common/dtos/query.dto';
+import { AuthLogging } from '../../cores/decorators/auth-logging.decorator';
+import { ActionType } from '../../cores/constants';
+import { AuthLoggingInterceptor } from '../../cores/interceptors/auth-logging.interceptor';
 
 @ApiTags('users')
 @ApiBearerAuth()
@@ -52,7 +56,7 @@ export class UsersController {
     @AdminRole()
     @Get()
     async findAll(@Query() query: PageQueryDto): Promise<PageDto<User>> {
-        const result = await this.userService.findAll(query);
+        const result = await this.userService.findAllPagination(query);
 
         result.items = plainToInstance(GetUserDto, result.items);
 
@@ -103,6 +107,8 @@ export class UsersController {
 
     @AdminRole()
     @Transactional()
+    @UseInterceptors(AuthLoggingInterceptor)
+    @AuthLogging(ActionType.UPDATE_USER)
     @Patch(':id')
     async update(@Param('id', ParseUUIDPipe) id: string, @Body() data: UpdateUserInput): Promise<GetUserDto> {
         try {
@@ -116,6 +122,8 @@ export class UsersController {
 
     @AdminRole()
     @Transactional()
+    @UseInterceptors(AuthLoggingInterceptor)
+    @AuthLogging(ActionType.DElETE_USER)
     @Delete(':id')
     async delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
         try {
@@ -128,6 +136,8 @@ export class UsersController {
 
     @AdminRole()
     @Transactional()
+    @UseInterceptors(AuthLoggingInterceptor)
+    @AuthLogging(ActionType.RESTORE_USER)
     @Patch(':id/restore')
     async restoreDeleted(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
         try {
@@ -153,8 +163,10 @@ export class UsersController {
     @ApiBearerAuth()
     @AdminRole()
     @Transactional()
+    @UseInterceptors(AuthLoggingInterceptor)
+    @AuthLogging(ActionType.CREATE_USER)
     @Post()
-    async signup(@CurrentUser() userId: string, @Body() data: CreateUserInput): Promise<GetUserDto> {
+    async create(@CurrentUser() userId: string, @Body() data: CreateUserInput): Promise<GetUserDto> {
         try {
             const result = await this.userService.create(data);
             return plainToInstance(GetUserDto, result);
