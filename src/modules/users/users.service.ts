@@ -12,11 +12,12 @@ import { UserSessionsService } from '../user-sessions/user-sessions.service';
 import { UpdateUserInput } from './dto/update-user.input';
 import { Role } from '../roles/entities/role.entity';
 import { EmailExistException, EmailNotExistException, UserNotExistException } from '../../common/exceptions/business.exception';
-import { RoleType } from '../../cores/constants';
+import { RoleType, USER_AUDIT } from '../../cores/constants';
 import { paginate } from '../../cores/utils/paginate.util';
 import { PageDto } from '../../common/dtos/page.dto';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { QueryDto } from '../../common/dtos/query.dto';
+import { ClsService } from 'nestjs-cls';
 
 @Injectable()
 export class UsersService {
@@ -25,6 +26,7 @@ export class UsersService {
         private passwordService: PasswordService,
         private rolesService: RolesService,
         private userSessionService: UserSessionsService,
+        private readonly cls: ClsService,
     ) {}
 
     async create(data: CreateUserInput): Promise<boolean> {
@@ -144,12 +146,14 @@ export class UsersService {
         return result;
     }
 
-    async update(id: string, data: UpdateUserInput): Promise<User> {
-        const result = await this.findOne(id);
+    async update(id: string, data: UpdateUserInput): Promise<boolean> {
+        await this.findOne(id);
 
-        await this.usersRepository.update(result.id, data);
+        const result = await this.usersRepository.update(id, data);
 
-        return await this.findOne(result.id);
+        this.cls.set(USER_AUDIT, id);
+
+        return result.affected ? true : false;
     }
 
     async deleteRefreshToken(id: string, refreshToken: string, userSessionId: string): Promise<boolean> {

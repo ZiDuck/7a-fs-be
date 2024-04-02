@@ -110,10 +110,9 @@ export class UsersController {
     @UseInterceptors(AuthLoggingInterceptor)
     @AuthLogging(ActionType.UPDATE_USER)
     @Patch(':id')
-    async update(@Param('id', ParseUUIDPipe) id: string, @Body() data: UpdateUserInput): Promise<GetUserDto> {
+    async update(@Param('id', ParseUUIDPipe) id: string, @Body() data: UpdateUserInput): Promise<boolean> {
         try {
-            const result = await this.userService.update(id, data);
-            return plainToInstance(GetUserDto, result);
+            return await this.userService.update(id, data);
         } catch (error) {
             if (error instanceof HttpException) throw error;
             throw new InternalServerErrorException(error.message);

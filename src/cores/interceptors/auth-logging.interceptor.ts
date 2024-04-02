@@ -114,7 +114,7 @@ export class AuthLoggingInterceptor implements NestInterceptor {
                 status: NotificationStatus.SUCCESS,
                 type: NotificationType.DElETE_USER,
                 userId: userId,
-                    formId: null,
+                formId: null,
             });
 
             this.eventEmitter.emit('user.created', eventData);

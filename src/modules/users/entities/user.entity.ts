@@ -37,10 +37,10 @@ export class User extends AppBaseEntity {
     @ManyToOne(() => Role, (role: Role) => role.users)
     role: Relation<Role>;
 
-    @OneToMany(() => Notification, (notification: Notification) => notification.sentByUserId)
+    @OneToMany(() => Notification, (notification: Notification) => notification.sentByUserId, { cascade: true })
     notificationsSent: Relation<Notification>[];
 
-    @OneToMany(() => Notification, (notification: Notification) => notification.receivedByUserId)
+    @OneToMany(() => Notification, (notification: Notification) => notification.receivedByUserId, { cascade: true })
     notificationsReceived: Relation<Notification>[];
 
     public getName(): string {
