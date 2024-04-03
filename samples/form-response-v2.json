@@ -1,0 +1,158 @@
+{
+    "id": "d0406728-f974-4d8e-a6f0-3e13b6c0bec8",
+    "title": "Title of the form 1",
+    "description": "Description of the form 1",
+    "startSurvey": null,
+    "status": "PENDING",
+    "hasAnswer": true,
+    "category": "PATIENT_CATEGORY",
+    "image": {
+        "id": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+        "publicId": "public/feedback-system/images/ojjsfjmt2saxtkrh245k",
+        "url": "https://res.cloudinary.com/dtxtzn5ii/image/upload/v1711532312/public/feedback-system/images/ojjsfjmt2saxtkrh245k.png"
+    },
+    "formQuestions": [
+        {
+            "id": "c03acad2-703a-42a5-8d04-efc1b22c008f",
+            "label": "Title of the question",
+            "description": "Description of the question",
+            "require": true,
+            "order": 1,
+            "image": {
+                "id": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+                "publicId": "public/feedback-system/images/ojjsfjmt2saxtkrh245k",
+                "url": "https://res.cloudinary.com/dtxtzn5ii/image/upload/v1711532312/public/feedback-system/images/ojjsfjmt2saxtkrh245k.png"
+            },
+            "attributeType": "DROPDOWN",
+            "formId": "d0406728-f974-4d8e-a6f0-3e13b6c0bec8",
+            "singleQuestion": {
+                "id": "0e8c2725-256e-487b-91f7-0ab19bbe506b",
+                "score": 0,
+                "isOther": false,
+                "singleQuestionValues": [
+                    {
+                        "id": "151db382-f2ba-47af-882a-b7838ff9978f",
+                        "value": "Cau tra loi dung 1",
+                        "image": {
+                            "id": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+                            "publicId": "public/feedback-system/images/ojjsfjmt2saxtkrh245k",
+                            "url": "https://res.cloudinary.com/dtxtzn5ii/image/upload/v1711532312/public/feedback-system/images/ojjsfjmt2saxtkrh245k.png"
+                        },
+                        "isCorrect": true
+                    },
+                    {
+                        "id": "605651f0-ada2-450b-8d5a-7b9262305205",
+                        "value": "Cau tra loi dung 2",
+                        "image": {
+                            "id": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+                            "publicId": "public/feedback-system/images/ojjsfjmt2saxtkrh245k",
+                            "url": "https://res.cloudinary.com/dtxtzn5ii/image/upload/v1711532312/public/feedback-system/images/ojjsfjmt2saxtkrh245k.png"
+                        },
+                        "isCorrect": false
+                    },
+                    {
+                        "id": "123eb833-8911-4a36-9c2d-77079d190986",
+                        "value": "Cau tra loi dung 2",
+                        "image": {
+                            "id": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+                            "publicId": "public/feedback-system/images/ojjsfjmt2saxtkrh245k",
+                            "url": "https://res.cloudinary.com/dtxtzn5ii/image/upload/v1711532312/public/feedback-system/images/ojjsfjmt2saxtkrh245k.png"
+                        },
+                        "isCorrect": false
+                    }
+                ]
+            }
+        },
+        {
+            "id": "77aebbcc-62db-4321-ac65-e496524b0177",
+            "label": "Title of the question",
+            "description": "Description of the question",
+            "require": true,
+            "order": 0,
+            "image": null,
+            "attributeType": "PARAGRAPH",
+            "formId": "d0406728-f974-4d8e-a6f0-3e13b6c0bec8",
+            "singleQuestion": {
+                "id": "70b91176-f336-4a0e-82f3-4f4fceecde4f",
+                "score": 0,
+                "isOther": false,
+                "singleQuestionValues": [
+                    {
+                        "id": "7a66137b-d4af-4a38-815b-14eb9965e884",
+                        "value": "Cau tra loi dung 1",
+                        "image": null,
+                        "isCorrect": true
+                    },
+                    {
+                        "id": "35526848-da8f-442c-91ef-0d2c967290c6",
+                        "value": "Cau tra loi dung 2",
+                        "image": null,
+                        "isCorrect": true
+                    }
+                ]
+            }
+        },
+        {
+            "id": "5c4ac58a-2a65-44dc-9628-fca8deae829d",
+            "label": "Title of the multi choice",
+            "description": "Description of multi choice",
+            "require": true,
+            "order": 2,
+            "image": null,
+            "attributeType": "RADIO_GRID",
+            "formId": "d0406728-f974-4d8e-a6f0-3e13b6c0bec8",
+            "groupQuestion": {
+                "rows": [
+                    {
+                        "id": "8a629b5a-e3e5-40f8-a159-5832ba47de19",
+                        "score": 0,
+                        "value": "Row 1",
+                        "order": 0
+                    },
+                    {
+                        "id": "e760213e-f2aa-485d-9ec7-38306262bc5b",
+                        "score": 0,
+                        "value": "Row 2",
+                        "order": 1
+                    }
+                ],
+                "columns": [
+                    {
+                        "id": "d7189839-3e7a-4401-b851-c64696025ed4",
+                        "value": "Column 1",
+                        "order": 0
+                    },
+                    {
+                        "id": "0c908f0b-195c-4f70-8983-579304e720f7",
+                        "value": "Column 2",
+                        "order": 1
+                    },
+                    {
+                        "id": "8fc75810-41e2-4050-9a03-6306e06da9c9",
+                        "value": "Column 4",
+                        "order": 3
+                    },
+                    {
+                        "id": "abc33779-48f6-4f93-b5fa-0b7badf046f2",
+                        "value": "Column 3",
+                        "order": 2
+                    }
+                ],
+                "answers": [
+                    {
+                        "id": "00769d71-99a3-401f-871b-58fae7a17466",
+                        "isCorrect": true,
+                        "rowId": "8a629b5a-e3e5-40f8-a159-5832ba47de19",
+                        "columnId": "d7189839-3e7a-4401-b851-c64696025ed4"
+                    },
+                    {
+                        "id": "7605f82e-c4f7-4676-8f85-4769b8497845",
+                        "isCorrect": true,
+                        "rowId": "e760213e-f2aa-485d-9ec7-38306262bc5b",
+                        "columnId": "0c908f0b-195c-4f70-8983-579304e720f7"
+                    }
+                ]
+            }
+        }
+    ]
+}

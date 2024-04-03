@@ -5,25 +5,26 @@
             "description": "Description of the question",
             "require": true,
             "order": 1,
-            "imageId": null,
-            "attributeType": "RADIO_BUTTON",
-            "formId": "86a424f1-94b9-4fcf-a16b-b93bee064193",
+            "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+            "attributeType": "DROPDOWN",
+            "formId": "d0406728-f974-4d8e-a6f0-3e13b6c0bec8",
             "formSingleAttribute": {
                 "score": 0,
+                "isOther": false,
                 "singleQuestionValues": [
                     {
                         "value": "Cau tra loi dung 1",
-                        "imageId": null,
+                        "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
                         "isCorrect": true
                     },
                     {
                         "value": "Cau tra loi dung 2",
-                        "imageId": null,
+                        "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
                         "isCorrect": false
                     },
                     {
                         "value": "Cau tra loi dung 2",
-                        "imageId": null,
+                        "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
                         "isCorrect": false
                     }
                 ]
@@ -35,10 +36,11 @@
             "require": true,
             "order": 0,
             "imageId": null,
-            "attributeType": "TEXT_BOX",
-            "formId": "86a424f1-94b9-4fcf-a16b-b93bee064193",
+            "attributeType": "PARAGRAPH",
+            "formId": "d0406728-f974-4d8e-a6f0-3e13b6c0bec8",
             "formSingleAttribute": {
                 "score": 0,
+                "isOther": false,
                 "singleQuestionValues": [
                     {
                         "value": "Cau tra loi dung 1",
@@ -59,8 +61,8 @@
             "require": true,
             "order": 2,
             "imageId": null,
-            "attributeType": "CHECKBOX_GRID",
-            "formId": "86a424f1-94b9-4fcf-a16b-b93bee064193",
+            "attributeType": "RADIO_GRID",
+            "formId": "d0406728-f974-4d8e-a6f0-3e13b6c0bec8",
             "formGroupAttribute": {
                 "groupQuestionRows": [
                     {
