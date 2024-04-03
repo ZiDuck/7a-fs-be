@@ -5,7 +5,7 @@ import { GroupQuestionAnswer } from './group-question-answer.entity';
 
 @Entity()
 export class GroupQuestionRow extends AppBaseEntity {
-    @Column('float', { nullable: true })
+    @Column('float', { default: 0 })
     score: number;
 
     @Column('varchar')

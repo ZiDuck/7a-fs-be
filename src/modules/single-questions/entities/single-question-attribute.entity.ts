@@ -5,7 +5,7 @@ import { SingleQuestionValue } from './single-question-value.entity';
 
 @Entity()
 export class SingleQuestionAttribute extends AppBaseEntity {
-    @Column('float', { nullable: true })
+    @Column('float', { default: 0 })
     score: number;
 
     @Column('boolean', { default: false })

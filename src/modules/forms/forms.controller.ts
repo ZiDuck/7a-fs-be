@@ -1,4 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, BadRequestException, ParseUUIDPipe } from '@nestjs/common';
+import {
+    Controller,
+    Get,
+    Post,
+    Body,
+    Patch,
+    Param,
+    Delete,
+    Query,
+    BadRequestException,
+    ParseUUIDPipe,
+    HttpException,
+    InternalServerErrorException,
+} from '@nestjs/common';
 import { FormsService } from './forms.service';
 import { CreateFormInput } from './dto/create-form.input';
 import { UpdateFormDto } from './dto/update-form.dto';
@@ -9,15 +22,23 @@ import { GetFormDto } from './dto/get-form.dto';
 import { ApiPaginatedResponse } from '../../cores/decorators/api-paginated-dto.decorator';
 import { ApiException } from '../../cores/decorators/api-exception.decorator';
 import { ApiOkResponseDto } from '../../cores/decorators/api-ok-dto.decorator';
+import { GetFormAllFormQuestionsDto } from './dto/get-form-all-form-questions.dto';
 
 @ApiTags('forms')
 @Controller('forms')
 export class FormsController {
     constructor(private readonly formsService: FormsService) {}
 
+    @ApiOkResponseDto(GetFormDto)
     @Post()
-    create(@Body() data: CreateFormInput) {
-        return this.formsService.create(data);
+    async create(@Body() data: CreateFormInput) {
+        try {
+            const result = await this.formsService.create(data);
+            return plainToInstance(GetFormDto, result);
+        } catch (error) {
+            if (error instanceof HttpException) throw error;
+            throw new InternalServerErrorException(error.message);
+        }
     }
 
     @ApiPaginatedResponse(GetFormDto)
@@ -28,6 +49,13 @@ export class FormsController {
         result.items = plainToInstance(GetFormDto, result.items);
 
         return result;
+    }
+
+    @ApiOkResponseDto(GetFormAllFormQuestionsDto)
+    @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
+    @Get(':id/form-questions')
+    async findFormQuestions(@Param('id', ParseUUIDPipe) id: string) {
+        return await this.formsService.findFormQuestions(id);
     }
 
     @ApiOkResponseDto(GetFormDto)

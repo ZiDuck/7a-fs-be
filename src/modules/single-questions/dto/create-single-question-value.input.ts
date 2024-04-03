@@ -1,17 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, ValidateIf } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsString, ValidateIf } from 'class-validator';
 import { IdExists } from '../../../common/validator/uuid.validator';
 import { Image } from '../../images/entites/image.entity';
 
 export class CreateSingleQuestionValueInput {
     @ApiProperty({
-        nullable: true,
-        example: 'Value of the question',
+        example: 'Value of the option',
     })
-    @ValidateIf((d) => d.value !== null)
     @IsString()
     @IsNotEmpty()
-    value: string | null;
+    value: string;
 
     @ApiProperty({
         nullable: true,
@@ -24,11 +22,9 @@ export class CreateSingleQuestionValueInput {
     imageId: string | null;
 
     @ApiProperty({
-        nullable: true,
         type: Boolean,
     })
-    @ValidateIf((d) => d.value !== null)
-    @IsString()
+    @IsBoolean()
     @IsNotEmpty()
-    isCorrect: boolean | null;
+    isCorrect: boolean;
 }

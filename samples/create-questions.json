@@ -1,0 +1,110 @@
+{
+    "formQuestions": [
+        {
+            "label": "Title of the question",
+            "description": "Description of the question",
+            "require": true,
+            "order": 1,
+            "imageId": null,
+            "attributeType": "RADIO_BUTTON",
+            "formId": "86a424f1-94b9-4fcf-a16b-b93bee064193",
+            "formSingleAttribute": {
+                "score": 0,
+                "singleQuestionValues": [
+                    {
+                        "value": "Cau tra loi dung 1",
+                        "imageId": null,
+                        "isCorrect": true
+                    },
+                    {
+                        "value": "Cau tra loi dung 2",
+                        "imageId": null,
+                        "isCorrect": false
+                    },
+                    {
+                        "value": "Cau tra loi dung 2",
+                        "imageId": null,
+                        "isCorrect": false
+                    }
+                ]
+            }
+        },
+        {
+            "label": "Title of the question",
+            "description": "Description of the question",
+            "require": true,
+            "order": 0,
+            "imageId": null,
+            "attributeType": "TEXT_BOX",
+            "formId": "86a424f1-94b9-4fcf-a16b-b93bee064193",
+            "formSingleAttribute": {
+                "score": 0,
+                "singleQuestionValues": [
+                    {
+                        "value": "Cau tra loi dung 1",
+                        "imageId": null,
+                        "isCorrect": true
+                    },
+                    {
+                        "value": "Cau tra loi dung 2",
+                        "imageId": null,
+                        "isCorrect": true
+                    }
+                ]
+            }
+        },
+        {
+            "label": "Title of the multi choice",
+            "description": "Description of multi choice",
+            "require": true,
+            "order": 2,
+            "imageId": null,
+            "attributeType": "CHECKBOX_GRID",
+            "formId": "86a424f1-94b9-4fcf-a16b-b93bee064193",
+            "formGroupAttribute": {
+                "groupQuestionRows": [
+                    {
+                        "order": 0,
+                        "score": 0,
+                        "value": "Row 1"
+                    },
+                    {
+                        "order": 1,
+                        "score": 0,
+                        "value": "Row 2"
+                    }
+                ],
+                "groupQuestionColumns": [
+                    {
+                        "order": 0,
+                        "value": "Column 1"
+                    },
+                    {
+                        "order": 1,
+                        "value": "Column 2"
+                    },
+                    {
+                        "order": 2,
+                        "value": "Column 3"
+                    },
+                    {
+                        "order": 3,
+                        "value": "Column 4"
+                    }
+                ],
+                "correctAnswers": [
+                    {
+                        "rowOrder": 0,
+                        "columnOrder": 0,
+                        "isCorrect": true
+                    },
+                    {
+                        "rowOrder": 1,
+                        "columnOrder": 1,
+                        "isCorrect": true
+                    }
+                ]
+            }
+        }
+    ]
+}

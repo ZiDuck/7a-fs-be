@@ -1,6 +1,4 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { UploadFileService } from '../upload-file/upload-file.service';
-import { UpdateImageInput } from './dto/update-image.input';
 import { CreateImageInput } from './dto/create-image.input';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -8,7 +6,6 @@ import { Image } from './entites/image.entity';
 import { ResourceType } from '../../cores/enums/resource-type.enum';
 import { DeleteImageInput } from './dto/delete-image.input';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
-import { DeleteImagesInput } from './dto/delete-images.input';
 
 @Injectable()
 export class ImagesService {
@@ -19,6 +16,28 @@ export class ImagesService {
 
     async getAll() {
         return await this.imageRepository.find();
+    }
+
+    async findOne(id: string) {
+        const result = await this.imageRepository.findOneBy({ id });
+
+        if (!result) {
+            throw new BadRequestException('Image Not Found!');
+        }
+
+        return result;
+    }
+
+    async checkImageHook(id: string) {
+        const image = await this.imageRepository.findOneBy({ id });
+
+        if (!image) return null;
+
+        return {
+            id: image.id,
+            publicId: image.publicId,
+            url: image.url,
+        };
     }
 
     async create(data: CreateImageInput) {

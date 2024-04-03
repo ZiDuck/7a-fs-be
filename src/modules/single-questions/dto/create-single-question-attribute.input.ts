@@ -1,23 +1,24 @@
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsNotEmpty, IsNumber, ValidateIf } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import { IsBoolean, IsDefined, IsNumber, ValidateNested } from 'class-validator';
 import { CreateSingleQuestionValueInput } from './create-single-question-value.input';
+import { Type } from 'class-transformer';
 
 export class CreateSingleQuestionAttributeInput {
     @ApiProperty({
-        nullable: true,
         example: 1,
     })
-    @ValidateIf((d) => d.score !== null)
     @IsNumber()
-    @IsNotEmpty()
-    score: number | null;
+    @IsDefined()
+    score: number;
 
-    @ApiPropertyOptional()
+    @ApiProperty()
     @IsBoolean()
-    isOther?: boolean;
+    isOther: boolean;
 
     @ApiProperty({
         type: [CreateSingleQuestionValueInput],
     })
+    @Type(() => CreateSingleQuestionValueInput)
+    @ValidateNested()
     singleQuestionValues: CreateSingleQuestionValueInput[];
 }

@@ -5,13 +5,13 @@ import { Image } from '../../images/entites/image.entity';
 
 @Entity()
 export class SingleQuestionValue extends AppBaseEntity {
-    @Column('varchar', { nullable: true })
+    @Column('varchar')
     value: string;
 
     @Column('uuid', { nullable: true })
     imageId: Image['id'];
 
-    @Column('boolean', { nullable: true })
+    @Column('boolean', { default: false })
     isCorrect: boolean;
 
     @Column('uuid')
