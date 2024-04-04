@@ -21,5 +21,5 @@ export class GetGroupQuestionValue {
         type: [GetGroupQuestionAnswer],
     })
     @Type(() => GetGroupQuestionAnswer)
-    answers: GetGroupQuestionAnswer[];
+    answers?: GetGroupQuestionAnswer[];
 }

@@ -12,6 +12,9 @@ import { plainToInstance } from 'class-transformer';
 import { GetFormQuestion } from '../form-questions/dto/get-form-question.dto';
 import { GetFormAllFormQuestionsDto } from './dto/get-form-all-form-questions.dto';
 import { ImagesService } from '../images/images.service';
+import { GetFormDto } from './dto/get-form.dto';
+import { FormTemplateDto } from '../form_templates/dto/form-template.dto';
+import { FormTemplatesService } from '../form_templates/form_templates.service';
 
 @Injectable()
 export class FormsService {
@@ -19,6 +22,7 @@ export class FormsService {
         @InjectRepository(Form) private formRepository: Repository<Form>,
         private readonly formQuestionService: FormQuestionsService,
         private imagesService: ImagesService,
+        private formTemplatesService: FormTemplatesService,
     ) {}
 
     @Transactional()
@@ -28,11 +32,35 @@ export class FormsService {
         return await this.formRepository.save(result);
     }
 
+    @Transactional()
+    async createTemplateForm(id: string) {
+        const existForm = await this.findFormQuestions(id);
+
+        const formTemplate = plainToInstance(FormTemplateDto, existForm);
+
+        const result = await this.formTemplatesService.create({
+            title: formTemplate.title,
+            category: formTemplate.category,
+            metadata: formTemplate,
+        });
+        return result ? true : false;
+    }
+
     async findAll(query: PageQueryDto) {
         const builder = this.formRepository.createQueryBuilder('form');
 
         const result = await paginate(builder, query);
 
+        result.items = await Promise.all(
+            result.items.map(async (item) => {
+                const customizeForm = plainToInstance(GetFormDto, {
+                    ...item,
+                    image: item.imageId ? await this.imagesService.checkImageHook(item.imageId) : null,
+                });
+
+                return customizeForm;
+            }),
+        );
         return result;
     }
 
@@ -58,8 +86,14 @@ export class FormsService {
         return customizeForm;
     }
 
-    update(id: number, updateFormDto: UpdateFormDto) {
-        return `This action updates a #${id} form`;
+    async update(id: string, data: UpdateFormDto) {
+        await this.findOne(id);
+
+        const result = await this.formRepository.update(id, data);
+
+        // this.cls.set(USER_AUDIT, id);
+
+        return result.affected ? true : false;
     }
 
     remove(id: number) {

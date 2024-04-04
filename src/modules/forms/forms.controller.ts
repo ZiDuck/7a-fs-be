@@ -41,6 +41,11 @@ export class FormsController {
         }
     }
 
+    @Post(':id/templates')
+    async createTemplateForm(@Param('id', ParseUUIDPipe) id: string) {
+        return await this.formsService.createTemplateForm(id);
+    }
+
     @ApiPaginatedResponse(GetFormDto)
     @Get()
     async findAll(@Query() query: PageQueryDto) {
@@ -66,8 +71,8 @@ export class FormsController {
     }
 
     @Patch(':id')
-    update(@Param('id') id: string, @Body() updateFormDto: UpdateFormDto) {
-        return this.formsService.update(+id, updateFormDto);
+    update(@Param('id') id: string, @Body() data: UpdateFormDto) {
+        return this.formsService.update(id, data);
     }
 
     @Delete(':id')

@@ -6,10 +6,9 @@ export class GetSingleQuestionValue {
     id: string;
 
     @ApiProperty({
-        nullable: true,
         example: 'Value of the question',
     })
-    value: string | null;
+    value: string;
 
     @ApiProperty({
         type: ImageOutput,
@@ -18,10 +17,9 @@ export class GetSingleQuestionValue {
     image: ImageOutput | null;
 
     @ApiProperty({
-        nullable: true,
         example: true,
     })
-    isCorrect: boolean | null;
+    isCorrect: boolean;
 
     // @Exclude()
     // createdDate: Date;

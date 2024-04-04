@@ -11,19 +11,19 @@ export class CreateGroupQuestionAttributeInput {
     })
     @Type(() => CreateGroupQuestionRowInput)
     @ValidateNested()
-    groupQuestionRows: CreateGroupQuestionRowInput[];
+    rows: CreateGroupQuestionRowInput[];
 
     @ApiProperty({
         type: [CreateGroupQuestionColumnInput],
     })
     @Type(() => CreateGroupQuestionColumnInput)
     @ValidateNested()
-    groupQuestionColumns: CreateGroupQuestionColumnInput[];
+    columns: CreateGroupQuestionColumnInput[];
 
     @ApiProperty({
         type: [CreateGroupQuestionAnswerInput],
     })
     @Type(() => CreateGroupQuestionAnswerInput)
     @ValidateNested()
-    correctAnswers: CreateGroupQuestionAnswerInput[];
+    answers: CreateGroupQuestionAnswerInput[];
 }

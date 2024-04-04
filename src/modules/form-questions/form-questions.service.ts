@@ -7,7 +7,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AttributeType } from './enums/attribute-type.enum';
 import { SingleQuestionValue } from '../single-questions/entities/single-question-value.entity';
 import { SingleQuestionsService } from '../single-questions/single-questions.service';
-import { Form } from '../forms/entities/form.entity';
 import { GetFormQuestion } from './dto/get-form-question.dto';
 import { GroupQuestionsService } from '../group-questions/group-questions.service';
 import { GroupQuestionColumn } from '../group-questions/entities/group-question-column.entity';
@@ -46,7 +45,7 @@ export class FormQuestionsService {
         ) {
             let attributeValues: DeepPartial<SingleQuestionValue>[] = [];
 
-            const singleQuestionInput = data.formSingleAttribute;
+            const singleQuestionInput = data.singleQuestion;
 
             attributeValues = singleQuestionInput.singleQuestionValues.reduce((listQuestionValues, value) => {
                 const attrValueInput = new SingleQuestionValue();
@@ -67,9 +66,9 @@ export class FormQuestionsService {
 
             newQuestion.formSingleAttribute = attribute;
         } else if ([AttributeType.CHECKBOX_GRID, AttributeType.RADIO_GRID].includes(data.attributeType)) {
-            const groupQuestionInput = data.formGroupAttribute;
+            const groupQuestionInput = data.groupQuestion;
 
-            const groupQuestionRows = groupQuestionInput.groupQuestionRows.map((rowInput) => {
+            const groupQuestionRows = groupQuestionInput.rows.map((rowInput) => {
                 const row = new GroupQuestionRow();
                 row.score = rowInput.score;
                 row.value = rowInput.value;
@@ -77,7 +76,7 @@ export class FormQuestionsService {
                 return this.groupQuestionsService.getGroupQuestionRowRepository().create(row);
             });
 
-            const groupQuestionColumns = groupQuestionInput.groupQuestionColumns.map((columnInput) => {
+            const groupQuestionColumns = groupQuestionInput.columns.map((columnInput) => {
                 const column = new GroupQuestionColumn();
                 column.value = columnInput.value;
                 column.order = columnInput.order;
@@ -98,8 +97,8 @@ export class FormQuestionsService {
 
         const formQuestion = await this.formQuestionRepository.save(newQuestion);
 
-        if (data.formGroupAttribute?.correctAnswers?.length > 0) {
-            const groupQuestionAnswerData = data.formGroupAttribute.correctAnswers.map((answerInput) => {
+        if (data.groupQuestion?.answers?.length > 0) {
+            const groupQuestionAnswerData = data.groupQuestion.answers.map((answerInput) => {
                 const answer = new GroupQuestionAnswer();
                 const groupQuestionRow = formQuestion.formGroupAttribute.groupQuestionRows.find((row) => row.order === answerInput.rowOrder);
                 const groupQuestionColumn = formQuestion.formGroupAttribute.groupQuestionColumns.find(
@@ -180,14 +179,18 @@ export class FormQuestionsService {
                     order: col.order,
                 };
             });
-
             grQuestion.answers = grQuestionRow.flatMap((row) =>
-                row.groupQuestionAnswers.map((answer) => ({
-                    id: answer.id,
-                    isCorrect: answer.isCorrect,
-                    rowId: answer.rowId,
-                    columnId: answer.columnId,
-                })),
+                row.groupQuestionAnswers.map((answer) => {
+                    const column = grQuestionCol.find((col) => col.id === answer.columnId);
+                    return {
+                        id: answer.id,
+                        isCorrect: answer.isCorrect,
+                        rowId: answer.rowId,
+                        columnId: answer.columnId,
+                        rowOrder: row.order,
+                        columnOrder: column ? column.order : null,
+                    };
+                }),
             );
 
             result.groupQuestion = grQuestion;

@@ -3,7 +3,6 @@ import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateGroupQuestionColumnInput {
     @ApiProperty({
-        nullable: true,
         example: 1,
     })
     @IsNotEmpty()

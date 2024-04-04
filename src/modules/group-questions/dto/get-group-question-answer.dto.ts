@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class GetGroupQuestionAnswer {
     @ApiProperty()
@@ -7,12 +7,17 @@ export class GetGroupQuestionAnswer {
     @ApiProperty()
     rowId: string;
 
+    @ApiPropertyOptional()
+    rowOrder?: number;
+
     @ApiProperty()
     columnId: string;
 
+    @ApiPropertyOptional()
+    columnOrder?: number;
+
     @ApiProperty({
-        nullable: true,
         example: true,
     })
-    isCorrect: boolean | null;
+    isCorrect: boolean;
 }

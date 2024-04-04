@@ -2,7 +2,6 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { AttributeType } from '../enums/attribute-type.enum';
 import { Type } from 'class-transformer';
 import { ImageOutput } from '../../images/dto/image.output';
-import { GetSingleQuestionValue } from '../../single-questions/dto/get-single-question-value.dto';
 import { GetGroupQuestionValue } from '../../group-questions/dto/get-group-question-value.dto';
 import { GetSingleQuestionAttribute } from '../../single-questions/dto/get-single-question-attribute.dto';
 
@@ -39,23 +38,15 @@ export class GetFormQuestion {
     @ApiProperty()
     formId: string;
 
-    // @ApiPropertyOptional({
-    //     example: 1,
-    // })
-    // score?: number | null;
-
-    // @ApiPropertyOptional()
-    // isOther?: boolean;
-
     @ApiPropertyOptional({
         type: [GetSingleQuestionAttribute],
     })
     @Type(() => GetSingleQuestionAttribute)
-    singleQuestion?: GetSingleQuestionAttribute | null;
+    singleQuestion?: GetSingleQuestionAttribute;
 
     @ApiPropertyOptional({
         type: GetGroupQuestionValue,
     })
     @Type(() => GetGroupQuestionValue)
-    groupQuestion?: GetGroupQuestionValue | null;
+    groupQuestion?: GetGroupQuestionValue;
 }

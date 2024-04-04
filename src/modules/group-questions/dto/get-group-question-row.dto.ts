@@ -5,10 +5,9 @@ export class GetGroupQuestionRow {
     id: string;
 
     @ApiProperty({
-        nullable: true,
         example: 1,
     })
-    score: number | null;
+    score: number;
 
     @ApiProperty()
     value: string;

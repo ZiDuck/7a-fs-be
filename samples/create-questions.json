@@ -8,7 +8,7 @@
             "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
             "attributeType": "DROPDOWN",
             "formId": "d0406728-f974-4d8e-a6f0-3e13b6c0bec8",
-            "formSingleAttribute": {
+            "singleQuestion": {
                 "score": 0,
                 "isOther": false,
                 "singleQuestionValues": [
@@ -38,7 +38,7 @@
             "imageId": null,
             "attributeType": "PARAGRAPH",
             "formId": "d0406728-f974-4d8e-a6f0-3e13b6c0bec8",
-            "formSingleAttribute": {
+            "singleQuestion": {
                 "score": 0,
                 "isOther": false,
                 "singleQuestionValues": [
@@ -63,8 +63,8 @@
             "imageId": null,
             "attributeType": "RADIO_GRID",
             "formId": "d0406728-f974-4d8e-a6f0-3e13b6c0bec8",
-            "formGroupAttribute": {
-                "groupQuestionRows": [
+            "groupQuestion": {
+                "rows": [
                     {
                         "order": 0,
                         "score": 0,
@@ -76,7 +76,7 @@
                         "value": "Row 2"
                     }
                 ],
-                "groupQuestionColumns": [
+                "columns": [
                     {
                         "order": 0,
                         "value": "Column 1"
@@ -94,7 +94,7 @@
                         "value": "Column 4"
                     }
                 ],
-                "correctAnswers": [
+                "answers": [
                     {
                         "rowOrder": 0,
                         "columnOrder": 0,

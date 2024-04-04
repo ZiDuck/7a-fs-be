@@ -67,7 +67,7 @@ export class CreateFormQuestionInput {
     @Type(() => CreateSingleQuestionAttributeInput)
     @IsOptional()
     @ValidateNested()
-    formSingleAttribute?: CreateSingleQuestionAttributeInput;
+    singleQuestion?: CreateSingleQuestionAttributeInput;
 
     @ApiPropertyOptional({
         type: CreateGroupQuestionAttributeInput,
@@ -75,5 +75,5 @@ export class CreateFormQuestionInput {
     @Type(() => CreateGroupQuestionAttributeInput)
     @IsOptional()
     @ValidateNested()
-    formGroupAttribute?: CreateGroupQuestionAttributeInput;
+    groupQuestion?: CreateGroupQuestionAttributeInput;
 }
