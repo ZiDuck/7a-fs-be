@@ -6,9 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { SingleQuestionsModule } from '../single-questions/single-questions.module';
 import { GroupQuestionsModule } from '../group-questions/group-questions.module';
 import { ImagesModule } from '../images/images.module';
+import { Form } from '../forms/entities/form.entity';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([FormQuestion]), SingleQuestionsModule, GroupQuestionsModule, ImagesModule],
+    imports: [TypeOrmModule.forFeature([FormQuestion, Form]), SingleQuestionsModule, GroupQuestionsModule, ImagesModule],
     controllers: [FormQuestionsController],
     providers: [FormQuestionsService],
     exports: [FormQuestionsService],

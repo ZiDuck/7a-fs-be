@@ -4,7 +4,7 @@ import { UpdateFormQuestionDto } from './dto/update-form-question.dto';
 import { FormQuestion } from './entities/form-question.entity';
 import { DeepPartial, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AttributeType } from './enums/attribute-type.enum';
+import { AttributeType, GROUP_QUESTION_TYPES, SINGLE_QUESTION_TYPES } from './enums/attribute-type.enum';
 import { SingleQuestionValue } from '../single-questions/entities/single-question-value.entity';
 import { SingleQuestionsService } from '../single-questions/single-questions.service';
 import { GetFormQuestion } from './dto/get-form-question.dto';
@@ -12,37 +12,27 @@ import { GroupQuestionsService } from '../group-questions/group-questions.servic
 import { GroupQuestionColumn } from '../group-questions/entities/group-question-column.entity';
 import { GroupQuestionRow } from '../group-questions/entities/group-question-row.entity';
 import { GroupQuestionAnswer } from '../group-questions/entities/group-question-answer.entity';
-import { Transactional } from 'typeorm-transactional';
 import { GetGroupQuestionValue } from '../group-questions/dto/get-group-question-value.dto';
-import { CreateFormQuestionsInput } from './dto/create-form-questions.input';
 import { GetSingleQuestionAttribute } from '../single-questions/dto/get-single-question-attribute.dto';
 import { ImagesService } from '../images/images.service';
+import { Form } from '../forms/entities/form.entity';
 
 @Injectable()
 export class FormQuestionsService {
     constructor(
         @InjectRepository(FormQuestion) private formQuestionRepository: Repository<FormQuestion>,
+        @InjectRepository(Form) private formRepository: Repository<Form>,
         private singleQuestionsService: SingleQuestionsService,
         private groupQuestionsService: GroupQuestionsService,
         private imagesService: ImagesService,
     ) {}
 
-    async create(data: CreateFormQuestionInput) {
-        // const form = await this.formService.findOne(data.formId);
-
-        // this.validateQuestion(form, data);
+    async create(data: CreateFormQuestionInput, formId: string) {
+        this.validateQuestion(data, formId);
 
         const newQuestion = this.formQuestionRepository.create(data);
 
-        if (
-            [
-                AttributeType.TEXT_BOX,
-                AttributeType.PARAGRAPH,
-                AttributeType.RADIO_BUTTON,
-                AttributeType.CHECKBOX_BUTTON,
-                AttributeType.DROPDOWN,
-            ].includes(data.attributeType)
-        ) {
+        if (SINGLE_QUESTION_TYPES.includes(data.attributeType)) {
             let attributeValues: DeepPartial<SingleQuestionValue>[] = [];
 
             const singleQuestionInput = data.singleQuestion;
@@ -65,7 +55,7 @@ export class FormQuestionsService {
             });
 
             newQuestion.formSingleAttribute = attribute;
-        } else if ([AttributeType.CHECKBOX_GRID, AttributeType.RADIO_GRID].includes(data.attributeType)) {
+        } else if (GROUP_QUESTION_TYPES.includes(data.attributeType)) {
             const groupQuestionInput = data.groupQuestion;
 
             const groupQuestionRows = groupQuestionInput.rows.map((rowInput) => {
@@ -116,17 +106,18 @@ export class FormQuestionsService {
         return formQuestion;
     }
 
-    @Transactional()
-    async createMany(data: CreateFormQuestionsInput) {
-        const results = await Promise.all(data.formQuestions.map((question) => this.create(question)));
+    // @Transactional()
+    async createMany(data: CreateFormQuestionInput[], formId: string) {
+        const results = await Promise.all(data.map((question) => this.create(question, formId)));
 
         return results ? true : false;
     }
 
-    // private validateQuestion(form: Form, data: CreateFormQuestionInput) {
-    //     // TODO: Thêm kiểm tra điều kiện cho order
-    //     // TODO: Thêm kiểm tra điều kiện cho các type select, ít nhất một phần tử
-    // }
+    private validateQuestion(data: CreateFormQuestionInput, formId: string) {
+        if (data.formId !== formId) throw new BadRequestException(`FormId của câu hỏi có index = ${data.order} không khớp với formId của Form`);
+        // TODO: Thêm kiểm tra điều kiện cho order
+        // TODO: Thêm kiểm tra điều kiện cho các type select, ít nhất một phần tử
+    }
 
     findAll() {
         return `This action returns all formQuestions`;

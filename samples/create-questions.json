@@ -1,31 +1,69 @@
 {
+    "id": "729e8cb1-41c0-4926-a3c2-b45c6c81efa1",
+    "title": "khao sat muc do hai long cua benh nhan",
+    "description": null,
+    "startSurvey": "2024-04-03T17:00:00.000Z",
+    "status": "PENDING",
+    "hasAnswer": true,
+    "category": "PATIENT_CATEGORY",
+    "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
     "formQuestions": [
         {
-            "label": "Title of the question",
-            "description": "Description of the question",
+            "label": "Title of the CHECKBOX BUTTON",
+            "description": "Description of the CHECKBOX BUTTON",
+            "require": true,
+            "order": 0,
+            "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+            "attributeType": "DROPDOWN",
+            "formId": "729e8cb1-41c0-4926-a3c2-b45c6c81efa1",
+            "singleQuestion": {
+                "score": 1,
+                "isOther": false,
+                "singleQuestionValues": [
+                    {
+                        "value": "checkbox value 1",
+                        "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+                        "isCorrect": true
+                    },
+                    {
+                        "value": "checkbox value 2",
+                        "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+                        "isCorrect": false
+                    },
+                    {
+                        "value": "checkbox value 3",
+                        "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+                        "isCorrect": false
+                    }
+                ]
+            }
+        },
+        {
+            "label": "Title of the dropdown",
+            "description": "Description of the dropdown",
             "require": true,
             "order": 1,
             "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
             "attributeType": "DROPDOWN",
-            "formId": "d0406728-f974-4d8e-a6f0-3e13b6c0bec8",
+            "formId": "729e8cb1-41c0-4926-a3c2-b45c6c81efa1",
             "singleQuestion": {
                 "score": 0,
                 "isOther": false,
                 "singleQuestionValues": [
                     {
-                        "value": "Cau tra loi dung 1",
+                        "value": "dropdown value 1",
                         "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
                         "isCorrect": true
                     },
                     {
-                        "value": "Cau tra loi dung 2",
+                        "value": "dropdown value 2",
                         "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
                         "isCorrect": false
                     },
                     {
-                        "value": "Cau tra loi dung 2",
+                        "value": "dropdown value 3",
                         "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
-                        "isCorrect": false
+                        "isCorrect": true
                     }
                 ]
             }
@@ -34,10 +72,10 @@
             "label": "Title of the question",
             "description": "Description of the question",
             "require": true,
-            "order": 0,
+            "order": 2,
             "imageId": null,
             "attributeType": "PARAGRAPH",
-            "formId": "d0406728-f974-4d8e-a6f0-3e13b6c0bec8",
+            "formId": "729e8cb1-41c0-4926-a3c2-b45c6c81efa1",
             "singleQuestion": {
                 "score": 0,
                 "isOther": false,
@@ -59,10 +97,10 @@
             "label": "Title of the multi choice",
             "description": "Description of multi choice",
             "require": true,
-            "order": 2,
+            "order": 3,
             "imageId": null,
             "attributeType": "RADIO_GRID",
-            "formId": "d0406728-f974-4d8e-a6f0-3e13b6c0bec8",
+            "formId": "729e8cb1-41c0-4926-a3c2-b45c6c81efa1",
             "groupQuestion": {
                 "rows": [
                     {

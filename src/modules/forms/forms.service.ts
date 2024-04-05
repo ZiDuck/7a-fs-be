@@ -15,6 +15,10 @@ import { ImagesService } from '../images/images.service';
 import { GetFormDto } from './dto/get-form.dto';
 import { FormTemplateDto } from '../form_templates/dto/form-template.dto';
 import { FormTemplatesService } from '../form_templates/form_templates.service';
+import { UpdateFormStatusDto } from './dto/update-form-status.dto';
+import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-form.input';
+import { FormStatus } from './enums/form-status.enum';
+import omit from 'lodash/omit';
 
 @Injectable()
 export class FormsService {
@@ -30,6 +34,15 @@ export class FormsService {
         const result = this.formRepository.create(data);
 
         return await this.formRepository.save(result);
+    }
+
+    @Transactional()
+    async createFormQuestions(data: CreateFormQuestionOfFormInput) {
+        if (data.status !== FormStatus.PENDING) throw new BadRequestException(`Chỉ có thể tạo câu hỏi cho form ở trạng thái ${FormStatus.PENDING}`);
+
+        await this.formRepository.update({ id: data.id }, omit(data, ['formQuestions', 'formId']));
+
+        return await this.formQuestionService.createMany(data.formQuestions, data.id);
     }
 
     @Transactional()
@@ -86,12 +99,14 @@ export class FormsService {
         return customizeForm;
     }
 
-    async update(id: string, data: UpdateFormDto) {
+    async updateStatus(id: string, data: UpdateFormStatusDto) {
+        return await this.update(id, data);
+    }
+
+    async update(id: string, data: UpdateFormDto | UpdateFormStatusDto) {
         await this.findOne(id);
 
         const result = await this.formRepository.update(id, data);
-
-        // this.cls.set(USER_AUDIT, id);
 
         return result.affected ? true : false;
     }

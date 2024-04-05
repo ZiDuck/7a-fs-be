@@ -9,3 +9,15 @@ export enum AttributeType {
     CHECKBOX_GRID = 'CHECKBOX_GRID',
     RADIO_GRID = 'RADIO_GRID',
 }
+
+export const SINGLE_QUESTION_TYPES = [
+    AttributeType.TEXT_BOX,
+    AttributeType.PARAGRAPH,
+    AttributeType.CHECKBOX_BUTTON,
+    AttributeType.RADIO_BUTTON,
+    AttributeType.DROPDOWN,
+];
+
+export const GROUP_QUESTION_TYPES = [AttributeType.CHECKBOX_GRID, AttributeType.RADIO_GRID];
+
+export const QUESTION_TYPES = [...SINGLE_QUESTION_TYPES, ...GROUP_QUESTION_TYPES];
