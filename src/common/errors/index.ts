@@ -1,6 +1,7 @@
 import {
     EmailExistException,
     EmailNotExistException,
+    FileNotFoundErrorBusinessException,
     InternalServerErrorBusinessException,
     PassWordIncorrectException,
     RefreshTokenInvalidException,
@@ -47,5 +48,9 @@ export class Errors {
 
     static InternalServerErrorBusiness(errMessage: string) {
         return new InternalServerErrorBusinessException({ errMessage });
+    }
+
+    static FileNotFoundErrorBusiness(id: string) {
+        return new FileNotFoundErrorBusinessException(id);
     }
 }

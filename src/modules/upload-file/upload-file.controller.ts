@@ -1,16 +1,23 @@
-import { Body, Controller, Delete, Get, HttpException, InternalServerErrorException, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpException,
+    InternalServerErrorException,
+    Param,
+    Post,
+    UploadedFile,
+    UseInterceptors,
+} from '@nestjs/common';
 import { UploadFileService } from './upload-file.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ArchiveFolder } from './enums/archive-folder.enum';
-import { env } from '../../cores/utils/env.util';
 import { Transactional } from 'typeorm-transactional';
 import { DeleteImageInput } from '../images/dto/delete-image.input';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiNoContentResponse, ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiNoContentResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
-import { CloudinaryApiResponse, CloudinaryErrorResponse } from '../cloudinary/dto/cloudinary-api-response.dto';
-import { ApiOkResponseDto } from '../../cores/decorators/api-ok-dto.decorator';
 import { FileUploadDto } from './enums/file-upload.dto';
-import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
 import { ApiException } from '../../cores/decorators/api-exception.decorator';
 import { ImageUploadOutput } from './dto/image-upload.output';
 import { plainToClass } from 'class-transformer';
@@ -72,5 +79,17 @@ export class UploadFileController {
 
             throw new InternalServerErrorException(error.message);
         }
+    }
+
+    @Get('download')
+    async download(@Param('publicId') publicId: string) {
+        const test = 'public/feedback-system/images/ojjsfjmt2saxtkrh245k';
+        return await this.uploadFileService.downloadFile(test);
+    }
+
+    @Get(':publicId')
+    async getDetailFile(@Param('publicId') publicId: string) {
+        const test = 'public/feedback-system/images/ojjsfjmt2saxtkrh245k';
+        return await this.uploadFileService.getDetailFile(test);
     }
 }

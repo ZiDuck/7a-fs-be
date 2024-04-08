@@ -22,6 +22,7 @@ import { CoreModule } from './cores/core.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CurrentUserContextInterceptor } from './cores/interceptors/current-user-context.interceptor';
 import { FormTemplatesModule } from './modules/form_templates/form_templates.module';
+import { BackupModule } from './modules/backup/backup.module';
 
 @Module({
     imports: [
@@ -51,6 +52,7 @@ import { FormTemplatesModule } from './modules/form_templates/form_templates.mod
         NotificationsModule,
         EventEmitterModule.forRoot(),
         FormTemplatesModule,
+        BackupModule,
     ],
     controllers: [AppController],
     providers: [

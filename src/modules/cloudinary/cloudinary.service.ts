@@ -1,11 +1,12 @@
 // cloudinary.service.ts
 
 import { Injectable } from '@nestjs/common';
-import { v2 as cloudinary } from 'cloudinary';
+import { AdminAndResourceOptions, v2 as cloudinary } from 'cloudinary';
 import { CloudinaryApiResponse, CloudinaryErrorResponse } from './dto/cloudinary-api-response.dto';
 import { env } from '../../cores/utils/env.util';
 import { CheckResourceExits } from './dto/check-resource-exits.dto';
 import streamifier from 'streamifier';
+import { ResourceType } from '../../cores/enums/resource-type.enum';
 
 export type ResourceType = 'image' | 'video' | 'raw';
 
@@ -22,6 +23,22 @@ export class CloudinaryService {
             );
 
             streamifier.createReadStream(file.buffer).pipe(uploadStream);
+        });
+    }
+
+    uploadRawFile(file: string): Promise<CloudinaryApiResponse | CloudinaryErrorResponse> {
+        return new Promise<CloudinaryApiResponse>((resolve, reject) => {
+            cloudinary.uploader.upload(
+                file,
+                {
+                    folder: 'public/feedback-system/backup/',
+                    resource_type: 'raw',
+                },
+                (error, result) => {
+                    if (error) return reject(error);
+                    resolve(result);
+                },
+            );
         });
     }
     async checkResourcesExists(params: CheckResourceExits): Promise<boolean> {
@@ -50,6 +67,35 @@ export class CloudinaryService {
             return true;
         } catch (error) {
             return false;
+        }
+    }
+
+    async getFileDetails(publicId: string): Promise<any> {
+        try {
+            const result = await cloudinary.api.resource(publicId);
+            return result;
+        } catch (error) {
+            throw new Error(`Error getting file details: ${error.message}`);
+        }
+    }
+
+    async getAllFileRaw(): Promise<any> {
+        try {
+            // const result = await cloudinary.search.expression('public/feedback-system/backup/').max_results(12).execute();
+            const result = await cloudinary.api.resources_by_asset_folder('public/feedback-system/backup/*');
+            return result;
+        } catch (error) {
+            throw new Error(`Error getting file details: ${error.message}`);
+        }
+    }
+
+    async downloadFile(publicId: string, options: AdminAndResourceOptions): Promise<string> {
+        try {
+            const getFile = await this.getFileDetails(publicId);
+            const response = await cloudinary.api.resource(publicId, options);
+            return response;
+        } catch (error) {
+            throw new Error(`Error downloading file: ${error.message}`);
         }
     }
 }

@@ -266,4 +266,16 @@ export class RestoreFormNotification extends Notification {
     }
 }
 
-export const entities = [Notification, CreateUserNotification, UpdateUserNotification, DeleteUserNotification, RestoreUserNotification];
+export const entities = [
+    Notification,
+    CreateUserNotification,
+    UpdateUserNotification,
+    DeleteUserNotification,
+    RestoreUserNotification,
+    DataUpdateNotification,
+    CreateFormNotification,
+    UpdateFormNotification,
+    DeleteFormNotification,
+    AcceptedFormNotification,
+    CancelFormNotification,
+];

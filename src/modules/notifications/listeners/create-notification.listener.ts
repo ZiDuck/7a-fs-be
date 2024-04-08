@@ -11,4 +11,9 @@ export class NotificationListener {
     async handleUserCreatedEvent(events: CreateNotificationEvent[]): Promise<void> {
         await this.notificationService.create(events);
     }
+
+    @OnEvent('system.backup')
+    async handleBackupCreatedEvent(events: CreateNotificationEvent[]): Promise<void> {
+        await this.notificationService.create(events);
+    }
 }

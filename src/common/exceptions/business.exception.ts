@@ -102,3 +102,9 @@ export class InternalServerErrorBusinessException extends BusinessException {
         super({ message: 'Lỗi hệ thống', ...response }, HttpStatus.INTERNAL_SERVER_ERROR, options);
     }
 }
+
+export class FileNotFoundErrorBusinessException extends BusinessException {
+    constructor(id?: string) {
+        super({ message: `Không tìm thấy file #${id}` }, HttpStatus.BAD_REQUEST);
+    }
+}

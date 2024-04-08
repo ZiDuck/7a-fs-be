@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { CloudinaryApiResponse, CloudinaryErrorResponse } from '../cloudinary/dto/cloudinary-api-response.dto';
 import { CheckResourceExits } from '../cloudinary/dto/check-resource-exits.dto';
-import { ResourceType } from '../../cores/enums/resource-type.enum';
 import { ImagesService } from '../images/images.service';
 import { DeleteImageInput } from '../images/dto/delete-image.input';
 import { ImageUploadOutput } from './dto/image-upload.output';
@@ -49,5 +48,17 @@ export class UploadFileService {
 
     async deleteOneImage(data: DeleteImageInput) {
         await this.imageService.deleteOne(data);
+    }
+
+    async getDetailFile(publicId: string) {
+        return await this.cloudinaryService.getFileDetails(publicId);
+    }
+
+    async downloadFile(publicId: string) {
+        return await this.cloudinaryService.downloadFile(publicId);
+    }
+
+    async uploadRawFile(file: string) {
+        return await this.cloudinaryService.uploadRawFile(file);
     }
 }
