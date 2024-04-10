@@ -46,9 +46,10 @@ services:
             - CLOUDINARY_CLOUD_PRIVATEDIR=private/feedback-system
 
             - MINUTE_WAIT_FORGOT_PASSWORD=1
+
     postgres-fs-stag:
         container_name: postgres-fs-stag
-        image: postgres:15
+        image: postgres:15-alpine
         restart: always
         environment:
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
