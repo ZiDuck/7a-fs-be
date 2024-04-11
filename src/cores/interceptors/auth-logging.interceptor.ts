@@ -41,7 +41,7 @@ export class AuthLoggingInterceptor implements NestInterceptor {
 
         const userId = this.cls.get(USER_AUDIT);
 
-        const users = await this.userService.findAllUser();
+        const users = await this.userService.findAllNotCurrUser(req.user.sub);
 
         if (actionType === ActionType.CREATE_USER) {
             // create notification event

@@ -1,7 +1,7 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 
 import { PasswordService } from '../auth/password.service';
 import { RolesService } from '../roles/roles.service';
@@ -64,6 +64,16 @@ export class UsersService {
 
     async findAllUser(): Promise<User[]> {
         const results = await this.usersRepository.find();
+
+        return results;
+    }
+
+    async findAllNotCurrUser(userId: string): Promise<User[]> {
+        const results = await this.usersRepository.find({
+            where: {
+                id: Not(userId),
+            },
+        });
 
         return results;
     }

@@ -85,6 +85,10 @@ export class NotificationsService {
             where: {
                 id,
             },
+            relations: {
+                userReceived: true,
+                userSent: true,
+            },
         });
 
         if (!notification) {

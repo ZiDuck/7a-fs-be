@@ -68,11 +68,6 @@ export class NotificationsController {
         }
     }
 
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.notificationsService.findOne(id);
-    }
-
     @Patch('all/read')
     updateAllRead() {
         return this.notificationsService.updateAllRead();
@@ -81,5 +76,10 @@ export class NotificationsController {
     @Patch(':id/read')
     update(@Param('id', ParseUUIDPipe) id: string) {
         return this.notificationsService.update(id);
+    }
+
+    @Get(':id')
+    findOne(@Param('id') id: string) {
+        return this.notificationsService.findOne(id);
     }
 }
