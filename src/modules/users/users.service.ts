@@ -46,7 +46,7 @@ export class UsersService {
     }
 
     async findAllPagination(query: PageQueryDto): Promise<PageDto<User>> {
-        const builder = this.usersRepository.createQueryBuilder('user').leftJoinAndSelect('user.role', 'role');
+        const builder = this.usersRepository.createQueryBuilder('user').leftJoinAndSelect('user.role', 'role').orderBy('user.createdDate', 'DESC');
         const result = await paginate(builder, query);
         // const results = await this.usersRepository.find({ relations: { role: true } });
 

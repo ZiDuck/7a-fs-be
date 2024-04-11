@@ -26,65 +26,58 @@ export class NotificationsService {
     async findAll(query: PageQueryDto) {
         const currentUserId = this.currentUserContext.getUserId();
 
-        const builder = this.notificationRepository
+        const builder = this.findAllBuilder(currentUserId);
+        const result = await paginate(builder, query);
+
+        const results = {
+            ...result,
+            items: result.items.map((notification) => {
+                return this.customizeResult(notification);
+            }),
+        };
+
+        return results;
+    }
+
+    async findAllRead(query: PageQueryDto) {
+        const currentUserId = this.currentUserContext.getUserId();
+
+        const builder = this.findAllBuilder(currentUserId).andWhere('noti.isRead=true');
+        const result = await paginate(builder, query);
+
+        const results = {
+            ...result,
+            items: result.items.map((notification) => {
+                return this.customizeResult(notification);
+            }),
+        };
+
+        return results;
+    }
+
+    async findAllUnread(query: PageQueryDto) {
+        const currentUserId = this.currentUserContext.getUserId();
+
+        const builder = this.findAllBuilder(currentUserId).andWhere('noti.isRead=false');
+        const result = await paginate(builder, query);
+
+        const results = {
+            ...result,
+            items: result.items.map((notification) => {
+                return this.customizeResult(notification);
+            }),
+        };
+
+        return results;
+    }
+
+    private findAllBuilder(currentUserId: string) {
+        return this.notificationRepository
             .createQueryBuilder('noti')
             .leftJoinAndSelect('noti.userReceived', 'receiver')
             .leftJoinAndSelect('noti.userSent', 'sent')
             .where('noti.receivedByUserId=:userId', { userId: currentUserId })
             .orderBy('noti.createdDate', 'DESC');
-        const result = await paginate(builder, query);
-        // const results = await this.usersRepository.find({ relations: { role: true } });
-
-        // return result;
-
-        // const notifications = await this.notificationRepository.find({
-        //     relations: {
-        //         userReceived: true,
-        //         userSent: true,
-        //     },
-        //     where: {
-        //         receivedByUserId: currentUserId,
-        //     },
-        //     take: 10,
-        //     order: {
-        //         createdDate: 'DESC',
-        //     },
-        // });
-
-        const results = {
-            ...result,
-            items: result.items.map((notification) => {
-                const data = new GetNotificationOutput();
-
-                data.id = notification.id;
-                data.sentBy = !notification.userSent
-                    ? null
-                    : {
-                          id: notification.userSent.id,
-                          fullName: notification.userSent.getName(),
-                      };
-
-                data.receivedBy = !notification.userReceived
-                    ? null
-                    : {
-                          id: notification.userReceived.id,
-                          fullName: notification.userReceived.getName(),
-                      };
-                data.status = notification.status;
-                data.type = notification.type;
-                data.createdDate = notification.createdDate;
-                data.isRead = notification.isRead;
-
-                const notificationInfo = notification.getNotificationInfo();
-
-                data.title = notificationInfo.title;
-                data.description = notificationInfo.description;
-
-                return data;
-            }),
-        };
-
-        return results;
     }
 
     async findOne(id: string) {
@@ -98,7 +91,26 @@ export class NotificationsService {
             throw new BadRequestException('Notification not found');
         }
 
-        return notification;
+        return this.customizeResult(notification);
+    }
+
+    async findAllUnreadNoPagination() {
+        const currentUserId = this.currentUserContext.getUserId();
+
+        const results = await this.notificationRepository.find({
+            where: {
+                isRead: false,
+                receivedByUserId: currentUserId,
+            },
+            relations: {
+                userReceived: true,
+                userSent: true,
+            },
+        });
+
+        return results.map((notification) => {
+            return this.customizeResult(notification);
+        });
     }
 
     async update(id: string) {
@@ -106,10 +118,54 @@ export class NotificationsService {
 
         notification.isRead = true;
 
-        await this.notificationRepository.save(notification);
+        const result = await this.notificationRepository.save(notification);
+
+        return result ? true : false;
+    }
+
+    async updateAllRead() {
+        const notifications = await this.findAllUnreadNoPagination();
+
+        // notification.isRead = true;
+
+        notifications.map((notification) => (notification.isRead = true));
+
+        const results = await this.notificationRepository.save(notifications);
+
+        return results ? true : false;
     }
 
     remove(id: number) {
         return `This action removes a #${id} notification`;
+    }
+
+    private customizeResult(notification: Notification) {
+        const data = new GetNotificationOutput();
+
+        data.id = notification.id;
+        data.sentBy = !notification.userSent
+            ? null
+            : {
+                  id: notification.userSent.id,
+                  fullName: notification.userSent.getName(),
+              };
+
+        data.receivedBy = !notification.userReceived
+            ? null
+            : {
+                  id: notification.userReceived.id,
+                  fullName: notification.userReceived.getName(),
+              };
+        data.status = notification.status;
+        data.type = notification.type;
+        data.createdDate = notification.createdDate;
+        data.isRead = notification.isRead;
+
+        const notificationInfo = notification.getNotificationInfo();
+
+        data.title = notificationInfo.title;
+        data.description = notificationInfo.description;
+
+        return data;
     }
 }

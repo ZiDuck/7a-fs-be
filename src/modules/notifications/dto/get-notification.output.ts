@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { NotificationStatus, NotificationType } from '../../../cores/constants';
 import { Expose } from 'class-transformer';
 
@@ -28,14 +28,17 @@ export class GetNotificationOutput {
     @ApiProperty({ enum: NotificationType })
     type: NotificationType;
 
-    @ApiProperty({ type: () => GetUser, nullable: true })
+    @ApiPropertyOptional({ type: () => GetUser, nullable: true })
     sentBy: GetUser | null;
 
     @ApiProperty({ type: () => GetUser, nullable: true })
     receivedBy: GetUser | null;
 
-    @ApiProperty({ type: String, nullable: true })
-    deviceId: string | null;
+    @ApiPropertyOptional()
+    formId: string | null;
+
+    @ApiPropertyOptional()
+    userId: string | null;
 
     @ApiProperty()
     isRead: boolean;
