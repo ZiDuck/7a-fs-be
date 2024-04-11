@@ -1,12 +1,12 @@
-import { Column, Entity, OneToMany, Relation } from 'typeorm';
-import { AppBaseEntity } from '../../../common/entities/base.entity';
+import { Column, DeleteDateColumn, Entity, OneToMany, Relation } from 'typeorm';
 import { FormStatus } from '../enums/form-status.enum';
 import { FormCategory } from '../enums/form-category.enum';
 import { FormQuestion } from '../../form-questions/entities/form-question.entity';
 import { Image } from '../../images/entites/image.entity';
+import { AuditEntity } from '../../../common/entities/audit.entity';
 
 @Entity()
-export class Form extends AppBaseEntity {
+export class Form extends AuditEntity {
     @Column('varchar', { length: 1000, default: '' })
     title: string;
 
@@ -28,6 +28,9 @@ export class Form extends AppBaseEntity {
     @Column('uuid', { nullable: true })
     imageId: Image['id'];
 
-    @OneToMany(() => FormQuestion, (formQuestion: FormQuestion) => formQuestion.form)
+    @OneToMany(() => FormQuestion, (formQuestion: FormQuestion) => formQuestion.form, { cascade: true })
     formQuestions: Relation<FormQuestion>[];
+
+    @DeleteDateColumn()
+    deletedDate: Date;
 }

@@ -3,11 +3,6 @@ import { Type } from 'class-transformer';
 import { IsInt, IsOptional, Max, Min } from 'class-validator';
 
 export class PageQueryDto {
-    // @ApiPropertyOptional({ enum: OrderByDirection, default: OrderByDirection.ASC })
-    // @AppIsEnum(OrderByDirection)
-    // @IsOptional()
-    // readonly order?: OrderByDirection = OrderByDirection.ASC;
-
     @ApiPropertyOptional({
         minimum: 1,
         default: 1,

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, Relation } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, Relation } from 'typeorm';
 import { AppBaseEntity } from '../../../common/entities/base.entity';
 import { AttributeType } from '../enums/attribute-type.enum';
 import { Form } from '../../forms/entities/form.entity';
@@ -30,15 +30,18 @@ export class FormQuestion extends AppBaseEntity {
     formId: Form['id'];
 
     @JoinColumn({ referencedColumnName: 'id', name: 'formId' })
-    @ManyToOne(() => Form, (form: Form) => form.formQuestions)
+    @ManyToOne(() => Form, (form: Form) => form.formQuestions, { onDelete: 'CASCADE' })
     form: Relation<Form>;
 
     @OneToOne(() => SingleQuestionAttribute, (singleQuestion: SingleQuestionAttribute) => singleQuestion.question, {
-        cascade: ['insert'],
+        cascade: true,
         eager: true,
     })
     formSingleAttribute?: Relation<SingleQuestionAttribute>;
 
-    @OneToOne(() => GroupQuestionAttribute, (groupQuestion: GroupQuestionAttribute) => groupQuestion.question, { cascade: ['insert'], eager: true })
+    @OneToOne(() => GroupQuestionAttribute, (groupQuestion: GroupQuestionAttribute) => groupQuestion.question, { cascade: true, eager: true })
     formGroupAttribute?: Relation<GroupQuestionAttribute>;
+
+    @DeleteDateColumn()
+    deletedDate: Date;
 }

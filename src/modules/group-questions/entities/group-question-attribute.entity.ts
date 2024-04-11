@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, Relation } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, OneToMany, OneToOne, Relation } from 'typeorm';
 import { AppBaseEntity } from '../../../common/entities/base.entity';
 import { FormQuestion } from '../../form-questions/entities/form-question.entity';
 import { GroupQuestionRow } from './group-question-row.entity';
@@ -14,14 +14,17 @@ export class GroupQuestionAttribute extends AppBaseEntity {
     question: Relation<FormQuestion>;
 
     @OneToMany(() => GroupQuestionRow, (groupQuestionRow: GroupQuestionRow) => groupQuestionRow.group, {
-        cascade: ['insert'],
+        cascade: true,
         eager: true,
     })
     groupQuestionRows: Relation<GroupQuestionRow>[];
 
     @OneToMany(() => GroupQuestionColumn, (groupQuestionColumn: GroupQuestionColumn) => groupQuestionColumn.group, {
-        cascade: ['insert'],
+        cascade: true,
         eager: true,
     })
     groupQuestionColumns: Relation<GroupQuestionColumn>[];
+
+    @DeleteDateColumn()
+    deletedDate: Date;
 }

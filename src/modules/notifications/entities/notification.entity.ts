@@ -30,14 +30,14 @@ export class Notification extends AppBaseEntity {
     sentByUserId: User['id'];
 
     @JoinColumn({ referencedColumnName: 'id', name: 'sentByUserId' })
-    @ManyToOne(() => User, (user: User) => user.notificationsSent)
+    @ManyToOne(() => User, (user: User) => user.notificationsSent, { onDelete: 'CASCADE' })
     userSent: Relation<User>;
 
     @Column('uuid')
     receivedByUserId: User['id'];
 
     @JoinColumn({ referencedColumnName: 'id', name: 'receivedByUserId' })
-    @ManyToOne(() => User, (user: User) => user.notificationsReceived)
+    @ManyToOne(() => User, (user: User) => user.notificationsReceived, { onDelete: 'CASCADE' })
     userReceived: Relation<User>;
 
     getNotificationInfo(): NotificationInfo {

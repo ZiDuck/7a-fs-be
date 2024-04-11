@@ -5,7 +5,7 @@ import { PageDto } from '../../common/dtos/page.dto';
 export async function paginate<T>(source: SelectQueryBuilder<T>, { page, take }: PageQueryDto) {
     const count$ = source.getCount();
     const items$ = source
-        // .orderBy()
+        // .orderBy(orderBy ? `${orderBy}` : 'createdDate', order)
         .skip((page - 1) * take)
         .take(take)
         .getMany();

@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, Relation } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, Relation } from 'typeorm';
 import { AppBaseEntity } from '../../../common/entities/base.entity';
 import { SingleQuestionAttribute } from './single-question-attribute.entity';
 import { Image } from '../../images/entites/image.entity';
@@ -20,4 +20,12 @@ export class SingleQuestionValue extends AppBaseEntity {
     @JoinColumn({ referencedColumnName: 'id', name: 'attributeId' })
     @ManyToOne(() => SingleQuestionAttribute, (form: SingleQuestionAttribute) => form.singleQuestionValues, { onDelete: 'CASCADE' })
     singleQuestionAttribute: Relation<SingleQuestionAttribute>;
+
+    @DeleteDateColumn()
+    deletedDate: Date;
+
+    constructor(partial: Partial<SingleQuestionValue>) {
+        super();
+        Object.assign(this, partial);
+    }
 }

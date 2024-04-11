@@ -15,21 +15,18 @@ import { GroupQuestionAnswer } from '../group-questions/entities/group-question-
 import { GetGroupQuestionValue } from '../group-questions/dto/get-group-question-value.dto';
 import { GetSingleQuestionAttribute } from '../single-questions/dto/get-single-question-attribute.dto';
 import { ImagesService } from '../images/images.service';
-import { Form } from '../forms/entities/form.entity';
+import { SingleQuestionAttribute } from '../single-questions/entities/single-question-attribute.entity';
 
 @Injectable()
 export class FormQuestionsService {
     constructor(
         @InjectRepository(FormQuestion) private formQuestionRepository: Repository<FormQuestion>,
-        @InjectRepository(Form) private formRepository: Repository<Form>,
         private singleQuestionsService: SingleQuestionsService,
         private groupQuestionsService: GroupQuestionsService,
         private imagesService: ImagesService,
     ) {}
 
-    async create(data: CreateFormQuestionInput, formId: string) {
-        this.validateQuestion(data, formId);
-
+    async create(data: CreateFormQuestionInput) {
         const newQuestion = this.formQuestionRepository.create(data);
 
         if (SINGLE_QUESTION_TYPES.includes(data.attributeType)) {
@@ -37,39 +34,49 @@ export class FormQuestionsService {
 
             const singleQuestionInput = data.singleQuestion;
 
+            // Add attribute values
             attributeValues = singleQuestionInput.singleQuestionValues.reduce((listQuestionValues, value) => {
-                const attrValueInput = new SingleQuestionValue();
-                attrValueInput.value = value.value;
-                attrValueInput.imageId = value.imageId;
-                attrValueInput.isCorrect = value.isCorrect;
+                const attrValueInput = new SingleQuestionValue(value);
+                // attrValueInput.value = value.value;
+                // attrValueInput.imageId = value.imageId;
+                // attrValueInput.isCorrect = value.isCorrect;
 
                 listQuestionValues.push(this.singleQuestionsService.getSingleQuestionValueRepository().create(attrValueInput));
 
                 return listQuestionValues;
             }, [] as DeepPartial<SingleQuestionValue>[]);
 
-            const attribute = this.singleQuestionsService.getSingleQuestionAttributeRepository().create({
+            // Add fileConfig if type === FILE_UPLOAD
+            let fileConfig = null;
+            if (data.attributeType === AttributeType.FILE_UPLOAD && singleQuestionInput?.fileConfig) {
+                fileConfig = singleQuestionInput.fileConfig;
+            }
+
+            const attributeInput = new SingleQuestionAttribute({
                 score: singleQuestionInput.score,
                 isOther: singleQuestionInput.isOther,
+                fileConfig: fileConfig,
                 singleQuestionValues: attributeValues,
             });
+
+            const attribute = this.singleQuestionsService.getSingleQuestionAttributeRepository().create(attributeInput);
 
             newQuestion.formSingleAttribute = attribute;
         } else if (GROUP_QUESTION_TYPES.includes(data.attributeType)) {
             const groupQuestionInput = data.groupQuestion;
 
             const groupQuestionRows = groupQuestionInput.rows.map((rowInput) => {
-                const row = new GroupQuestionRow();
-                row.score = rowInput.score;
-                row.value = rowInput.value;
-                row.order = rowInput.order;
+                const row = new GroupQuestionRow(rowInput);
+                // row.score = rowInput.score;
+                // row.value = rowInput.value;
+                // row.order = rowInput.order;
                 return this.groupQuestionsService.getGroupQuestionRowRepository().create(row);
             });
 
             const groupQuestionColumns = groupQuestionInput.columns.map((columnInput) => {
-                const column = new GroupQuestionColumn();
-                column.value = columnInput.value;
-                column.order = columnInput.order;
+                const column = new GroupQuestionColumn(columnInput);
+                // column.value = columnInput.value;
+                // column.order = columnInput.order;
                 return this.groupQuestionsService.getGroupQuestionColumnRepository().create(column);
             });
 
@@ -79,8 +86,6 @@ export class FormQuestionsService {
             });
 
             newQuestion.formGroupAttribute = attribute;
-        } else if ([AttributeType.FILE_UPLOAD].includes(data.attributeType)) {
-            throw new BadRequestException(`Type ${data.attributeType} chưa được hỗ trợ để tạo question`);
         } else {
             throw new BadRequestException(`Type ${data.attributeType} chưa được hỗ trợ để tạo question`);
         }
@@ -108,13 +113,21 @@ export class FormQuestionsService {
 
     // @Transactional()
     async createMany(data: CreateFormQuestionInput[], formId: string) {
-        const results = await Promise.all(data.map((question) => this.create(question, formId)));
+        // Validate each questions
+        await Promise.all(data.map((question) => this.validateQuestion(question, formId)));
+
+        // Create async list question
+        const results = await Promise.all(data.map((question) => this.create(question)));
 
         return results ? true : false;
     }
 
     private validateQuestion(data: CreateFormQuestionInput, formId: string) {
         if (data.formId !== formId) throw new BadRequestException(`FormId của câu hỏi có index = ${data.order} không khớp với formId của Form`);
+
+        if (data.attributeType === AttributeType.FILE_UPLOAD && !data.singleQuestion?.fileConfig) {
+            throw new BadRequestException(`Câu hỏi kiểu FILE_UPLOAD phải có fileConfig`);
+        }
         // TODO: Thêm kiểm tra điều kiện cho order
         // TODO: Thêm kiểm tra điều kiện cho các type select, ít nhất một phần tử
     }
@@ -149,7 +162,7 @@ export class FormQuestionsService {
         result.attributeType = question.attributeType;
         result.formId = question.formId;
 
-        if ([AttributeType.CHECKBOX_GRID, AttributeType.RADIO_GRID].includes(question.attributeType)) {
+        if (GROUP_QUESTION_TYPES.includes(question.attributeType)) {
             const grQuestionRow = question.formGroupAttribute?.groupQuestionRows;
             const grQuestionCol = question.formGroupAttribute?.groupQuestionColumns;
 
@@ -185,15 +198,7 @@ export class FormQuestionsService {
             );
 
             result.groupQuestion = grQuestion;
-        } else if (
-            [
-                AttributeType.TEXT_BOX,
-                AttributeType.PARAGRAPH,
-                AttributeType.RADIO_BUTTON,
-                AttributeType.CHECKBOX_BUTTON,
-                AttributeType.DROPDOWN,
-            ].includes(question.attributeType)
-        ) {
+        } else if (SINGLE_QUESTION_TYPES.includes(question.attributeType)) {
             const singleQuestion = new GetSingleQuestionAttribute();
 
             singleQuestion.id = question.formSingleAttribute.id;
@@ -210,6 +215,10 @@ export class FormQuestionsService {
                     return result;
                 }),
             );
+
+            if (question.attributeType === AttributeType.FILE_UPLOAD && question.formSingleAttribute.fileConfig)
+                singleQuestion.fileConfig = question.formSingleAttribute.fileConfig;
+            else singleQuestion.fileConfig = null;
 
             result.singleQuestion = singleQuestion;
         }

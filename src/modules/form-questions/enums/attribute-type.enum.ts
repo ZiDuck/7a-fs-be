@@ -16,6 +16,8 @@ export const SINGLE_QUESTION_TYPES = [
     AttributeType.CHECKBOX_BUTTON,
     AttributeType.RADIO_BUTTON,
     AttributeType.DROPDOWN,
+    AttributeType.FILE_UPLOAD,
+    AttributeType.STAR,
 ];
 
 export const GROUP_QUESTION_TYPES = [AttributeType.CHECKBOX_GRID, AttributeType.RADIO_GRID];

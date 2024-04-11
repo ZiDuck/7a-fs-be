@@ -1,38 +1,38 @@
 {
-    "id": "729e8cb1-41c0-4926-a3c2-b45c6c81efa1",
+    "id": "3a536132-2e8b-488a-a0e1-bed7a49358ff",
     "title": "khao sat muc do hai long cua benh nhan",
     "description": null,
     "startSurvey": "2024-04-03T17:00:00.000Z",
     "status": "PENDING",
     "hasAnswer": true,
     "category": "PATIENT_CATEGORY",
-    "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+    "imageId": null,
     "formQuestions": [
         {
             "label": "Title of the CHECKBOX BUTTON",
             "description": "Description of the CHECKBOX BUTTON",
             "require": true,
             "order": 0,
-            "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+            "imageId": null,
             "attributeType": "DROPDOWN",
-            "formId": "729e8cb1-41c0-4926-a3c2-b45c6c81efa1",
+            "formId": "3a536132-2e8b-488a-a0e1-bed7a49358ff",
             "singleQuestion": {
                 "score": 1,
                 "isOther": false,
                 "singleQuestionValues": [
                     {
                         "value": "checkbox value 1",
-                        "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+                        "imageId": null,
                         "isCorrect": true
                     },
                     {
                         "value": "checkbox value 2",
-                        "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+                        "imageId": null,
                         "isCorrect": false
                     },
                     {
                         "value": "checkbox value 3",
-                        "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+                        "imageId": null,
                         "isCorrect": false
                     }
                 ]
@@ -43,26 +43,26 @@
             "description": "Description of the dropdown",
             "require": true,
             "order": 1,
-            "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+            "imageId": null,
             "attributeType": "DROPDOWN",
-            "formId": "729e8cb1-41c0-4926-a3c2-b45c6c81efa1",
+            "formId": "3a536132-2e8b-488a-a0e1-bed7a49358ff",
             "singleQuestion": {
                 "score": 0,
                 "isOther": false,
                 "singleQuestionValues": [
                     {
                         "value": "dropdown value 1",
-                        "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+                        "imageId": null,
                         "isCorrect": true
                     },
                     {
                         "value": "dropdown value 2",
-                        "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+                        "imageId": null,
                         "isCorrect": false
                     },
                     {
                         "value": "dropdown value 3",
-                        "imageId": "04cadb73-667d-4628-955f-aa2a7d0b428f",
+                        "imageId": null,
                         "isCorrect": true
                     }
                 ]
@@ -75,7 +75,7 @@
             "order": 2,
             "imageId": null,
             "attributeType": "PARAGRAPH",
-            "formId": "729e8cb1-41c0-4926-a3c2-b45c6c81efa1",
+            "formId": "3a536132-2e8b-488a-a0e1-bed7a49358ff",
             "singleQuestion": {
                 "score": 0,
                 "isOther": false,
@@ -100,7 +100,7 @@
             "order": 3,
             "imageId": null,
             "attributeType": "RADIO_GRID",
-            "formId": "729e8cb1-41c0-4926-a3c2-b45c6c81efa1",
+            "formId": "3a536132-2e8b-488a-a0e1-bed7a49358ff",
             "groupQuestion": {
                 "rows": [
                     {
@@ -144,6 +144,24 @@
                         "isCorrect": true
                     }
                 ]
+            }
+        },
+        {
+            "label": "Title of the file upload",
+            "description": null,
+            "require": true,
+            "order": 4,
+            "imageId": null,
+            "attributeType": "FILE_UPLOAD",
+            "formId": "3a536132-2e8b-488a-a0e1-bed7a49358ff",
+            "singleQuestion": {
+                "score": 0,
+                "isOther": false,
+                "singleQuestionValues": [],
+                "fileConfig": {
+                    "maxNumOfFiles": 1,
+                    "maxFileSize": 10
+                }
             }
         }
     ]

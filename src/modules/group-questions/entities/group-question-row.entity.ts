@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
 import { AppBaseEntity } from '../../../common/entities/base.entity';
 import { GroupQuestionAttribute } from './group-question-attribute.entity';
 import { GroupQuestionAnswer } from './group-question-answer.entity';
@@ -22,8 +22,16 @@ export class GroupQuestionRow extends AppBaseEntity {
     group: Relation<GroupQuestionAttribute>;
 
     @OneToMany(() => GroupQuestionAnswer, (answer: GroupQuestionAnswer) => answer.groupQuestionRow, {
-        cascade: ['insert'],
+        cascade: true,
         eager: true,
     })
     groupQuestionAnswers: Relation<GroupQuestionAnswer>[];
+
+    @DeleteDateColumn()
+    deletedDate: Date;
+
+    constructor(partial: Partial<GroupQuestionRow>) {
+        super();
+        Object.assign(this, partial);
+    }
 }

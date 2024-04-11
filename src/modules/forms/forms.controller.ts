@@ -17,7 +17,6 @@ import { CreateFormInput } from './dto/create-form.input';
 import { UpdateFormDto } from './dto/update-form.dto';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
-import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { GetFormDto } from './dto/get-form.dto';
 import { ApiPaginatedResponse } from '../../cores/decorators/api-paginated-dto.decorator';
 import { ApiException } from '../../cores/decorators/api-exception.decorator';
@@ -27,6 +26,7 @@ import { UpdateFormStatusDto } from './dto/update-form-status.dto';
 import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-form.input';
 import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
 import { AdminRole, AdminUserRole } from '../../cores/decorators/role.decorator';
+import { FormFilterQuery } from './dto/form-filter-query.dto';
 
 @ApiTags('forms')
 @ApiBearerAuth()
@@ -68,8 +68,19 @@ export class FormsController {
     @AdminUserRole()
     @ApiPaginatedResponse(GetFormDto)
     @Get()
-    async findAll(@Query() query: PageQueryDto) {
+    async findAll(@Query() query: FormFilterQuery) {
         const result = await this.formsService.findAll(query);
+
+        result.items = plainToInstance(GetFormDto, result.items);
+
+        return result;
+    }
+
+    @AdminUserRole()
+    @ApiPaginatedResponse(GetFormDto)
+    @Get('is-deleted')
+    async findAllDeleted(@Query() query: FormFilterQuery) {
+        const result = await this.formsService.findAllDeleted(query);
 
         result.items = plainToInstance(GetFormDto, result.items);
 
@@ -98,13 +109,36 @@ export class FormsController {
         return this.formsService.updateStatus(id, data);
     }
 
-    // @Patch(':id')
-    // update(@Param('id') id: string, @Body() data: UpdateFormDto) {
-    //     return this.formsService.update(id, data);
-    // }
+    @AdminUserRole()
+    @Patch(':id/info')
+    async update(@Param('id') id: string, @Body() data: UpdateFormDto) {
+        try {
+            return await this.formsService.updateInformation(id, data);
+        } catch (error) {
+            if (error instanceof HttpException) throw error;
+            throw new InternalServerErrorException(error.message);
+        }
+    }
 
-    // @Delete(':id')
-    // remove(@Param('id') id: string) {
-    //     return this.formsService.remove(+id);
-    // }
+    @AdminUserRole()
+    @Delete(':id')
+    async remove(@Param('id', ParseUUIDPipe) id: string) {
+        try {
+            return await this.formsService.remove(id);
+        } catch (error) {
+            if (error instanceof HttpException) throw error;
+            throw new InternalServerErrorException(error.message);
+        }
+    }
+
+    @AdminUserRole()
+    @Patch(':id/restore')
+    async restoreDeleted(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+        try {
+            await this.formsService.restore(id);
+        } catch (error) {
+            if (error instanceof HttpException) throw error;
+            throw new InternalServerErrorException(error.message);
+        }
+    }
 }

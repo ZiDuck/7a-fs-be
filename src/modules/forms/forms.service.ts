@@ -1,10 +1,10 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateFormInput } from './dto/create-form.input';
 import { UpdateFormDto } from './dto/update-form.dto';
 import { Transactional } from 'typeorm-transactional';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Form } from './entities/form.entity';
-import { Repository } from 'typeorm';
+import { FindOptionsRelationByString, FindOptionsRelations, Repository, SelectQueryBuilder } from 'typeorm';
 import { paginate } from '../../cores/utils/paginate.util';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { FormQuestionsService } from '../form-questions/form-questions.service';
@@ -19,6 +19,16 @@ import { UpdateFormStatusDto } from './dto/update-form-status.dto';
 import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-form.input';
 import { FormStatus } from './enums/form-status.enum';
 import omit from 'lodash/omit';
+import { FormFilterQuery } from './dto/form-filter-query.dto';
+
+type DefaultRelationType = FindOptionsRelations<Form> | FindOptionsRelationByString;
+
+const defaultRelation: DefaultRelationType = {
+    formQuestions: {
+        formSingleAttribute: true,
+        formGroupAttribute: true,
+    },
+};
 
 @Injectable()
 export class FormsService {
@@ -59,8 +69,33 @@ export class FormsService {
         return result ? true : false;
     }
 
-    async findAll(query: PageQueryDto) {
-        const builder = this.formRepository.createQueryBuilder('form');
+    async findAll(query: FormFilterQuery) {
+        const builder = this.formRepository.createQueryBuilder('form').orderBy('form.createdDate', 'DESC');
+
+        return await this.getFormResult(query, builder);
+    }
+
+    async findAllDeleted(query: FormFilterQuery) {
+        const builder = this.formRepository
+            .createQueryBuilder('form')
+            .withDeleted()
+            .where('form.deletedDate is not null')
+            .orderBy('form.deletedDate', 'DESC');
+
+        return await this.getFormResult(query, builder);
+    }
+
+    private async getFormResult(query: FormFilterQuery, builder: SelectQueryBuilder<Form>) {
+        // Add search query for title
+        if (query.title) {
+            const processedTitle = query.title.trim();
+            builder.andWhere('form.title ILIKE :title', { title: `%${processedTitle}%` });
+        }
+
+        // Add order query for orderBy input
+        if (query.orderBy) {
+            builder.orderBy('form.' + query.orderBy, query.orderType);
+        }
 
         const result = await paginate(builder, query);
 
@@ -78,7 +113,18 @@ export class FormsService {
     }
 
     async findOne(id: string) {
-        const result = await this.formRepository.findOne({ where: { id: id } });
+        const result = await this.formRepository.findOne({
+            where: { id: id },
+            relations: defaultRelation,
+        });
+
+        if (!result) throw new BadRequestException(`Form with id ${id} is not exists!`);
+
+        return result;
+    }
+
+    async findOneDeleted(id: string): Promise<Form> {
+        const result = await this.formRepository.findOne({ where: { id: id }, relations: defaultRelation, withDeleted: true });
 
         if (!result) throw new BadRequestException(`Form with id ${id} is not exists!`);
 
@@ -100,10 +146,10 @@ export class FormsService {
     }
 
     async updateStatus(id: string, data: UpdateFormStatusDto) {
-        return await this.update(id, data);
+        return await this.updateInformation(id, data);
     }
 
-    async update(id: string, data: UpdateFormDto | UpdateFormStatusDto) {
+    async updateInformation(id: string, data: UpdateFormDto | UpdateFormStatusDto) {
         await this.findOne(id);
 
         const result = await this.formRepository.update(id, data);
@@ -111,7 +157,23 @@ export class FormsService {
         return result.affected ? true : false;
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} form`;
+    async remove(id: string) {
+        const deleteForm = await this.findOne(id);
+
+        const result = await this.formRepository.softRemove(deleteForm);
+
+        if (!result) throw new InternalServerErrorException();
+
+        return;
+    }
+
+    async restore(id: string): Promise<void> {
+        const restoreUser = await this.findOneDeleted(id);
+
+        const result = await this.formRepository.recover(restoreUser);
+
+        if (!result) throw new InternalServerErrorException();
+
+        return;
     }
 }

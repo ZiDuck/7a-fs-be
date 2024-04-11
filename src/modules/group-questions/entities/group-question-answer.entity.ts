@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, Relation } from 'typeorm';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, Relation } from 'typeorm';
 import { AppBaseEntity } from '../../../common/entities/base.entity';
 import { GroupQuestionRow } from './group-question-row.entity';
 import { GroupQuestionColumn } from './group-question-column.entity';
@@ -9,9 +9,7 @@ export class GroupQuestionAnswer extends AppBaseEntity {
     rowId: GroupQuestionRow['id'];
 
     @JoinColumn({ referencedColumnName: 'id', name: 'rowId' })
-    @ManyToOne(() => GroupQuestionRow, (singleQuestionValue: GroupQuestionRow) => singleQuestionValue.groupQuestionAnswers, {
-        onDelete: 'CASCADE',
-    })
+    @ManyToOne(() => GroupQuestionRow, (singleQuestionValue: GroupQuestionRow) => singleQuestionValue.groupQuestionAnswers, { onDelete: 'CASCADE' })
     groupQuestionRow: Relation<GroupQuestionRow>;
 
     @Column('uuid')
@@ -25,4 +23,7 @@ export class GroupQuestionAnswer extends AppBaseEntity {
 
     @Column('boolean', { nullable: true })
     isCorrect: boolean;
+
+    @DeleteDateColumn()
+    deletedDate: Date;
 }
