@@ -28,6 +28,9 @@ export class Form extends AuditEntity {
     @Column('uuid', { nullable: true })
     imageId: Image['id'];
 
+    @Column('integer', { default: 0 })
+    version: number;
+
     @OneToMany(() => FormQuestion, (formQuestion: FormQuestion) => formQuestion.form, { cascade: true })
     formQuestions: Relation<FormQuestion>[];
 

@@ -57,4 +57,7 @@ export class GetFormDto extends Form {
 
     @Exclude()
     updatedDate: Date;
+
+    @Exclude()
+    deletedDate: Date;
 }

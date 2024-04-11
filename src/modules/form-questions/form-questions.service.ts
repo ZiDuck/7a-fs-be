@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateFormQuestionInput } from './dto/create-form-question.input';
-import { UpdateFormQuestionDto } from './dto/update-form-question.dto';
 import { FormQuestion } from './entities/form-question.entity';
 import { DeepPartial, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -226,11 +225,17 @@ export class FormQuestionsService {
         return result;
     }
 
-    update(id: string, data: UpdateFormQuestionDto) {
-        return `This action updates a #${id} formQuestion`;
+    async deleteAllByFormId(formId: string) {
+        const result = await this.formQuestionRepository.delete({ formId });
+
+        return result.affected;
     }
 
-    remove(id: number) {
-        return `This action removes a #${id} formQuestion`;
-    }
+    // update(id: string, data: UpdateFormQuestionDto) {
+    //     return `This action updates a #${id} formQuestion`;
+    // }
+
+    // remove(id: number) {
+    //     return `This action removes a #${id} formQuestion`;
+    // }
 }

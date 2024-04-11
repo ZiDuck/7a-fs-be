@@ -27,6 +27,7 @@ import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-fo
 import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
 import { AdminRole, AdminUserRole } from '../../cores/decorators/role.decorator';
 import { FormFilterQuery } from './dto/form-filter-query.dto';
+import { UpdateFormQuestionOfFormInput } from './dto/update-form-questions-of-form.input';
 
 @ApiTags('forms')
 @ApiBearerAuth()
@@ -103,6 +104,12 @@ export class FormsController {
         return plainToInstance(GetFormDto, await this.formsService.findOne(id));
     }
 
+    @AdminUserRole()
+    @Patch('form-questions')
+    updateQuestions(@Body() data: UpdateFormQuestionOfFormInput) {
+        return this.formsService.updateQuestions(data);
+    }
+
     @AdminRole()
     @Patch(':id/status')
     updateStatus(@Param('id') id: string, @Body() data: UpdateFormStatusDto) {
@@ -111,7 +118,7 @@ export class FormsController {
 
     @AdminUserRole()
     @Patch(':id/info')
-    async update(@Param('id') id: string, @Body() data: UpdateFormDto) {
+    async updateInformation(@Param('id') id: string, @Body() data: UpdateFormDto) {
         try {
             return await this.formsService.updateInformation(id, data);
         } catch (error) {

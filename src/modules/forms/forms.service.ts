@@ -6,7 +6,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Form } from './entities/form.entity';
 import { FindOptionsRelationByString, FindOptionsRelations, Repository, SelectQueryBuilder } from 'typeorm';
 import { paginate } from '../../cores/utils/paginate.util';
-import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { FormQuestionsService } from '../form-questions/form-questions.service';
 import { plainToInstance } from 'class-transformer';
 import { GetFormQuestion } from '../form-questions/dto/get-form-question.dto';
@@ -20,6 +19,8 @@ import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-fo
 import { FormStatus } from './enums/form-status.enum';
 import omit from 'lodash/omit';
 import { FormFilterQuery } from './dto/form-filter-query.dto';
+import { UpdateFormQuestionOfFormInput } from './dto/update-form-questions-of-form.input';
+import { FormAudit } from './entities/form-audit.entity';
 
 type DefaultRelationType = FindOptionsRelations<Form> | FindOptionsRelationByString;
 
@@ -34,6 +35,7 @@ const defaultRelation: DefaultRelationType = {
 export class FormsService {
     constructor(
         @InjectRepository(Form) private formRepository: Repository<Form>,
+        @InjectRepository(FormAudit) private formAuditRepository: Repository<FormAudit>,
         private readonly formQuestionService: FormQuestionsService,
         private imagesService: ImagesService,
         private formTemplatesService: FormTemplatesService,
@@ -143,6 +145,33 @@ export class FormsService {
         customizeForm.formQuestions = plainToInstance(GetFormQuestion, await this.formQuestionService.findAllByFormId(existedForm.id));
 
         return customizeForm;
+    }
+
+    @Transactional()
+    async updateQuestions(data: UpdateFormQuestionOfFormInput) {
+        const existedForm = await this.findOne(data.id);
+
+        if (existedForm.status !== FormStatus.PENDING && existedForm.status !== FormStatus.ACCEPTED)
+            throw new BadRequestException(`Chỉ có thể cập nhật câu hỏi cho form ở trạng thái ${FormStatus.PENDING} hoặc ${FormStatus.ACCEPTED}`);
+
+        if (existedForm.status === FormStatus.ACCEPTED) {
+            // Save form information to form audit
+            const formAuditInput = this.formAuditRepository.create({
+                form: existedForm,
+                isMaster: existedForm.version === 0 ? true : false,
+            });
+
+            await this.formAuditRepository.save(formAuditInput);
+
+            // Update version of the form
+            data.version = existedForm.version + 1;
+        }
+
+        await this.formQuestionService.deleteAllByFormId(data.id);
+
+        await this.formRepository.update({ id: data.id }, omit(data, ['formQuestions', 'formId']));
+
+        return await this.formQuestionService.createMany(data.formQuestions, data.id);
     }
 
     async updateStatus(id: string, data: UpdateFormStatusDto) {

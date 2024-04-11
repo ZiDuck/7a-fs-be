@@ -1,5 +1,5 @@
 {
-    "id": "3a536132-2e8b-488a-a0e1-bed7a49358ff",
+    "id": "fbb8232f-117c-41b5-a5aa-55be52982c7b",
     "title": "khao sat muc do hai long cua benh nhan",
     "description": null,
     "startSurvey": "2024-04-03T17:00:00.000Z",
@@ -15,7 +15,7 @@
             "order": 0,
             "imageId": null,
             "attributeType": "DROPDOWN",
-            "formId": "3a536132-2e8b-488a-a0e1-bed7a49358ff",
+            "formId": "fbb8232f-117c-41b5-a5aa-55be52982c7b",
             "singleQuestion": {
                 "score": 1,
                 "isOther": false,
@@ -45,7 +45,7 @@
             "order": 1,
             "imageId": null,
             "attributeType": "DROPDOWN",
-            "formId": "3a536132-2e8b-488a-a0e1-bed7a49358ff",
+            "formId": "fbb8232f-117c-41b5-a5aa-55be52982c7b",
             "singleQuestion": {
                 "score": 0,
                 "isOther": false,
@@ -75,7 +75,7 @@
             "order": 2,
             "imageId": null,
             "attributeType": "PARAGRAPH",
-            "formId": "3a536132-2e8b-488a-a0e1-bed7a49358ff",
+            "formId": "fbb8232f-117c-41b5-a5aa-55be52982c7b",
             "singleQuestion": {
                 "score": 0,
                 "isOther": false,
@@ -100,7 +100,7 @@
             "order": 3,
             "imageId": null,
             "attributeType": "RADIO_GRID",
-            "formId": "3a536132-2e8b-488a-a0e1-bed7a49358ff",
+            "formId": "fbb8232f-117c-41b5-a5aa-55be52982c7b",
             "groupQuestion": {
                 "rows": [
                     {
@@ -153,7 +153,7 @@
             "order": 4,
             "imageId": null,
             "attributeType": "FILE_UPLOAD",
-            "formId": "3a536132-2e8b-488a-a0e1-bed7a49358ff",
+            "formId": "fbb8232f-117c-41b5-a5aa-55be52982c7b",
             "singleQuestion": {
                 "score": 0,
                 "isOther": false,
