@@ -6,7 +6,6 @@ import { CloudinaryApiResponse, CloudinaryErrorResponse } from './dto/cloudinary
 import { env } from '../../cores/utils/env.util';
 import { CheckResourceExits } from './dto/check-resource-exits.dto';
 import streamifier from 'streamifier';
-import { ResourceType } from '../../cores/enums/resource-type.enum';
 
 export type ResourceType = 'image' | 'video' | 'raw';
 
@@ -89,13 +88,13 @@ export class CloudinaryService {
         }
     }
 
-    async downloadFile(publicId: string, options: AdminAndResourceOptions): Promise<string> {
-        try {
-            const getFile = await this.getFileDetails(publicId);
-            const response = await cloudinary.api.resource(publicId, options);
-            return response;
-        } catch (error) {
-            throw new Error(`Error downloading file: ${error.message}`);
-        }
-    }
+    // async downloadFile(publicId: string, options: AdminAndResourceOptions): Promise<string> {
+    //     try {
+    //         const getFile = await this.getFileDetails(publicId);
+    //         const response = await cloudinary.api.resource(publicId, options);
+    //         return response;
+    //     } catch (error) {
+    //         throw new Error(`Error downloading file: ${error.message}`);
+    //     }
+    // }
 }

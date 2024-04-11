@@ -81,15 +81,15 @@ export class UploadFileController {
         }
     }
 
-    @Get('download')
-    async download(@Param('publicId') publicId: string) {
-        const test = 'public/feedback-system/images/ojjsfjmt2saxtkrh245k';
-        return await this.uploadFileService.downloadFile(test);
-    }
+    // @Get('download')
+    // async download(@Param('publicId') publicId: string) {
+    //     const test = 'public/feedback-system/images/ojjsfjmt2saxtkrh245k';
+    //     return await this.uploadFileService.downloadFile(test);
+    // }
 
-    @Get(':publicId')
-    async getDetailFile(@Param('publicId') publicId: string) {
-        const test = 'public/feedback-system/images/ojjsfjmt2saxtkrh245k';
-        return await this.uploadFileService.getDetailFile(test);
-    }
+    // @Get(':publicId')
+    // async getDetailFile(@Param('publicId') publicId: string) {
+    //     const test = 'public/feedback-system/images/ojjsfjmt2saxtkrh245k';
+    //     return await this.uploadFileService.getDetailFile(test);
+    // }
 }

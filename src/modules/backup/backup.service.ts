@@ -70,13 +70,13 @@ export class BackupService {
         return removeLocal && removeRemote ? true : false;
     }
 
-    async downloadFile(id: string) {
-        const file = await this.findOne(id);
+    // async downloadFile(id: string) {
+    //     const file = await this.findOne(id);
 
-        const fileDownload = await this.cloudinaryService.downloadFile(file.publicId, {
-            resource_type: ResourceType.RAW,
-        });
-    }
+    //     const fileDownload = await this.cloudinaryService.downloadFile(file.publicId, {
+    //         resource_type: ResourceType.RAW,
+    //     });
+    // }
 
     async dataBackupService() {
         const date = dayjs().subtract(1, 'M').toDate();

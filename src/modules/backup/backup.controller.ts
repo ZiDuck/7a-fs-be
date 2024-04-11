@@ -28,10 +28,10 @@ export class BackupController {
         return this.backupService.dataBackupService();
     }
 
-    @Get(':id/download')
-    download(@Param('id') id: string) {
-        return this.backupService.downloadFile(id);
-    }
+    // @Get(':id/download')
+    // download(@Param('id') id: string) {
+    //     return this.backupService.downloadFile(id);
+    // }
 
     @Get(':id')
     findOne(@Param('id') id: string) {

@@ -54,9 +54,9 @@ export class UploadFileService {
         return await this.cloudinaryService.getFileDetails(publicId);
     }
 
-    async downloadFile(publicId: string) {
-        return await this.cloudinaryService.downloadFile(publicId);
-    }
+    // async downloadFile(publicId: string) {
+    //     return await this.cloudinaryService.downloadFile(publicId);
+    // }
 
     async uploadRawFile(file: string) {
         return await this.cloudinaryService.uploadRawFile(file);
