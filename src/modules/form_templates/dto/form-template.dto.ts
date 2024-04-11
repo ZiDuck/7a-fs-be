@@ -4,6 +4,15 @@ import { FormCategory } from '../../forms/enums/form-category.enum';
 import { FormStatus } from '../../forms/enums/form-status.enum';
 import { ImageOutput } from '../../images/dto/image.output';
 
+export class SingleQuestionFileConfigTemplate {
+    @Exclude()
+    id: string;
+
+    maxNumOfFiles: number;
+
+    maxFileSize: number;
+}
+
 export class SingleQuestionTemplate {
     @Exclude()
     id: string;
@@ -16,6 +25,9 @@ export class SingleQuestionTemplate {
 
     @Type(() => SingleQuestionValueTemplate)
     singleQuestionValues: SingleQuestionValueTemplate[];
+
+    @Type(() => SingleQuestionFileConfigTemplate)
+    fileConfig: SingleQuestionFileConfigTemplate | null;
 }
 
 class GetGroupQuestionTemplate {

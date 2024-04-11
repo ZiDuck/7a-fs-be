@@ -27,7 +27,11 @@ type DefaultRelationType = FindOptionsRelations<Form> | FindOptionsRelationByStr
 const defaultRelation: DefaultRelationType = {
     formQuestions: {
         formSingleAttribute: true,
-        formGroupAttribute: true,
+        formGroupAttribute: {
+            groupQuestionRows: {
+                groupQuestionAnswers: true,
+            },
+        },
     },
 };
 
@@ -51,6 +55,10 @@ export class FormsService {
     @Transactional()
     async createFormQuestions(data: CreateFormQuestionOfFormInput) {
         if (data.status !== FormStatus.PENDING) throw new BadRequestException(`Chỉ có thể tạo câu hỏi cho form ở trạng thái ${FormStatus.PENDING}`);
+
+        const existedForm = await this.findOne(data.id);
+
+        if (existedForm.formQuestions.length > 0) throw new BadRequestException(`Form có id ${data.id} đã tồn tại câu hỏi!`);
 
         await this.formRepository.update({ id: data.id }, omit(data, ['formQuestions', 'formId']));
 

@@ -36,9 +36,6 @@ export class FormQuestionsService {
             // Add attribute values
             attributeValues = singleQuestionInput.singleQuestionValues.reduce((listQuestionValues, value) => {
                 const attrValueInput = new SingleQuestionValue(value);
-                // attrValueInput.value = value.value;
-                // attrValueInput.imageId = value.imageId;
-                // attrValueInput.isCorrect = value.isCorrect;
 
                 listQuestionValues.push(this.singleQuestionsService.getSingleQuestionValueRepository().create(attrValueInput));
 
@@ -66,16 +63,11 @@ export class FormQuestionsService {
 
             const groupQuestionRows = groupQuestionInput.rows.map((rowInput) => {
                 const row = new GroupQuestionRow(rowInput);
-                // row.score = rowInput.score;
-                // row.value = rowInput.value;
-                // row.order = rowInput.order;
                 return this.groupQuestionsService.getGroupQuestionRowRepository().create(row);
             });
 
             const groupQuestionColumns = groupQuestionInput.columns.map((columnInput) => {
                 const column = new GroupQuestionColumn(columnInput);
-                // column.value = columnInput.value;
-                // column.order = columnInput.order;
                 return this.groupQuestionsService.getGroupQuestionColumnRepository().create(column);
             });
 
@@ -110,7 +102,6 @@ export class FormQuestionsService {
         return formQuestion;
     }
 
-    // @Transactional()
     async createMany(data: CreateFormQuestionInput[], formId: string) {
         // Validate each questions
         await Promise.all(data.map((question) => this.validateQuestion(question, formId)));
@@ -230,12 +221,4 @@ export class FormQuestionsService {
 
         return result.affected;
     }
-
-    // update(id: string, data: UpdateFormQuestionDto) {
-    //     return `This action updates a #${id} formQuestion`;
-    // }
-
-    // remove(id: number) {
-    //     return `This action removes a #${id} formQuestion`;
-    // }
 }

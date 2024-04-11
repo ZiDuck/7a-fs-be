@@ -106,8 +106,13 @@ export class FormsController {
 
     @AdminUserRole()
     @Patch('form-questions')
-    updateQuestions(@Body() data: UpdateFormQuestionOfFormInput) {
-        return this.formsService.updateQuestions(data);
+    async updateQuestions(@Body() data: UpdateFormQuestionOfFormInput) {
+        try {
+            return await this.formsService.updateQuestions(data);
+        } catch (error) {
+            if (error instanceof HttpException) throw error;
+            throw new InternalServerErrorException(error.message);
+        }
     }
 
     @AdminRole()
