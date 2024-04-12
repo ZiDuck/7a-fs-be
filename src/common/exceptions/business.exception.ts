@@ -108,3 +108,9 @@ export class FileNotFoundErrorBusinessException extends BusinessException {
         super({ message: `Không tìm thấy file #${id}` }, HttpStatus.BAD_REQUEST);
     }
 }
+
+export class ImageHistoryNotFoundErrorBusinessException extends BusinessException {
+    constructor(id?: string) {
+        super({ message: `Không tìm thấy ảnh #${id}` }, HttpStatus.BAD_REQUEST);
+    }
+}

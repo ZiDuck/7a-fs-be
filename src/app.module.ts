@@ -25,6 +25,7 @@ import { FormTemplatesModule } from './modules/form_templates/form_templates.mod
 import { BackupModule } from './modules/backup/backup.module';
 import { FormSubmitsModule } from './modules/form-submits/form-submits.module';
 import { RawFilesModule } from './modules/raw-files/raw-files.module';
+import { ImageHistoryModule } from './modules/image-history/image-history.module';
 
 @Module({
     imports: [
@@ -57,6 +58,7 @@ import { RawFilesModule } from './modules/raw-files/raw-files.module';
         BackupModule,
         FormSubmitsModule,
         RawFilesModule,
+        ImageHistoryModule,
     ],
     controllers: [AppController],
     providers: [

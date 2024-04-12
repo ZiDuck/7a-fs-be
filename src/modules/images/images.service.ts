@@ -53,7 +53,9 @@ export class ImagesService {
 
         if (image) await this.imageRepository.remove(image);
 
-        await this.deleteImageOnCloud([condition.publicId]);
+        const result = await this.deleteImageOnCloud([condition.publicId]);
+
+        return result ? true : false;
     }
 
     // async deleteImages(condition: DeleteImagesInput) {
@@ -74,6 +76,8 @@ export class ImagesService {
     }
 
     async deleteImageOnCloud(publicIds: string[]) {
-        await this.cloudinaryService.deleteResources(publicIds, ResourceType.IMAGE);
+        const result = await this.cloudinaryService.deleteResources(publicIds, ResourceType.IMAGE);
+
+        return result ? true : false;
     }
 }

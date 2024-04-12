@@ -11,6 +11,7 @@ import backupHistories from '../../modules/backup/entities';
 import formTemplateEntities from '../../modules/form_templates/entities';
 import formSubmitEntities from '../../modules/form-submits/entities';
 import rawFileEntities from '../../modules/raw-files/enitites';
+import imageHistories from '../../modules/image-history/entities';
 
 const entities = [
     ...roleEntities,
@@ -26,5 +27,6 @@ const entities = [
     ...formTemplateEntities,
     ...formSubmitEntities,
     ...rawFileEntities,
+    ...imageHistories,
 ];
 export default entities;

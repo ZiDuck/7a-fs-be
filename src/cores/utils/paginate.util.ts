@@ -13,6 +13,17 @@ export async function paginate<T>(source: SelectQueryBuilder<T>, { page, take }:
     return new PageDto<T>(items, count, page, take);
 }
 
+export async function paginateRaw<T>(source: SelectQueryBuilder<T>, { page, take }: PageQueryDto) {
+    const count$ = source.getCount();
+    const items$ = source
+        // .orderBy(orderBy ? `${orderBy}` : 'createdDate', order)
+        .skip((page - 1) * take)
+        .take(take)
+        .getRawMany();
+    const [count, items] = await Promise.all([count$, items$]);
+    return new PageDto<T>(items, count, page, take);
+}
+
 export async function paginateDynamicFilter<T>(source: SelectQueryBuilder<T>, { page, take }: PageQueryDto) {
     const count$ = source.getCount();
     const items$ = source

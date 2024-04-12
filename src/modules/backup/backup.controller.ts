@@ -4,7 +4,11 @@ import { CreateBackupDto } from './dto/create-backup.dto';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { plainToInstance } from 'class-transformer';
 import { GetBackupOutput } from './dto/backup-history.output';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Backup History')
+// @ApiBearerAuth()
+// @UseRoleGuard()
 @Controller('backup')
 export class BackupController {
     constructor(private readonly backupService: BackupService) {}
@@ -23,6 +27,7 @@ export class BackupController {
         return result;
     }
 
+    //TODO: remove
     @Get('upload')
     backup() {
         return this.backupService.dataBackupService();

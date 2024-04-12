@@ -2,6 +2,7 @@ import {
     EmailExistException,
     EmailNotExistException,
     FileNotFoundErrorBusinessException,
+    ImageHistoryNotFoundErrorBusinessException,
     InternalServerErrorBusinessException,
     PassWordIncorrectException,
     RefreshTokenInvalidException,
@@ -52,5 +53,9 @@ export class Errors {
 
     static FileNotFoundErrorBusiness(id: string) {
         return new FileNotFoundErrorBusinessException(id);
+    }
+
+    static ImageHistoryNotFoundErrorBusiness(id: string) {
+        return new ImageHistoryNotFoundErrorBusinessException(id);
     }
 }

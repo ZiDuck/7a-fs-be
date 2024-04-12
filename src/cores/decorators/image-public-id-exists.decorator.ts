@@ -1,6 +1,4 @@
-import { applyDecorators, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
-import { RolesGuard } from '../guards/roles.guard';
+import { applyDecorators } from '@nestjs/common';
 import { FilePublicIdExists } from '../../common/validator/file.validator';
 import { ResourceType } from '../enums/resource-type.enum';
 

@@ -1,8 +1,6 @@
-import { Body, Controller, Delete, Get, HttpException, InternalServerErrorException } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ImagesService } from './images.service';
 import { ImageOutput } from './dto/image.output';
-import { DeleteImageInput } from './dto/delete-image.input';
-import { Transactional } from 'typeorm-transactional';
 
 @Controller('images')
 export class ImagesController {
