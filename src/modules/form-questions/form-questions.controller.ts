@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, HttpException, InternalServerErrorException } from '@nestjs/common';
+import { Controller, Get, Param, BadRequestException } from '@nestjs/common';
 import { FormQuestionsService } from './form-questions.service';
 import { ApiTags } from '@nestjs/swagger';
 import { GetFormQuestion } from './dto/get-form-question.dto';
@@ -21,10 +21,10 @@ export class FormQuestionsController {
     //     }
     // }
 
-    @Get()
-    findAll() {
-        return this.formQuestionsService.findAll();
-    }
+    // @Get()
+    // findAll() {
+    //     return this.formQuestionsService.findAll();
+    // }
 
     @ApiOkResponseDto(GetFormQuestion)
     @ApiException(() => BadRequestException, { description: 'Không tồn tại câu hỏi với id ${id}' })
