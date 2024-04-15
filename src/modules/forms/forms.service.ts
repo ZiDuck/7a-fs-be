@@ -21,6 +21,9 @@ import omit from 'lodash/omit';
 import { FormFilterQuery } from './dto/form-filter-query.dto';
 import { UpdateFormQuestionOfFormInput } from './dto/update-form-questions-of-form.input';
 import { FormAudit } from './entities/form-audit.entity';
+import { CurrentUserContext } from '../../cores/providers/current-user-context.provider';
+import { UsersService } from '../users/users.service';
+import { RoleType } from '../../cores/constants';
 
 type DefaultRelationType = FindOptionsRelations<Form> | FindOptionsRelationByString;
 
@@ -43,6 +46,8 @@ export class FormsService {
         private readonly formQuestionService: FormQuestionsService,
         private imagesService: ImagesService,
         private formTemplatesService: FormTemplatesService,
+        private usersService: UsersService,
+        private readonly currentUserContext: CurrentUserContext,
     ) {}
 
     @Transactional()
@@ -82,6 +87,12 @@ export class FormsService {
     async findAll(query: FormFilterQuery) {
         const builder = this.formRepository.createQueryBuilder('form').orderBy('form.createdDate', 'DESC');
 
+        const currentUser = await this.usersService.findOne(this.currentUserContext.getUserId());
+
+        if (currentUser.role.value === RoleType.USER) {
+            builder.andWhere('form.createdBy = :createdBy', { createdBy: currentUser.id });
+        }
+
         return await this.getFormResult(query, builder);
     }
 
@@ -95,7 +106,7 @@ export class FormsService {
         return await this.getFormResult(query, builder);
     }
 
-    private async getFormResult(query: FormFilterQuery, builder: SelectQueryBuilder<Form>) {
+    async getFormResult(query: FormFilterQuery, builder: SelectQueryBuilder<Form>) {
         // Add search query for title
         if (query.title) {
             const processedTitle = query.title.trim();
@@ -125,6 +136,11 @@ export class FormsService {
     async findOne(id: string) {
         const result = await this.formRepository.findOne({
             where: { id: id },
+            order: {
+                formQuestions: {
+                    order: 'ASC',
+                },
+            },
             relations: defaultRelation,
         });
 
@@ -144,13 +160,29 @@ export class FormsService {
     async findFormQuestions(id: string) {
         const existedForm = await this.findOne(id);
 
+        const formQuestionsResult = plainToInstance(GetFormQuestion, await this.formQuestionService.findAllByForm(existedForm));
+
         const customizeForm = plainToInstance(GetFormAllFormQuestionsDto, {
             ...existedForm,
-            // image: existedForm.imageId ? await this.imagesService.checkImageHook(existedForm.imageId) : null,
-            image: await this.imagesService.checkImageHook(existedForm.imageId),
+            formQuestions: formQuestionsResult,
+            image: existedForm.imageId ? await this.imagesService.checkImageHook(existedForm.imageId) : null,
         });
 
-        customizeForm.formQuestions = plainToInstance(GetFormQuestion, await this.formQuestionService.findAllByFormId(existedForm.id));
+        return customizeForm;
+    }
+
+    async findFormQuestionsForViewFormPage(id: string) {
+        const existedForm = await this.findOne(id);
+
+        if (existedForm.status !== FormStatus.ACCEPTED) throw new BadRequestException(`Không thể xem form ở trạng thái ${existedForm.status}`);
+
+        const formQuestionsResult = plainToInstance(GetFormQuestion, await this.formQuestionService.findAllByForm(existedForm));
+
+        const customizeForm = plainToInstance(GetFormAllFormQuestionsDto, {
+            ...existedForm,
+            formQuestions: formQuestionsResult,
+            image: await this.imagesService.checkImageHook(existedForm.imageId),
+        });
 
         return customizeForm;
     }
@@ -163,6 +195,13 @@ export class FormsService {
             throw new BadRequestException(`Chỉ có thể cập nhật câu hỏi cho form ở trạng thái ${FormStatus.PENDING} hoặc ${FormStatus.ACCEPTED}`);
 
         if (existedForm.status === FormStatus.ACCEPTED) {
+            const currentUserId = this.currentUserContext.getUserId();
+
+            const user = await this.usersService.findOne(currentUserId);
+
+            if (user.role.value !== RoleType.ADMIN)
+                throw new BadRequestException('Chỉ có admin mới có thể cập nhật câu hỏi cho form ở trạng thái ACCEPTED');
+
             // Save form information to form audit
             const formAuditInput = this.formAuditRepository.create({
                 form: existedForm,
@@ -175,9 +214,33 @@ export class FormsService {
             data.version = existedForm.version + 1;
         }
 
-        await this.formQuestionService.deleteAllByFormId(data.id);
+        if (existedForm.status === FormStatus.PENDING) {
+            const currentUser = await this.usersService.findOne(this.currentUserContext.getUserId());
 
-        await this.formRepository.update({ id: data.id }, omit(data, ['formQuestions', 'formId']));
+            if (currentUser.role.value === RoleType.USER && existedForm.createdBy !== currentUser.id)
+                throw new BadRequestException('Chỉ có người tạo form hoặc admin mới có thể cập nhật form ở trạng thái PENDING');
+        }
+
+        await this.formRepository.update({ id: data.id }, omit(data, ['formQuestions']));
+
+        // TODO: Check this update logic again
+        // const currentFormQuestions = await this.formQuestionService.findAllByFormId(data.id);
+
+        // // Check each current form question
+        // for (const currentFormQuestion of currentFormQuestions) {
+        //     // If the current form question does not exist in data.questions, delete it
+        //     if (!data.formQuestions.some((question) => question?.id === currentFormQuestion.id)) {
+        //         await this.formQuestionService.delete(currentFormQuestion.id);
+        //     }
+        // }
+
+        // // Update or create new form questions
+        // for (const question of data.formQuestions) {
+        //     const formQuestion = this.formQuestionService.create(question);
+        //     // await this.formQuestionRepository.save(formQuestion);
+        // }
+
+        await this.formQuestionService.deleteAllByFormId(data.id);
 
         return await this.formQuestionService.createMany(data.formQuestions, data.id);
     }

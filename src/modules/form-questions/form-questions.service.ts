@@ -15,6 +15,7 @@ import { GetGroupQuestionValue } from '../group-questions/dto/get-group-question
 import { GetSingleQuestionAttribute } from '../single-questions/dto/get-single-question-attribute.dto';
 import { ImagesService } from '../images/images.service';
 import { SingleQuestionAttribute } from '../single-questions/entities/single-question-attribute.entity';
+import { Form } from '../forms/entities/form.entity';
 
 @Injectable()
 export class FormQuestionsService {
@@ -122,14 +123,14 @@ export class FormQuestionsService {
         // TODO: Thêm kiểm tra điều kiện cho các type select, ít nhất một phần tử
     }
 
-    findAll() {
-        return `This action returns all formQuestions`;
-    }
-
     async findAllByFormId(formId: string): Promise<GetFormQuestion[]> {
         const result = await this.formQuestionRepository.find({ where: { formId } });
 
         return await Promise.all(result.map((question) => this.customizeResult(question)));
+    }
+
+    async findAllByForm(form: Form): Promise<GetFormQuestion[]> {
+        return await Promise.all(form.formQuestions.map((question) => this.customizeResult(question)));
     }
 
     async findOne(id: string): Promise<GetFormQuestion> {
@@ -214,6 +215,12 @@ export class FormQuestionsService {
         }
 
         return result;
+    }
+
+    async delete(id: string) {
+        const result = await this.formQuestionRepository.delete(id);
+
+        return result.affected;
     }
 
     async deleteAllByFormId(formId: string) {

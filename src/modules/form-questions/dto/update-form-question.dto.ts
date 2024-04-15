@@ -1,4 +1,16 @@
-import { PartialType } from '@nestjs/swagger';
+import { ApiPropertyOptional } from '@nestjs/swagger';
 import { CreateFormQuestionInput } from './create-form-question.input';
+import { IsOptional, IsUUID } from 'class-validator';
+import { UUID } from 'typeorm/driver/mongodb/bson.typings';
+import { IdExists } from '../../../common/validator/uuid.validator';
+import { Form } from '../../forms/entities/form.entity';
 
-export class UpdateFormQuestionDto extends PartialType(CreateFormQuestionInput) {}
+export class UpdateFormQuestionDto extends CreateFormQuestionInput {
+    @ApiPropertyOptional({
+        type: UUID,
+    })
+    @IsOptional()
+    @IsUUID()
+    @IdExists(Form)
+    id?: string;
+}

@@ -1,14 +1,13 @@
 import { Controller, Get, Patch, Param, ParseUUIDPipe, HttpException, Query } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
 import { GetNotificationOutput } from './dto/get-notification.output';
-import { ApiTags, ApiBearerAuth, ApiOkResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOkResponse } from '@nestjs/swagger';
 import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
 import { AdminUserRole } from '../../cores/decorators/role.decorator';
 import { Errors } from '../../common/errors';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
 
 @ApiTags('Notification')
-@ApiBearerAuth()
 @UseRoleGuard()
 @Controller('notifications')
 export class NotificationsController {

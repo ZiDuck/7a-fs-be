@@ -1,21 +1,10 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    HttpException,
-    InternalServerErrorException,
-    Param,
-    Post,
-    UploadedFile,
-    UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, InternalServerErrorException, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UploadFileService } from './upload-file.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ArchiveFolder } from './enums/archive-folder.enum';
 import { Transactional } from 'typeorm-transactional';
 import { DeleteImageInput } from '../images/dto/delete-image.input';
-import { ApiBearerAuth, ApiBody, ApiConsumes, ApiNoContentResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiNoContentResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
 import { FileUploadDto } from './enums/file-upload.dto';
 import { ApiException } from '../../cores/decorators/api-exception.decorator';
@@ -23,7 +12,6 @@ import { ImageUploadOutput } from './dto/image-upload.output';
 import { plainToClass } from 'class-transformer';
 
 @ApiTags('upload-file')
-@ApiBearerAuth()
 @UseRoleGuard()
 @Controller('upload-file')
 export class UploadFileController {

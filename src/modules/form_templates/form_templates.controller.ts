@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { FormTemplatesService } from './form_templates.service';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { plainToInstance } from 'class-transformer';
 import { GetFormTemplate } from './dto/get-form-template.dto';
@@ -9,7 +9,6 @@ import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
 import { AdminUserRole } from '../../cores/decorators/role.decorator';
 
 @ApiTags('form templates')
-@ApiBearerAuth()
 @UseRoleGuard()
 @Controller('form-templates')
 export class FormTemplatesController {

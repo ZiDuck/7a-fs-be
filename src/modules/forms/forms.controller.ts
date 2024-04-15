@@ -15,7 +15,7 @@ import {
 import { FormsService } from './forms.service';
 import { CreateFormInput } from './dto/create-form.input';
 import { UpdateFormDto } from './dto/update-form.dto';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { GetFormDto } from './dto/get-form.dto';
 import { ApiPaginatedResponse } from '../../cores/decorators/api-paginated-dto.decorator';
@@ -30,12 +30,11 @@ import { FormFilterQuery } from './dto/form-filter-query.dto';
 import { UpdateFormQuestionOfFormInput } from './dto/update-form-questions-of-form.input';
 
 @ApiTags('forms')
-@ApiBearerAuth()
-@UseRoleGuard()
 @Controller('forms')
 export class FormsController {
     constructor(private readonly formsService: FormsService) {}
 
+    @UseRoleGuard()
     @AdminUserRole()
     @ApiOkResponseDto(GetFormDto)
     @Post()
@@ -49,6 +48,7 @@ export class FormsController {
         }
     }
 
+    @UseRoleGuard()
     @AdminUserRole()
     @Post('form-questions')
     async createFormQuestions(@Body() data: CreateFormQuestionOfFormInput) {
@@ -60,12 +60,14 @@ export class FormsController {
         }
     }
 
+    @UseRoleGuard()
     @AdminUserRole()
     @Post(':id/templates')
     async createTemplateForm(@Param('id', ParseUUIDPipe) id: string) {
         return await this.formsService.createTemplateForm(id);
     }
 
+    @UseRoleGuard()
     @AdminUserRole()
     @ApiPaginatedResponse(GetFormDto)
     @Get()
@@ -77,6 +79,7 @@ export class FormsController {
         return result;
     }
 
+    @UseRoleGuard()
     @AdminUserRole()
     @ApiPaginatedResponse(GetFormDto)
     @Get('is-deleted')
@@ -88,6 +91,14 @@ export class FormsController {
         return result;
     }
 
+    @ApiOkResponseDto(GetFormAllFormQuestionsDto)
+    @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
+    @Get(':id/form-questions/view-form')
+    async findFormQuestionsForViewFormPage(@Param('id', ParseUUIDPipe) id: string) {
+        return await this.formsService.findFormQuestionsForViewFormPage(id);
+    }
+
+    @UseRoleGuard()
     @AdminUserRole()
     @ApiOkResponseDto(GetFormAllFormQuestionsDto)
     @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
@@ -96,6 +107,7 @@ export class FormsController {
         return await this.formsService.findFormQuestions(id);
     }
 
+    @UseRoleGuard()
     @AdminUserRole()
     @ApiOkResponseDto(GetFormDto)
     @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
@@ -104,6 +116,7 @@ export class FormsController {
         return plainToInstance(GetFormDto, await this.formsService.findOne(id));
     }
 
+    @UseRoleGuard()
     @AdminUserRole()
     @Patch('form-questions')
     async updateQuestions(@Body() data: UpdateFormQuestionOfFormInput) {
@@ -115,12 +128,14 @@ export class FormsController {
         }
     }
 
+    @UseRoleGuard()
     @AdminRole()
     @Patch(':id/status')
     updateStatus(@Param('id') id: string, @Body() data: UpdateFormStatusDto) {
         return this.formsService.updateStatus(id, data);
     }
 
+    @UseRoleGuard()
     @AdminUserRole()
     @Patch(':id/info')
     async updateInformation(@Param('id') id: string, @Body() data: UpdateFormDto) {
@@ -132,6 +147,7 @@ export class FormsController {
         }
     }
 
+    @UseRoleGuard()
     @AdminUserRole()
     @Delete(':id')
     async remove(@Param('id', ParseUUIDPipe) id: string) {
@@ -143,6 +159,7 @@ export class FormsController {
         }
     }
 
+    @UseRoleGuard()
     @AdminUserRole()
     @Patch(':id/restore')
     async restoreDeleted(@Param('id', ParseUUIDPipe) id: string): Promise<void> {

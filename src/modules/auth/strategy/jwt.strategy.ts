@@ -19,7 +19,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         const email: string = payload.email;
         const user: User = await this.usersService.findOneByEmail(email);
 
-        if (!user) throw new UnauthorizedException();
+        if (!user) throw new UnauthorizedException('Người dùng không tồn tại!');
 
         return payload;
     }
