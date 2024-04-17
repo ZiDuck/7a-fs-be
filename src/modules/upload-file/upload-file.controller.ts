@@ -1,6 +1,17 @@
-import { Body, Controller, Delete, Get, HttpException, InternalServerErrorException, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpException,
+    InternalServerErrorException,
+    Post,
+    UploadedFile,
+    UploadedFiles,
+    UseInterceptors,
+} from '@nestjs/common';
 import { UploadFileService } from './upload-file.service';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { AnyFilesInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { ArchiveFolder } from './enums/archive-folder.enum';
 import { Transactional } from 'typeorm-transactional';
 import { DeleteImageInput } from '../images/dto/delete-image.input';
@@ -45,6 +56,13 @@ export class UploadFileController {
     @UseInterceptors(FilesInterceptor('file[]', 5))
     async uploadImages(@UploadedFile() file: Express.Multer.File) {
         return await this.uploadFileService.uploadImages(file, ArchiveFolder.images);
+    }
+
+    @Transactional()
+    @UseInterceptors(FileInterceptor('file'))
+    @Post('raw')
+    async uploadFiles(@UploadedFile() file: Express.Multer.File) {
+        return await this.uploadFileService.uploadFileSubmit(file);
     }
 
     @Get('image')

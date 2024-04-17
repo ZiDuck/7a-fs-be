@@ -19,6 +19,8 @@ export class FormTemplatesService {
     async findAll(query: PageQueryDto) {
         const builder = this.formTemplateRepository.createQueryBuilder('formTemplate');
 
+        builder.orderBy('formTemplate.createdDate', 'DESC');
+
         const result = await paginate(builder, query);
 
         return result;

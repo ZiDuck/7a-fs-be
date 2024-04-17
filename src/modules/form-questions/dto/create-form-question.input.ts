@@ -61,19 +61,37 @@ export class CreateFormQuestionInput {
     @IdExists(Form)
     formId: string;
 
-    @ApiPropertyOptional({
+    // @ApiPropertyOptional({
+    //     type: CreateSingleQuestionAttributeInput,
+    // })
+    // @Type(() => CreateSingleQuestionAttributeInput)
+    // @IsOptional()
+    // @ValidateNested()
+    // singleQuestion?: CreateSingleQuestionAttributeInput;
+
+    // @ApiPropertyOptional({
+    //     type: CreateGroupQuestionAttributeInput,
+    // })
+    // @Type(() => CreateGroupQuestionAttributeInput)
+    // @IsOptional()
+    // @ValidateNested()
+    // groupQuestion?: CreateGroupQuestionAttributeInput;
+}
+
+export class CreateSingleQuestionFormInput extends CreateFormQuestionInput {
+    @ApiProperty({
         type: CreateSingleQuestionAttributeInput,
     })
     @Type(() => CreateSingleQuestionAttributeInput)
-    @IsOptional()
     @ValidateNested()
-    singleQuestion?: CreateSingleQuestionAttributeInput;
+    singleQuestion: CreateSingleQuestionAttributeInput;
+}
 
-    @ApiPropertyOptional({
+export class CreateGroupQuestionFormInput extends CreateFormQuestionInput {
+    @ApiProperty({
         type: CreateGroupQuestionAttributeInput,
     })
     @Type(() => CreateGroupQuestionAttributeInput)
-    @IsOptional()
     @ValidateNested()
-    groupQuestion?: CreateGroupQuestionAttributeInput;
+    groupQuestion: CreateGroupQuestionAttributeInput;
 }

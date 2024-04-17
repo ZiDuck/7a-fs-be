@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateFormQuestionInput } from './dto/create-form-question.input';
+import { CreateFormQuestionInput, CreateGroupQuestionFormInput, CreateSingleQuestionFormInput } from './dto/create-form-question.input';
 import { FormQuestion } from './entities/form-question.entity';
 import { DeepPartial, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -16,7 +16,6 @@ import { GetSingleQuestionAttribute } from '../single-questions/dto/get-single-q
 import { ImagesService } from '../images/images.service';
 import { SingleQuestionAttribute } from '../single-questions/entities/single-question-attribute.entity';
 import { Form } from '../forms/entities/form.entity';
-
 @Injectable()
 export class FormQuestionsService {
     constructor(
@@ -27,9 +26,13 @@ export class FormQuestionsService {
     ) {}
 
     async create(data: CreateFormQuestionInput) {
-        const newQuestion = this.formQuestionRepository.create(data);
+        let newQuestion: FormQuestion;
 
-        if (SINGLE_QUESTION_TYPES.includes(data.attributeType)) {
+        if (data instanceof CreateSingleQuestionFormInput) {
+            const question = this.formQuestionRepository.create({
+                ...data,
+            });
+
             let attributeValues: DeepPartial<SingleQuestionValue>[] = [];
 
             const singleQuestionInput = data.singleQuestion;
@@ -54,12 +57,19 @@ export class FormQuestionsService {
                 isOther: singleQuestionInput.isOther,
                 fileConfig: fileConfig,
                 singleQuestionValues: attributeValues,
+                // question: question,
             });
 
             const attribute = this.singleQuestionsService.getSingleQuestionAttributeRepository().create(attributeInput);
 
-            newQuestion.formSingleAttribute = attribute;
-        } else if (GROUP_QUESTION_TYPES.includes(data.attributeType)) {
+            question.formSingleAttribute = attribute;
+
+            newQuestion = question;
+        }
+
+        if (data instanceof CreateGroupQuestionFormInput) {
+            const question = this.formQuestionRepository.create(data);
+
             const groupQuestionInput = data.groupQuestion;
 
             const groupQuestionRows = groupQuestionInput.rows.map((rowInput) => {
@@ -77,30 +87,34 @@ export class FormQuestionsService {
                 groupQuestionColumns: groupQuestionColumns,
             });
 
-            newQuestion.formGroupAttribute = attribute;
-        } else {
-            throw new BadRequestException(`Type ${data.attributeType} chưa được hỗ trợ để tạo question`);
+            question.formGroupAttribute = attribute;
+
+            newQuestion = question;
         }
 
-        const formQuestion = await this.formQuestionRepository.save(newQuestion);
+        await this.formQuestionRepository.save(newQuestion);
 
-        if (data.groupQuestion?.answers?.length > 0) {
-            const groupQuestionAnswerData = data.groupQuestion.answers.map((answerInput) => {
-                const answer = new GroupQuestionAnswer();
-                const groupQuestionRow = formQuestion.formGroupAttribute.groupQuestionRows.find((row) => row.order === answerInput.rowOrder);
-                const groupQuestionColumn = formQuestion.formGroupAttribute.groupQuestionColumns.find(
-                    (column) => column.order === answerInput.columnOrder,
-                );
-                answer.groupQuestionRow = groupQuestionRow;
-                answer.groupQuestionColumn = groupQuestionColumn;
-                answer.isCorrect = answerInput.isCorrect;
-                return this.groupQuestionsService.getGroupQuestionAnswerRepository().create(answer);
-            });
+        if (data instanceof CreateGroupQuestionFormInput) {
+            const formQuestion = newQuestion as FormQuestion;
 
-            await this.groupQuestionsService.getGroupQuestionAnswerRepository().save(groupQuestionAnswerData);
+            if (data.groupQuestion?.answers?.length > 0) {
+                const groupQuestionAnswerData = data.groupQuestion.answers.map((answerInput) => {
+                    const answer = new GroupQuestionAnswer();
+                    const groupQuestionRow = formQuestion.formGroupAttribute.groupQuestionRows.find((row) => row.order === answerInput.rowOrder);
+                    const groupQuestionColumn = formQuestion.formGroupAttribute.groupQuestionColumns.find(
+                        (column) => column.order === answerInput.columnOrder,
+                    );
+                    answer.groupQuestionRow = groupQuestionRow;
+                    answer.groupQuestionColumn = groupQuestionColumn;
+                    answer.isCorrect = answerInput.isCorrect;
+                    return this.groupQuestionsService.getGroupQuestionAnswerRepository().create(answer);
+                });
+
+                await this.groupQuestionsService.getGroupQuestionAnswerRepository().save(groupQuestionAnswerData);
+            }
         }
 
-        return formQuestion;
+        return newQuestion;
     }
 
     async createMany(data: CreateFormQuestionInput[], formId: string) {
@@ -108,6 +122,7 @@ export class FormQuestionsService {
         await Promise.all(data.map((question) => this.validateQuestion(question, formId)));
 
         // Create async list question
+        // const results = await Promise.all(data.map((question) => this.create(question)));
         const results = await Promise.all(data.map((question) => this.create(question)));
 
         return results ? true : false;
@@ -116,9 +131,12 @@ export class FormQuestionsService {
     private validateQuestion(data: CreateFormQuestionInput, formId: string) {
         if (data.formId !== formId) throw new BadRequestException(`FormId của câu hỏi có index = ${data.order} không khớp với formId của Form`);
 
-        if (data.attributeType === AttributeType.FILE_UPLOAD && !data.singleQuestion?.fileConfig) {
-            throw new BadRequestException(`Câu hỏi kiểu FILE_UPLOAD phải có fileConfig`);
+        if (data instanceof CreateSingleQuestionFormInput) {
+            if (data.attributeType === AttributeType.FILE_UPLOAD && !data.singleQuestion?.fileConfig) {
+                throw new BadRequestException(`Câu hỏi kiểu FILE_UPLOAD phải có fileConfig`);
+            }
         }
+
         // TODO: Thêm kiểm tra điều kiện cho order
         // TODO: Thêm kiểm tra điều kiện cho các type select, ít nhất một phần tử
     }

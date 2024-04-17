@@ -1,27 +1,22 @@
 import { Exclude, Type } from 'class-transformer';
-import { AttributeType } from '../../form-questions/enums/attribute-type.enum';
-import { FormCategory } from '../../forms/enums/form-category.enum';
-import { FormStatus } from '../../forms/enums/form-status.enum';
-import { ImageOutput } from '../../images/dto/image.output';
+import { GetFormQuestion } from '../../form-questions/dto/get-form-question.dto';
+import { GetSingleQuestionAttribute } from '../../single-questions/dto/get-single-question-attribute.dto';
+import { GetSingleQuestionValue } from '../../single-questions/dto/get-single-question-value.dto';
+import { GetSingleQuestionFileConfig } from '../../single-questions/dto/get-single-question-file-config.dto';
+import { GetGroupQuestionRow } from '../../group-questions/dto/get-group-question-row.dto';
+import { GetGroupQuestionColumn } from '../../group-questions/dto/get-group-question-column.dto';
+import { GetGroupQuestionAnswer } from '../../group-questions/dto/get-group-question-answer.dto';
+import { GetFormAllFormQuestionsDto } from '../../forms/dto/get-form-all-form-questions.dto';
+import { GetGroupQuestionValue } from '../../group-questions/dto/get-group-question-value.dto';
 
-export class SingleQuestionFileConfigTemplate {
+export class SingleQuestionFileConfigTemplate extends GetSingleQuestionFileConfig {
     @Exclude()
     id: string;
-
-    maxNumOfFiles: number;
-
-    maxFileSize: number;
 }
 
-export class SingleQuestionTemplate {
+export class SingleQuestionTemplate extends GetSingleQuestionAttribute {
     @Exclude()
     id: string;
-
-    score: number;
-
-    isOther: boolean;
-
-    questionId: string;
 
     @Type(() => SingleQuestionValueTemplate)
     singleQuestionValues: SingleQuestionValueTemplate[];
@@ -30,100 +25,52 @@ export class SingleQuestionTemplate {
     fileConfig: SingleQuestionFileConfigTemplate | null;
 }
 
-class GetGroupQuestionTemplate {
-    @Type(() => GetGroupQuestionRowTemplate)
-    rows: GetGroupQuestionRowTemplate[];
+class GroupQuestionTemplate extends GetGroupQuestionValue {
+    @Type(() => GroupQuestionRowTemplate)
+    rows: GroupQuestionRowTemplate[];
 
-    @Type(() => GetGroupQuestionColumnTemplate)
-    columns: GetGroupQuestionColumnTemplate[];
+    @Type(() => GroupQuestionColumnTemplate)
+    columns: GroupQuestionColumnTemplate[];
 
-    @Type(() => GetGroupQuestionAnswerTemplate)
-    answers: GetGroupQuestionAnswerTemplate[];
+    @Type(() => GroupQuestionAnswerTemplate)
+    answers: GroupQuestionAnswerTemplate[];
 }
 
-export class FormTemplateDto {
+export class FormTemplateDto extends GetFormAllFormQuestionsDto {
     @Exclude()
     id: string;
-
-    title: string;
-
-    description: string | null;
-
-    startSurvey: Date;
-
-    status: FormStatus;
-
-    hasAnswer: boolean;
-
-    category: FormCategory;
-
-    image: ImageOutput | null;
-
-    imageId: string;
 
     @Type(() => FormQuestionTemplate)
     formQuestions: FormQuestionTemplate[];
 }
 
-export class FormQuestionTemplate {
+export class FormQuestionTemplate extends GetFormQuestion {
     @Exclude()
     id: string;
-
-    label: string;
-
-    description: string | null;
-
-    require: boolean;
-
-    order: number;
-
-    image: ImageOutput | null;
-
-    attributeType: AttributeType;
-
-    @Exclude()
-    formId: string;
 
     @Type(() => SingleQuestionTemplate)
     singleQuestion?: SingleQuestionTemplate;
 
-    @Type(() => GetGroupQuestionTemplate)
-    groupQuestion?: GetGroupQuestionTemplate;
+    @Type(() => GroupQuestionTemplate)
+    groupQuestion?: GroupQuestionTemplate;
 }
 
-export class SingleQuestionValueTemplate {
+export class SingleQuestionValueTemplate extends GetSingleQuestionValue {
     @Exclude()
     id: string;
-
-    value: string;
-
-    @Type(() => ImageOutput)
-    image: ImageOutput | null;
-
-    isCorrect: boolean;
 }
 
-class GetGroupQuestionRowTemplate {
+class GroupQuestionRowTemplate extends GetGroupQuestionRow {
     @Exclude()
     id: string;
-
-    score: number;
-
-    value: string;
-
-    order: number;
 }
 
-class GetGroupQuestionColumnTemplate {
+class GroupQuestionColumnTemplate extends GetGroupQuestionColumn {
     @Exclude()
     id: string;
-
-    value: string;
-
-    order: number;
 }
 
-class GetGroupQuestionAnswerTemplate {
+class GroupQuestionAnswerTemplate extends GetGroupQuestionAnswer {
     @Exclude()
     id: string;
 
@@ -132,10 +79,4 @@ class GetGroupQuestionAnswerTemplate {
 
     @Exclude()
     columnId: string;
-
-    rowOrder: number;
-
-    columnOrder: number;
-
-    isCorrect: boolean;
 }

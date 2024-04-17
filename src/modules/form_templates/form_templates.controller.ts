@@ -3,7 +3,7 @@ import { FormTemplatesService } from './form_templates.service';
 import { ApiTags } from '@nestjs/swagger';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { plainToInstance } from 'class-transformer';
-import { GetFormTemplate } from './dto/get-form-template.dto';
+import { GetFormTemplate, GetFormTemplateDetail } from './dto/get-form-template.dto';
 import { ApiPaginatedResponse } from '../../cores/decorators/api-paginated-dto.decorator';
 import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
 import { AdminUserRole } from '../../cores/decorators/role.decorator';
@@ -28,6 +28,6 @@ export class FormTemplatesController {
     @AdminUserRole()
     @Get(':id')
     async findOne(@Param('id') id: string) {
-        return plainToInstance(GetFormTemplate, await this.formTemplatesService.findOne(id));
+        return plainToInstance(GetFormTemplateDetail, await this.formTemplatesService.findOne(id));
     }
 }

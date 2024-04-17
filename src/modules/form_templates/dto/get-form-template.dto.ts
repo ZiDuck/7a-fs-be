@@ -16,6 +16,28 @@ export class GetFormTemplate extends FormTemplate {
     @ApiProperty({
         type: FormTemplateDto,
     })
+    @Exclude()
+    metadata: FormTemplateDto;
+
+    @Exclude()
+    createdDate: Date;
+
+    @Exclude()
+    updatedDate: Date;
+}
+
+export class GetFormTemplateDetail extends FormTemplate {
+    @ApiProperty()
+    title: string;
+
+    @ApiProperty({
+        enum: FormCategory,
+    })
+    category: FormCategory;
+
+    @ApiProperty({
+        type: FormTemplateDto,
+    })
     metadata: FormTemplateDto;
 
     @Exclude()

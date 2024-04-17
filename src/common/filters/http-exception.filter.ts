@@ -17,6 +17,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
             error: exception.name,
             path: request.url,
             timestamps: new Date().toISOString(),
+            trace: exception.stack,
         };
 
         if (Array.isArray(exceptionResponse.message)) {

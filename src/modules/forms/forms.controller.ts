@@ -11,6 +11,8 @@ import {
     ParseUUIDPipe,
     HttpException,
     InternalServerErrorException,
+    UsePipes,
+    ValidationPipe,
 } from '@nestjs/common';
 import { FormsService } from './forms.service';
 import { CreateFormInput } from './dto/create-form.input';
@@ -28,6 +30,8 @@ import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
 import { AdminRole, AdminUserRole } from '../../cores/decorators/role.decorator';
 import { FormFilterQuery } from './dto/form-filter-query.dto';
 import { UpdateFormQuestionOfFormInput } from './dto/update-form-questions-of-form.input';
+import { CreateFormSubmitDto } from '../form-submits/dto/create-form-submit.dto';
+import { FormSubmitQuery } from './dto/form-submit-query.dto';
 
 @ApiTags('forms')
 @Controller('forms')
@@ -50,6 +54,7 @@ export class FormsController {
 
     @UseRoleGuard()
     @AdminUserRole()
+    @UsePipes(new ValidationPipe({ transform: true }))
     @Post('form-questions')
     async createFormQuestions(@Body() data: CreateFormQuestionOfFormInput) {
         try {
@@ -58,6 +63,12 @@ export class FormsController {
             if (error instanceof HttpException) throw error;
             throw new InternalServerErrorException(error.message);
         }
+    }
+
+    @Post('submit')
+    @UsePipes(new ValidationPipe({ transform: true }))
+    async submitForm(@Body() data: CreateFormSubmitDto) {
+        return await this.formsService.submitForm(data);
     }
 
     @UseRoleGuard()
@@ -105,6 +116,15 @@ export class FormsController {
     @Get(':id/form-questions')
     async findFormQuestions(@Param('id', ParseUUIDPipe) id: string) {
         return await this.formsService.findFormQuestions(id);
+    }
+
+    @UseRoleGuard()
+    @AdminUserRole()
+    @ApiOkResponseDto(GetFormAllFormQuestionsDto)
+    @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
+    @Get(':id/submit-forms')
+    async findSubmitForm(@Param('id', ParseUUIDPipe) id: string, @Query() query: FormSubmitQuery) {
+        return await this.formsService.findSubmitForm(id, query);
     }
 
     @UseRoleGuard()

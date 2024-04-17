@@ -33,6 +33,9 @@ export class FormQuestion extends AppBaseEntity {
     @ManyToOne(() => Form, (form: Form) => form.formQuestions, { onDelete: 'CASCADE' })
     form: Relation<Form>;
 
+    @DeleteDateColumn()
+    deletedDate: Date;
+
     @OneToOne(() => SingleQuestionAttribute, (singleQuestion: SingleQuestionAttribute) => singleQuestion.question, {
         cascade: true,
         eager: true,
@@ -41,7 +44,4 @@ export class FormQuestion extends AppBaseEntity {
 
     @OneToOne(() => GroupQuestionAttribute, (groupQuestion: GroupQuestionAttribute) => groupQuestion.question, { cascade: true, eager: true })
     formGroupAttribute?: Relation<GroupQuestionAttribute>;
-
-    @DeleteDateColumn()
-    deletedDate: Date;
 }

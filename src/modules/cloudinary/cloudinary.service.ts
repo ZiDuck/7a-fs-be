@@ -9,6 +9,12 @@ import streamifier from 'streamifier';
 
 export type ResourceType = 'image' | 'video' | 'raw';
 
+export interface FileOption {
+    folder: string;
+
+    format: string;
+}
+
 @Injectable()
 export class CloudinaryService {
     uploadFile(file: Express.Multer.File, folder: string): Promise<CloudinaryApiResponse | CloudinaryErrorResponse> {
@@ -25,12 +31,12 @@ export class CloudinaryService {
         });
     }
 
-    uploadRawFile(file: string): Promise<CloudinaryApiResponse | CloudinaryErrorResponse> {
+    uploadRawFile(file: string, folder?: string): Promise<CloudinaryApiResponse | CloudinaryErrorResponse> {
         return new Promise<CloudinaryApiResponse>((resolve, reject) => {
             cloudinary.uploader.upload(
                 file,
                 {
-                    folder: 'public/feedback-system/backup/',
+                    folder: `${env.String('CLOUDINARY_CLOUD_PUBLICDIR')}/${folder}/${env.String('ENV')}`,
                     resource_type: 'raw',
                 },
                 (error, result) => {
@@ -40,6 +46,24 @@ export class CloudinaryService {
             );
         });
     }
+
+    uploadRawFileStream(file: Express.Multer.File, fileOption?: FileOption): Promise<CloudinaryApiResponse | CloudinaryErrorResponse> {
+        return new Promise<CloudinaryApiResponse>((resolve, reject) => {
+            const uploadStream = cloudinary.uploader.upload_stream(
+                {
+                    folder: `${env.String('CLOUDINARY_CLOUD_PUBLICDIR')}/${fileOption.folder}/${env.String('ENV')}`,
+                    resource_type: 'raw',
+                    format: fileOption.format,
+                },
+                (error, result) => {
+                    if (error) return reject(error);
+                    resolve(result);
+                },
+            );
+            streamifier.createReadStream(file.buffer).pipe(uploadStream);
+        });
+    }
+
     async checkResourcesExists(params: CheckResourceExits): Promise<boolean> {
         try {
             if (!params.type) {

@@ -6,6 +6,7 @@ import { IdExists } from '../../../common/validator/uuid.validator';
 import { CreateFormQuestionInput } from '../../form-questions/dto/create-form-question.input';
 import { Form } from '../entities/form.entity';
 import { CreateFormInput } from './create-form.input';
+import { UpdateFormQuestionDto } from '../../form-questions/dto/update-form-question.dto';
 
 export class UpdateFormQuestionOfFormInput extends CreateFormInput {
     @ApiProperty({
@@ -28,5 +29,5 @@ export class UpdateFormQuestionOfFormInput extends CreateFormInput {
     })
     @Type(() => CreateFormQuestionInput)
     @ValidateNested()
-    formQuestions: CreateFormQuestionInput[];
+    formQuestions: UpdateFormQuestionDto[];
 }

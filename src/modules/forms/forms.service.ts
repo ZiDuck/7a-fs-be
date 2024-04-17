@@ -24,6 +24,10 @@ import { FormAudit } from './entities/form-audit.entity';
 import { CurrentUserContext } from '../../cores/providers/current-user-context.provider';
 import { UsersService } from '../users/users.service';
 import { RoleType } from '../../cores/constants';
+import { CreateFormSubmitDto } from '../form-submits/dto/create-form-submit.dto';
+import { FormSubmitsService } from '../form-submits/form-submits.service';
+import { FormViewDto } from './dto/view-form.dto';
+import { FormSubmitQuery } from './dto/form-submit-query.dto';
 
 type DefaultRelationType = FindOptionsRelations<Form> | FindOptionsRelationByString;
 
@@ -47,6 +51,7 @@ export class FormsService {
         private imagesService: ImagesService,
         private formTemplatesService: FormTemplatesService,
         private usersService: UsersService,
+        private formSubmitService: FormSubmitsService,
         private readonly currentUserContext: CurrentUserContext,
     ) {}
 
@@ -82,6 +87,18 @@ export class FormsService {
             metadata: formTemplate,
         });
         return result ? true : false;
+    }
+
+    async submitForm(data: CreateFormSubmitDto) {
+        const existedForm = await this.findFormQuestions(data.id);
+
+        if (data.version !== existedForm.version) throw new BadRequestException(`Phiên bản form không hợp lệ. Vui lòng load lại trang!`);
+
+        if (existedForm.status !== FormStatus.ACCEPTED) throw new BadRequestException(`Chỉ được submit form có trạng thái là ${FormStatus.ACCEPTED}`);
+
+        const formSubmit = await this.formSubmitService.create(data, existedForm);
+
+        return formSubmit;
     }
 
     async findAll(query: FormFilterQuery) {
@@ -179,6 +196,16 @@ export class FormsService {
         return customizeForm;
     }
 
+    async findSubmitForm(id: string, query: FormSubmitQuery) {
+        const existedForm = await this.findOne(id);
+
+        const version = query?.version ? query.version : existedForm.version;
+
+        const formSubmits = await this.formSubmitService.findAllByForm(existedForm, version);
+
+        return formSubmits;
+    }
+
     async findFormQuestionsForViewFormPage(id: string) {
         const existedForm = await this.findOne(id);
 
@@ -186,10 +213,10 @@ export class FormsService {
 
         const formQuestionsResult = plainToInstance(GetFormQuestion, await this.formQuestionService.findAllByForm(existedForm));
 
-        const customizeForm = plainToInstance(GetFormAllFormQuestionsDto, {
+        const customizeForm = plainToInstance(FormViewDto, {
             ...existedForm,
             formQuestions: formQuestionsResult,
-            image: await this.imagesService.checkImageHook(existedForm.imageId),
+            image: existedForm.imageId ? await this.imagesService.checkImageHook(existedForm.imageId) : null,
         });
 
         return customizeForm;

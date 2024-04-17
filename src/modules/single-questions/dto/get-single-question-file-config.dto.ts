@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class GetSingleQuestionFileConfig {
+    @ApiProperty()
+    id: string;
+
     @ApiProperty({
         example: '1',
         description: 'Maximum number of files that can be uploaded',

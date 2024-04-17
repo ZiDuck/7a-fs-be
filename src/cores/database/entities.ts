@@ -9,6 +9,8 @@ import groupQuestionEntities from '../../modules/group-questions/entities';
 import notificationEntities from '../../modules/notifications/entities';
 import backupHistories from '../../modules/backup/entities';
 import formTemplateEntities from '../../modules/form_templates/entities';
+import formSubmitEntities from '../../modules/form-submits/entities';
+import rawFileEntities from '../../modules/raw-files/enitites';
 
 const entities = [
     ...roleEntities,
@@ -22,5 +24,7 @@ const entities = [
     ...notificationEntities,
     ...backupHistories,
     ...formTemplateEntities,
+    ...formSubmitEntities,
+    ...rawFileEntities,
 ];
 export default entities;

@@ -23,6 +23,8 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CurrentUserContextInterceptor } from './cores/interceptors/current-user-context.interceptor';
 import { FormTemplatesModule } from './modules/form_templates/form_templates.module';
 import { BackupModule } from './modules/backup/backup.module';
+import { FormSubmitsModule } from './modules/form-submits/form-submits.module';
+import { RawFilesModule } from './modules/raw-files/raw-files.module';
 
 @Module({
     imports: [
@@ -53,6 +55,8 @@ import { BackupModule } from './modules/backup/backup.module';
         EventEmitterModule.forRoot(),
         FormTemplatesModule,
         BackupModule,
+        FormSubmitsModule,
+        RawFilesModule,
     ],
     controllers: [AppController],
     providers: [

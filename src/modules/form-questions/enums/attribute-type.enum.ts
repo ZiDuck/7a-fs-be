@@ -10,15 +10,13 @@ export enum AttributeType {
     RADIO_GRID = 'RADIO_GRID',
 }
 
-export const SINGLE_QUESTION_TYPES = [
-    AttributeType.TEXT_BOX,
-    AttributeType.PARAGRAPH,
-    AttributeType.CHECKBOX_BUTTON,
-    AttributeType.RADIO_BUTTON,
-    AttributeType.DROPDOWN,
-    AttributeType.FILE_UPLOAD,
-    AttributeType.STAR,
-];
+export const TEXT_QUESTION_TYPES = [AttributeType.TEXT_BOX, AttributeType.PARAGRAPH];
+
+export const ONE_SELECTION_QUESTION_TYPES = [AttributeType.RADIO_BUTTON, AttributeType.DROPDOWN];
+
+export const SELECTION_QUESTION_TYPES = [...ONE_SELECTION_QUESTION_TYPES, AttributeType.CHECKBOX_BUTTON];
+
+export const SINGLE_QUESTION_TYPES = [...TEXT_QUESTION_TYPES, ...SELECTION_QUESTION_TYPES, AttributeType.FILE_UPLOAD, AttributeType.STAR];
 
 export const GROUP_QUESTION_TYPES = [AttributeType.CHECKBOX_GRID, AttributeType.RADIO_GRID];
 

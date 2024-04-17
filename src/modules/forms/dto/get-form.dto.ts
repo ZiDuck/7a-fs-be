@@ -33,6 +33,9 @@ export class GetFormDto extends Form {
     status: FormStatus;
 
     @ApiProperty()
+    version: number;
+
+    @ApiProperty()
     hasAnswer: boolean;
 
     @ApiProperty({

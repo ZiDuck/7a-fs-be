@@ -43,7 +43,11 @@ async function bootstrap() {
 
     // allows class-validator to use NestJS dependency injection container
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
-    app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalPipes(
+        new ValidationPipe({
+            // transform: true,
+        }),
+    );
 
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('docs', app, document);

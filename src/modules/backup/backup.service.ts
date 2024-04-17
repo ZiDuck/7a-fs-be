@@ -111,7 +111,7 @@ export class BackupService {
 
             await promise$;
 
-            const fileUpload = await this.uploadFileService.uploadRawFile(localFile);
+            const fileUpload = await this.uploadFileService.uploadRawFile(localFile, 'backup');
 
             if (fileUpload) {
             }
