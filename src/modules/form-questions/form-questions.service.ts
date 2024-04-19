@@ -158,7 +158,11 @@ export class FormQuestionsService {
             const grQuestionCol = question.formGroupAttribute?.groupQuestionColumns;
 
             const grQuestion = new GetGroupQuestionValue();
+            let totalScore = 0;
+
             grQuestion.rows = grQuestionRow.map((row) => {
+                totalScore = totalScore + row.score;
+
                 return {
                     id: row.id,
                     score: row.score,
@@ -167,6 +171,8 @@ export class FormQuestionsService {
                 };
             });
 
+            grQuestion.totalScore = totalScore;
+
             grQuestion.columns = grQuestionCol.map((col) => {
                 return {
                     id: col.id,
@@ -174,6 +180,7 @@ export class FormQuestionsService {
                     order: col.order,
                 };
             });
+
             grQuestion.answers = grQuestionRow.flatMap((row) =>
                 row.groupQuestionAnswers.map((answer) => {
                     const column = grQuestionCol.find((col) => col.id === answer.columnId);

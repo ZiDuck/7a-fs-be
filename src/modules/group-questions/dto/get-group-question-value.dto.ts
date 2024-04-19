@@ -22,4 +22,7 @@ export class GetGroupQuestionValue {
     })
     @Type(() => GetGroupQuestionAnswer)
     answers?: GetGroupQuestionAnswer[];
+
+    @ApiProperty()
+    totalScore: number;
 }

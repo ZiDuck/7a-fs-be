@@ -139,6 +139,14 @@ export class FormsService {
             order: {
                 formQuestions: {
                     order: 'ASC',
+                    formGroupAttribute: {
+                        groupQuestionRows: {
+                            order: 'ASC',
+                        },
+                        groupQuestionColumns: {
+                            order: 'ASC',
+                        },
+                    },
                 },
             },
             relations: defaultRelation,
