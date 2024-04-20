@@ -8,4 +8,13 @@ export class Image extends AppBaseEntity {
 
     @Column('varchar', { length: 1000 })
     url: string;
+
+    @Column('varchar', { length: 1000, nullable: true })
+    filename?: string;
+
+    @Column('text', { nullable: true })
+    secureUrl?: string;
+
+    @Column('decimal', { nullable: true })
+    bytes?: number;
 }

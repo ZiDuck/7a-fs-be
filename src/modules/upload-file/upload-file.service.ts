@@ -30,7 +30,10 @@ export class UploadFileService {
 
         const imageResult = await this.imageService.create({
             publicId: cloudinaryResult.public_id,
-            url: cloudinaryResult.secure_url,
+            url: cloudinaryResult.url,
+            bytes: cloudinaryResult.bytes,
+            filename: file.originalname,
+            secureUrl: cloudinaryResult.secure_url,
         });
 
         return {
@@ -43,38 +46,47 @@ export class UploadFileService {
         };
     }
 
-    async uploadRawFileStream(file: Express.Multer.File, folder: string, format: string) {
+    async uploadImageSubmit(file: Express.Multer.File, folder: string) {
+        const cloudinaryResult = await this.cloudinaryService.uploadFile(file, folder);
+
+        if (!cloudinaryResult?.public_id) {
+            return cloudinaryResult as CloudinaryErrorResponse;
+        }
+
+        const imageResult = await this.imageService.create({
+            publicId: cloudinaryResult.public_id,
+            url: cloudinaryResult.url,
+            bytes: cloudinaryResult.bytes,
+            filename: file.originalname,
+            secureUrl: cloudinaryResult.secure_url,
+        });
+
+        return {
+            ...imageResult,
+            resourceType: cloudinaryResult.resource_type,
+        };
+    }
+
+    async uploadDocumentFileSubmit(file: Express.Multer.File, folder: string, format: string) {
         const cloudinaryResult = await this.cloudinaryService.uploadRawFileStream(file, {
             folder,
             format,
         });
 
         if (!cloudinaryResult?.public_id) {
-            return {
-                imageCloudResponse: cloudinaryResult,
-                image: null,
-            };
+            return cloudinaryResult as CloudinaryErrorResponse;
         }
 
         const rawFileResult = await this.rawService.create({
             publicId: cloudinaryResult.public_id,
-            url: cloudinaryResult.secure_url,
+            url: cloudinaryResult.url,
             resourceType: cloudinaryResult.resource_type,
             secureUrl: cloudinaryResult.secure_url,
             bytes: cloudinaryResult.bytes,
             filename: file.originalname,
         });
 
-        // return {
-        //     image: {
-        //         id: imageResult.id,
-        //         publicId: cloudinaryResult.public_id,
-        //         url: cloudinaryResult.secure_url,
-        //     },
-        //     imageCloudResponse: cloudinaryResult,
-        // };
-
-        return cloudinaryResult;
+        return rawFileResult;
     }
 
     async uploadImages(file: Express.Multer.File, folder: string): Promise<CloudinaryApiResponse | CloudinaryErrorResponse> {
@@ -92,10 +104,10 @@ export class UploadFileService {
         const extension = path.extname(file.originalname).toLowerCase().slice(1); // Lấy đuôi file
 
         if (mimeType.startsWith('image/')) {
-            return await this.uploadImage(file, ArchiveFolder.images);
+            return await this.uploadImageSubmit(file, ArchiveFolder.images);
         } else if (mimeType.startsWith('video/')) {
         } else {
-            return await this.uploadRawFileStream(file, ArchiveFolder.documents, extension);
+            return await this.uploadDocumentFileSubmit(file, ArchiveFolder.documents, extension);
         }
 
         // return await this.cloudinaryService.uploadFile(file, folder);

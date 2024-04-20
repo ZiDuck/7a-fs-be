@@ -1,17 +1,6 @@
-import {
-    Body,
-    Controller,
-    Delete,
-    Get,
-    HttpException,
-    InternalServerErrorException,
-    Post,
-    UploadedFile,
-    UploadedFiles,
-    UseInterceptors,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, InternalServerErrorException, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UploadFileService } from './upload-file.service';
-import { AnyFilesInterceptor, FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ArchiveFolder } from './enums/archive-folder.enum';
 import { Transactional } from 'typeorm-transactional';
 import { DeleteImageInput } from '../images/dto/delete-image.input';
@@ -23,11 +12,11 @@ import { ImageUploadOutput } from './dto/image-upload.output';
 import { plainToClass } from 'class-transformer';
 
 @ApiTags('upload-file')
-@UseRoleGuard()
 @Controller('upload-file')
 export class UploadFileController {
     constructor(private readonly uploadFileService: UploadFileService) {}
 
+    @UseRoleGuard()
     @Post('image')
     @UseInterceptors(FileInterceptor('file'))
     @ApiConsumes('multipart/form-data')
@@ -52,11 +41,11 @@ export class UploadFileController {
         }
     }
 
-    @Post('images')
-    @UseInterceptors(FilesInterceptor('file[]', 5))
-    async uploadImages(@UploadedFile() file: Express.Multer.File) {
-        return await this.uploadFileService.uploadImages(file, ArchiveFolder.images);
-    }
+    // @Post('images')
+    // @UseInterceptors(FilesInterceptor('file[]', 5))
+    // async uploadImages(@UploadedFile() file: Express.Multer.File) {
+    //     return await this.uploadFileService.uploadImages(file, ArchiveFolder.images);
+    // }
 
     @Transactional()
     @UseInterceptors(FileInterceptor('file'))
@@ -65,6 +54,7 @@ export class UploadFileController {
         return await this.uploadFileService.uploadFileSubmit(file);
     }
 
+    @UseRoleGuard()
     @Get('image')
     async checkResource() {
         return this.uploadFileService.checkResourcesExists({
@@ -74,6 +64,7 @@ export class UploadFileController {
         });
     }
 
+    @UseRoleGuard()
     @Delete('image')
     @ApiNoContentResponse({ description: 'Delete image successfully' })
     @Transactional()

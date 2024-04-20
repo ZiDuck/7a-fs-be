@@ -1,7 +1,7 @@
 // cloudinary.service.ts
 
 import { Injectable } from '@nestjs/common';
-import { AdminAndResourceOptions, v2 as cloudinary } from 'cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
 import { CloudinaryApiResponse, CloudinaryErrorResponse } from './dto/cloudinary-api-response.dto';
 import { env } from '../../cores/utils/env.util';
 import { CheckResourceExits } from './dto/check-resource-exits.dto';
