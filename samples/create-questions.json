@@ -1,6 +1,6 @@
 {
-    "id": "18f8402c-e975-4373-9ceb-697bcbb420ff",
-    "title": "khao sat muc do hai long cua benh nhan",
+    "id": "f453707a-86f2-4280-bf8a-7cad12eb87ea",
+    "title": "Standard Form",
     "description": null,
     "startSurvey": "2024-04-03T17:00:00.000Z",
     "status": "PENDING",
@@ -15,7 +15,7 @@
             "order": 0,
             "imageId": null,
             "attributeType": "DROPDOWN",
-            "formId": "18f8402c-e975-4373-9ceb-697bcbb420ff",
+            "formId": "f453707a-86f2-4280-bf8a-7cad12eb87ea",
             "singleQuestion": {
                 "score": 1,
                 "isOther": false,
@@ -44,24 +44,14 @@
             "require": true,
             "order": 1,
             "imageId": null,
-            "attributeType": "DROPDOWN",
-            "formId": "18f8402c-e975-4373-9ceb-697bcbb420ff",
+            "attributeType": "TEXT_BOX",
+            "formId": "f453707a-86f2-4280-bf8a-7cad12eb87ea",
             "singleQuestion": {
                 "score": 0,
                 "isOther": false,
                 "singleQuestionValues": [
                     {
-                        "value": "dropdown value 1",
-                        "imageId": null,
-                        "isCorrect": true
-                    },
-                    {
-                        "value": "dropdown value 2",
-                        "imageId": null,
-                        "isCorrect": false
-                    },
-                    {
-                        "value": "dropdown value 3",
+                        "value": "true value",
                         "imageId": null,
                         "isCorrect": true
                     }
@@ -75,7 +65,7 @@
             "order": 2,
             "imageId": null,
             "attributeType": "PARAGRAPH",
-            "formId": "18f8402c-e975-4373-9ceb-697bcbb420ff",
+            "formId": "f453707a-86f2-4280-bf8a-7cad12eb87ea",
             "singleQuestion": {
                 "score": 0,
                 "isOther": false,
@@ -100,7 +90,7 @@
             "order": 3,
             "imageId": null,
             "attributeType": "RADIO_GRID",
-            "formId": "18f8402c-e975-4373-9ceb-697bcbb420ff",
+            "formId": "f453707a-86f2-4280-bf8a-7cad12eb87ea",
             "groupQuestion": {
                 "rows": [
                     {
@@ -126,10 +116,6 @@
                     {
                         "order": 2,
                         "value": "Column 3"
-                    },
-                    {
-                        "order": 3,
-                        "value": "Column 4"
                     }
                 ],
                 "answers": [
@@ -139,9 +125,29 @@
                         "isCorrect": true
                     },
                     {
+                        "rowOrder": 0,
+                        "columnOrder": 1,
+                        "isCorrect": false
+                    },
+                    {
+                        "rowOrder": 0,
+                        "columnOrder": 2,
+                        "isCorrect": false
+                    },
+                    {
+                        "rowOrder": 1,
+                        "columnOrder": 0,
+                        "isCorrect": false
+                    },
+                    {
                         "rowOrder": 1,
                         "columnOrder": 1,
                         "isCorrect": true
+                    },
+                    {
+                        "rowOrder": 1,
+                        "columnOrder": 2,
+                        "isCorrect": false
                     }
                 ]
             }
@@ -153,15 +159,29 @@
             "order": 4,
             "imageId": null,
             "attributeType": "FILE_UPLOAD",
-            "formId": "18f8402c-e975-4373-9ceb-697bcbb420ff",
+            "formId": "f453707a-86f2-4280-bf8a-7cad12eb87ea",
             "singleQuestion": {
                 "score": 0,
                 "isOther": false,
                 "singleQuestionValues": [],
                 "fileConfig": {
-                    "maxNumOfFiles": 1,
-                    "maxFileSize": 10
+                    "maxNumOfFiles": 2,
+                    "maxFileSize": 10485760
                 }
+            }
+        },
+        {
+            "label": "Title of the file upload",
+            "description": null,
+            "require": true,
+            "order": 5,
+            "imageId": null,
+            "attributeType": "STAR",
+            "formId": "f453707a-86f2-4280-bf8a-7cad12eb87ea",
+            "singleQuestion": {
+                "score": 0,
+                "isOther": false,
+                "singleQuestionValues": []
             }
         }
     ]

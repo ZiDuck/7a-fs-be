@@ -1,17 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { CreateImageHistoryDto } from './dto/create-image-history.dto';
-import { UpdateImageHistoryDto } from './dto/update-image-history.dto';
 import { ImageHistory } from './entities/image-history.entity';
 import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
 import { Repository, DataSource } from 'typeorm';
 import { Image } from '../images/entites/image.entity';
-import { paginate, paginateRaw } from '../../cores/utils/paginate.util';
+import { paginateRaw } from '../../cores/utils/paginate.util';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
-import { camelCase } from 'lodash';
 import { Errors } from '../../common/errors';
 import { DeleteImageInput } from '../images/dto/delete-image.input';
-import { DeleteImagesInput } from '../images/dto/delete-images.input';
-import { validate, validateSync } from 'class-validator';
+import { validate } from 'class-validator';
 
 @Injectable()
 export class ImageHistoryService {

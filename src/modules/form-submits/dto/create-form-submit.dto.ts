@@ -51,12 +51,23 @@ export class CreateGuestAnswerId {
     id: string;
 }
 
+export class CreateGuestFileValue {
+    @ApiProperty()
+    id: string;
+
+    @ApiProperty()
+    bytes: number;
+}
+
 export class CreateGuestAnswerFormSingle {
     @ApiPropertyOptional()
     choiceIds?: CreateGuestAnswerId[];
 
     @ApiPropertyOptional()
     textValue?: string;
+
+    @ApiPropertyOptional()
+    fileValues?: CreateGuestFileValue[];
 }
 
 export class CreateSingleQuestionSubmit {

@@ -87,6 +87,33 @@ export class FormSubmitsService {
                                 );
                             }
                         });
+                    } else if (formQuestion.attributeType === AttributeType.FILE_UPLOAD) {
+                        if (!guestAnswer?.fileValues) throw new BadRequestException(`Câu hỏi ${formQuestion.id} không tồn tại câu trả lời`);
+
+                        // Kiểm tra nếu câu hỏi file upload mà không có file nào gửi lên thì throw error
+                        if (formQuestion.require && guestAnswer.fileValues.length === 0) {
+                            throw new BadRequestException(`Câu hỏi ${formQuestion.id} không được để trống vì đây là câu hỏi bắt buộc`);
+                        }
+
+                        // Kiểm tra nếu câu hỏi file upload mà có số lượng file gửi lên nhiều hơn maxNumOfFiles thì throw error
+                        if (
+                            formQuestion.singleQuestion.fileConfig &&
+                            guestAnswer.fileValues.length > formQuestion.singleQuestion.fileConfig.maxNumOfFiles
+                        ) {
+                            throw new BadRequestException(
+                                `Câu hỏi ${formQuestion.id} chỉ được gửi lên tối đa ${formQuestion.singleQuestion.fileConfig.maxNumOfFiles} file`,
+                            );
+                        }
+
+                        // Kiểm tra nếu câu hỏi file upload mà các file gửi lên có tổng kích thước vượt quá maxFileSizes thì throw error
+                        if (
+                            formQuestion.singleQuestion.fileConfig &&
+                            guestAnswer.fileValues.reduce((acc, file) => acc + file.bytes, 0) > formQuestion.singleQuestion.fileConfig.maxFileSize
+                        ) {
+                            throw new BadRequestException(
+                                `Câu hỏi ${formQuestion.id} chỉ được gửi lên tối đa ${formQuestion.singleQuestion.fileConfig.maxFileSize} bytes`,
+                            );
+                        }
                     }
                 } else if (formQuestion instanceof CreateGroupQuestionSubmitTemp) {
                     if (!formQuestion.groupQuestion?.guestAnswer) throw new BadRequestException(`Câu hỏi ${formQuestion.id} không được để trống`);

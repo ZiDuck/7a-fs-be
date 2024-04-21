@@ -26,6 +26,7 @@ import { BackupModule } from './modules/backup/backup.module';
 import { FormSubmitsModule } from './modules/form-submits/form-submits.module';
 import { RawFilesModule } from './modules/raw-files/raw-files.module';
 import { ImageHistoryModule } from './modules/image-history/image-history.module';
+import { FileHistoryModule } from './modules/file-history/file-history.module';
 
 @Module({
     imports: [
@@ -59,6 +60,7 @@ import { ImageHistoryModule } from './modules/image-history/image-history.module
         FormSubmitsModule,
         RawFilesModule,
         ImageHistoryModule,
+        FileHistoryModule,
     ],
     controllers: [AppController],
     providers: [
