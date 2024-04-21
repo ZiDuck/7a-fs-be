@@ -32,6 +32,7 @@ import { FormFilterQuery } from './dto/form-filter-query.dto';
 import { UpdateFormQuestionOfFormInput } from './dto/update-form-questions-of-form.input';
 import { CreateFormSubmitDto } from '../form-submits/dto/create-form-submit.dto';
 import { FormSubmitQuery } from './dto/form-submit-query.dto';
+import { GetFormSubmit } from '../form-submits/dto/get-form-submit.dto';
 
 @ApiTags('forms')
 @Controller('forms')
@@ -120,7 +121,7 @@ export class FormsController {
 
     @UseRoleGuard()
     @AdminUserRole()
-    @ApiOkResponseDto(GetFormAllFormQuestionsDto)
+    @ApiOkResponseDto(GetFormSubmit)
     @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
     @Get(':id/submit-forms')
     async findSubmitForm(@Param('id', ParseUUIDPipe) id: string, @Query() query: FormSubmitQuery) {
