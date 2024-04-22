@@ -17,7 +17,7 @@ import {
 import { FormsService } from './forms.service';
 import { CreateFormInput } from './dto/create-form.input';
 import { UpdateFormDto } from './dto/update-form.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 import { GetFormDto } from './dto/get-form.dto';
 import { ApiPaginatedResponse } from '../../cores/decorators/api-paginated-dto.decorator';
@@ -33,6 +33,7 @@ import { UpdateFormQuestionOfFormInput } from './dto/update-form-questions-of-fo
 import { CreateFormSubmitDto } from '../form-submits/dto/create-form-submit.dto';
 import { FormSubmitQuery } from './dto/form-submit-query.dto';
 import { GetFormSubmit } from '../form-submits/dto/get-form-submit.dto';
+import { GetVersion } from './dto/get-version.dto';
 
 @ApiTags('forms')
 @Controller('forms')
@@ -128,6 +129,27 @@ export class FormsController {
         return await this.formsService.findSubmitForm(id, query);
     }
 
+    @ApiOkResponse({
+        type: GetVersion,
+    })
+    @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
+    @Get(':id/versions/current')
+    async findCurrentVersion(@Param('id', ParseUUIDPipe) id: string) {
+        return plainToInstance(GetVersion, await this.formsService.findCurrentVersion(id));
+    }
+
+    @UseRoleGuard()
+    @AdminUserRole()
+    @ApiOkResponse({
+        type: [GetVersion],
+    })
+    @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
+    @Get(':id/versions')
+    async findAllVersions(@Param('id', ParseUUIDPipe) id: string) {
+        // return plainToInstance(GetVersion, await this.formsService.findAllVersions(id));
+        return await this.formsService.findAllVersions(id);
+    }
+
     @UseRoleGuard()
     @AdminUserRole()
     @ApiOkResponseDto(GetFormDto)
@@ -139,6 +161,7 @@ export class FormsController {
 
     @UseRoleGuard()
     @AdminUserRole()
+    @UsePipes(new ValidationPipe({ transform: true }))
     @Patch('form-questions')
     async updateQuestions(@Body() data: UpdateFormQuestionOfFormInput) {
         try {

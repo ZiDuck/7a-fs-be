@@ -222,6 +222,28 @@ export class FormsService {
         return customizeForm;
     }
 
+    async findCurrentVersion(id: string) {
+        const result = await this.formRepository.findOne({
+            where: { id: id },
+        });
+
+        if (!result) throw new BadRequestException(`Form with id ${id} is not exists!`);
+
+        return { version: result.version };
+    }
+
+    async findAllVersions(id: string) {
+        const result = await this.formAuditRepository
+            .createQueryBuilder('formAudit')
+            .select("formAudit.form ->> 'version'", 'version')
+            .where(`formAudit.form ->> 'id' = :id`, { id })
+            .getRawMany();
+
+        if (!result) throw new BadRequestException(`Form with id ${id} is not exists!`);
+
+        return result;
+    }
+
     @Transactional()
     async updateQuestions(data: UpdateFormQuestionOfFormInput) {
         const existedForm = await this.findOne(data.id);
