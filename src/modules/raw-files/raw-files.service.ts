@@ -23,4 +23,14 @@ export class RawFilesService {
 
         return result;
     }
+
+    async remove(id: string) {
+        const result = await this.rawFileRepository.findOneBy({ id });
+
+        if (!result) throw new BadRequestException(`Không tồn tại file có id ${id}`);
+
+        await this.rawFileRepository.remove(result);
+
+        return true;
+    }
 }

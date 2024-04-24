@@ -155,11 +155,14 @@ export class FileHistoryService {
         return true;
     }
 
+    @Transactional()
     async remove(id: string) {
         const fileExists = await this.findOneHasDeleted(id);
 
-        const result = await this.fileHistoryRepository.remove(fileExists);
+        await this.rawFileService.remove(fileExists.rawFileId);
 
-        return result;
+        await this.fileHistoryRepository.remove(fileExists);
+
+        return true;
     }
 }
