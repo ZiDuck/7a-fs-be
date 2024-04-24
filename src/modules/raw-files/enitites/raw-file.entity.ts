@@ -1,5 +1,6 @@
 import { Entity, Column } from 'typeorm';
 import { AppBaseEntity } from '../../../common/entities/base.entity';
+import { ResourceType } from '../../../cores/enums/resource-type.enum';
 
 @Entity()
 export class RawFile extends AppBaseEntity {
@@ -15,8 +16,8 @@ export class RawFile extends AppBaseEntity {
     @Column('text')
     secureUrl?: string;
 
-    @Column('varchar', { length: 100, nullable: true })
-    resourceType: string;
+    @Column('enum', { enum: ResourceType })
+    resourceType: ResourceType;
 
     @Column('decimal', { nullable: true })
     bytes?: number;

@@ -9,6 +9,7 @@ import { ImageUploadOutput } from './dto/image-upload.output';
 import { ArchiveFolder } from './enums/archive-folder.enum';
 import path from 'path';
 import { RawFilesService } from '../raw-files/raw-files.service';
+import { ResourceType } from '../../cores/enums/resource-type.enum';
 
 @Injectable()
 export class UploadFileService {
@@ -28,12 +29,13 @@ export class UploadFileService {
             };
         }
 
-        const imageResult = await this.imageService.create({
+        const imageResult = await this.rawService.create({
             publicId: cloudinaryResult.public_id,
             url: cloudinaryResult.url,
             bytes: cloudinaryResult.bytes,
             filename: file.originalname,
             secureUrl: cloudinaryResult.secure_url,
+            resourceType: cloudinaryResult.resource_type as ResourceType,
         });
 
         return {
@@ -80,7 +82,7 @@ export class UploadFileService {
         const rawFileResult = await this.rawService.create({
             publicId: cloudinaryResult.public_id,
             url: cloudinaryResult.url,
-            resourceType: cloudinaryResult.resource_type,
+            resourceType: cloudinaryResult.resource_type as ResourceType,
             secureUrl: cloudinaryResult.secure_url,
             bytes: cloudinaryResult.bytes,
             filename: file.originalname,

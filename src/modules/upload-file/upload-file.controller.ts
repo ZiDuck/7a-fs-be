@@ -64,19 +64,19 @@ export class UploadFileController {
         });
     }
 
-    @UseRoleGuard()
-    @Delete('image')
-    @ApiNoContentResponse({ description: 'Delete image successfully' })
-    @Transactional()
-    async deleteImage(@Body() data: DeleteImageInput): Promise<void> {
-        try {
-            await this.uploadFileService.deleteOneImage(data);
-        } catch (error) {
-            if (error instanceof HttpException) throw error;
+    // @UseRoleGuard()
+    // @Delete('image')
+    // @ApiNoContentResponse({ description: 'Delete image successfully' })
+    // @Transactional()
+    // async deleteImage(@Body() data: DeleteImageInput): Promise<void> {
+    //     try {
+    //         await this.uploadFileService.deleteOneImage(data);
+    //     } catch (error) {
+    //         if (error instanceof HttpException) throw error;
 
-            throw new InternalServerErrorException(error.message);
-        }
-    }
+    //         throw new InternalServerErrorException(error.message);
+    //     }
+    // }
 
     // @Get('download')
     // async download(@Param('publicId') publicId: string) {

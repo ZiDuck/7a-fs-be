@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, InternalServerErrorException, Param, Patch, Post, Query } from '@nestjs/common';
 import { FileHistoryService } from './file-history.service';
 import { CreateFileHistoryDto } from './dto/create-file-history.dto';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
@@ -29,8 +29,13 @@ export class FileHistoryController {
     //     return this.fileHistoryService.update(id);
     // }
 
-    @Delete(':id')
-    async remove(@Param('id') id: string) {
-        return await this.fileHistoryService.remove(id);
+    @Patch(':id')
+    async removeRawFileInCloud(@Param('id') id: string) {
+        try {
+            return await this.fileHistoryService.removeRawFileInCloud(id);
+        } catch (error) {
+            if (error instanceof HttpException) throw error;
+            throw new InternalServerErrorException(error.message);
+        }
     }
 }

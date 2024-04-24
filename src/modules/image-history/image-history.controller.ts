@@ -12,28 +12,28 @@ import { PageQueryDto } from '../../common/dtos/page-query.dto';
 export class ImageHistoryController {
     constructor(private readonly imageHistoryService: ImageHistoryService) {}
 
-    @Post()
-    create(@Body() data: CreateImageHistoryDto) {
-        return this.imageHistoryService.create(data);
-    }
+    // @Post()
+    // create(@Body() data: CreateImageHistoryDto) {
+    //     return this.imageHistoryService.create(data);
+    // }
 
-    @Get()
-    async findAll(@Query() query: PageQueryDto) {
-        return await this.imageHistoryService.findAll(query);
-    }
+    // @Get()
+    // async findAll(@Query() query: PageQueryDto) {
+    //     return await this.imageHistoryService.findAll(query);
+    // }
 
-    @Get(':id')
-    async findOne(@Param('id') id: string) {
-        return await this.imageHistoryService.findOne(id);
-    }
+    // @Get(':id')
+    // async findOne(@Param('id') id: string) {
+    //     return await this.imageHistoryService.findOne(id);
+    // }
 
-    @Patch(':id')
-    update(@Param('id') id: string) {
-        return this.imageHistoryService.update(id);
-    }
+    // @Patch(':id')
+    // update(@Param('id') id: string) {
+    //     return this.imageHistoryService.update(id);
+    // }
 
-    @Delete(':id')
-    async remove(@Param('id') id: string) {
-        return await this.imageHistoryService.remove(id);
-    }
+    // @Delete(':id')
+    // async remove(@Param('id') id: string) {
+    //     return await this.imageHistoryService.remove(id);
+    // }
 }

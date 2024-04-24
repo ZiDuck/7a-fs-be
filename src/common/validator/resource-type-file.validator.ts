@@ -4,13 +4,15 @@ import { CloudinaryService } from '../../modules/cloudinary/cloudinary.service';
 
 @Injectable()
 @ValidatorConstraint({ async: true })
-export class FilePublicIdExistsConstraint implements ValidatorConstraintInterface {
-    constructor(private readonly cloudinaryService: CloudinaryService) {}
+export class RSFilePublicIdExistsConstraint implements ValidatorConstraintInterface {
+    constructor(private readonly uploadFileService: CloudinaryService) {}
 
     async validate(value: string, args: ValidationArguments): Promise<boolean> {
-        const resourceType = args.constraints[0];
+        const resourceTypeCallback = args.constraints[0];
+
+        const resourceType = resourceTypeCallback(args.object);
         // const type = resourceType === ResourceType.RAW ? 'private' : '';
-        const result: boolean = await this.cloudinaryService.checkResourcesExists({
+        const result: boolean = await this.uploadFileService.checkResourcesExists({
             publicId: value,
             resourceType: resourceType,
         });
@@ -23,15 +25,15 @@ export class FilePublicIdExistsConstraint implements ValidatorConstraintInterfac
     }
 }
 
-export function FilePublicIdExists(resourceTypes: string, validationOptions?: ValidationOptions) {
+export function RSFilePublicIdExists(resourceTypeCallback: (object: any) => string, validationOptions?: ValidationOptions) {
     return function (object: any, propertyName: string) {
         registerDecorator({
-            name: FilePublicIdExists.name,
+            name: RSFilePublicIdExists.name,
             target: object.constructor,
             propertyName: propertyName,
             options: validationOptions,
-            validator: FilePublicIdExistsConstraint,
-            constraints: [resourceTypes],
+            validator: RSFilePublicIdExistsConstraint,
+            constraints: [resourceTypeCallback],
         });
     };
 }

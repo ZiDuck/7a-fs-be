@@ -114,3 +114,15 @@ export class ImageHistoryNotFoundErrorBusinessException extends BusinessExceptio
         super({ message: `Không tìm thấy ảnh #${id}` }, HttpStatus.BAD_REQUEST);
     }
 }
+
+export class FileNotFoundInCloudinaryErrorBusinessException extends BusinessException {
+    constructor(id?: string) {
+        super({ message: `Không tìm thấy file #${id} ở trên cloudinary` }, HttpStatus.BAD_REQUEST);
+    }
+}
+
+export class FileNotDeletedInCloudinaryErrorBusinessException extends BusinessException {
+    constructor(id?: string) {
+        super({ message: `Không thể xóa file trên cloudinary` }, HttpStatus.BAD_REQUEST);
+    }
+}

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RawFile } from './enitites/raw-file.entity';
@@ -12,6 +12,14 @@ export class RawFilesService {
         const result = this.rawFileRepository.create(data);
 
         await this.rawFileRepository.save(result);
+
+        return result;
+    }
+
+    async getById(id: string) {
+        const result = await this.rawFileRepository.findOneBy({ id });
+
+        if (!result) throw new BadRequestException(`Không tồn tại file có id ${id}`);
 
         return result;
     }

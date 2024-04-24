@@ -1,7 +1,9 @@
 import {
     EmailExistException,
     EmailNotExistException,
+    FileNotDeletedInCloudinaryErrorBusinessException,
     FileNotFoundErrorBusinessException,
+    FileNotFoundInCloudinaryErrorBusinessException,
     ImageHistoryNotFoundErrorBusinessException,
     InternalServerErrorBusinessException,
     PassWordIncorrectException,
@@ -55,7 +57,15 @@ export class Errors {
         return new FileNotFoundErrorBusinessException(id);
     }
 
+    static FileNotFoundInCloudinaryErrorBusiness(id: string) {
+        return new FileNotFoundInCloudinaryErrorBusinessException(id);
+    }
+
     static ImageHistoryNotFoundErrorBusiness(id: string) {
         return new ImageHistoryNotFoundErrorBusinessException(id);
+    }
+
+    static FileNotDeletedInCloudinaryErrorBusiness(id: string) {
+        return new FileNotDeletedInCloudinaryErrorBusinessException(id);
     }
 }
