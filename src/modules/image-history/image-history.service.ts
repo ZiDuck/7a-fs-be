@@ -9,6 +9,7 @@ import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { Errors } from '../../common/errors';
 import { DeleteImageInput } from '../images/dto/delete-image.input';
 import { validate } from 'class-validator';
+import { GetImageHistoryQuery } from './dto/get-image-history-query.dto';
 
 @Injectable()
 export class ImageHistoryService {
@@ -39,6 +40,24 @@ export class ImageHistoryService {
             .orderBy('history.createdDate', 'DESC');
 
         const result = await paginateRaw(builder, query);
+
+        return result;
+    }
+
+    async findAllNotPaginate(condition: GetImageHistoryQuery) {
+        const result = await this.dataSource
+            .createQueryBuilder()
+            .select('history.id', 'id')
+            .addSelect('history.hasDeleted', 'hasDeleted')
+            .addSelect('history.imageId', 'imageId')
+            .addSelect('image.url', 'url')
+            .addSelect('image.publicId', 'publicId')
+            .from(ImageHistory, 'history')
+            .addFrom(Image, 'image')
+            .where('image.id=history.imageId')
+            .andWhere('history.createdDate BETWEEN :startDate AND :endDate', { startDate: condition.startDate, endDate: condition.endDate })
+            .orderBy('history.createdDate', 'DESC')
+            .getRawMany();
 
         return result;
     }

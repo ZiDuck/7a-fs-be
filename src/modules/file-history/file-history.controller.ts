@@ -41,7 +41,7 @@ export class FileHistoryController {
     @Delete(':id')
     async remove(@Param('id') id: string) {
         try {
-            return await this.fileHistoryService.remove(id);
+            return await this.fileHistoryService.removeRawFile(id);
         } catch (error) {
             if (error instanceof HttpException) throw error;
             throw new InternalServerErrorException(error.message);

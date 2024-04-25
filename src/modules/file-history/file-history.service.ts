@@ -9,11 +9,9 @@ import { paginateRaw } from '../../cores/utils/paginate.util';
 import { Errors } from '../../common/errors';
 import { RawFilesService } from '../raw-files/raw-files.service';
 import { UpdateFileHistoryDto } from './dto/update-file-history.dto';
-import { validate } from 'class-validator';
-import { DeleteImageInput } from '../images/dto/delete-image.input';
-import { DeleteFileInput } from './dto/delete-file-history.dto';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { Transactional } from 'typeorm-transactional';
+import { GetFileHistoryQuery } from './dto/get-file-history-query.dto';
 
 @Injectable()
 export class FileHistoryService {
@@ -54,6 +52,49 @@ export class FileHistoryService {
             .orderBy('history.updatedDate', 'DESC');
 
         const result = await paginateRaw(builder, query);
+
+        return result;
+    }
+
+    async findAllNotPaginate(condition: GetFileHistoryQuery) {
+        const result = await this.dataSource
+            .createQueryBuilder()
+            .select('history.id', 'id')
+            .addSelect('history.hasDeleted', 'hasDeleted')
+            .addSelect('history.rawFileId', 'rawFileId')
+            .addSelect('file.publicId', 'publicId')
+            .addSelect('file.secureUrl', 'secureUrl')
+            .addSelect('file.fileName', 'fileName')
+            .addSelect('file.resourceType', 'resourceType')
+            .addSelect('file.bytes', 'bytes')
+            .from(FileHistory, 'history')
+            .addFrom(RawFile, 'file')
+            .where('file.id=history.rawFileId')
+            .andWhere('history.createdDate BETWEEN :startDate AND :endDate', { startDate: condition.startDate, endDate: condition.endDate })
+            .orderBy('history.updatedDate', 'DESC')
+            .getRawMany();
+
+        return result;
+    }
+
+    async findAllHasNotDeletedAndNotPaginate(condition: GetFileHistoryQuery) {
+        const result = await this.dataSource
+            .createQueryBuilder()
+            .select('history.id', 'id')
+            .addSelect('history.hasDeleted', 'hasDeleted')
+            .addSelect('history.rawFileId', 'rawFileId')
+            .addSelect('file.publicId', 'publicId')
+            .addSelect('file.secureUrl', 'secureUrl')
+            .addSelect('file.fileName', 'fileName')
+            .addSelect('file.resourceType', 'resourceType')
+            .addSelect('file.bytes', 'bytes')
+            .from(FileHistory, 'history')
+            .addFrom(RawFile, 'file')
+            .where('file.id=history.rawFileId')
+            .andWhere('history.createdDate BETWEEN :startDate AND :endDate', { startDate: condition.startDate, endDate: condition.endDate })
+            .andWhere('history.hasDeleted=false')
+            .orderBy('history.updatedDate', 'DESC')
+            .getRawMany();
 
         return result;
     }
@@ -156,12 +197,18 @@ export class FileHistoryService {
     }
 
     @Transactional()
-    async remove(id: string) {
+    async removeRawFile(id: string) {
         const fileExists = await this.findOneHasDeleted(id);
 
         await this.rawFileService.remove(fileExists.rawFileId);
 
         await this.fileHistoryRepository.remove(fileExists);
+
+        return true;
+    }
+
+    async remove(id: string) {
+        await this.fileHistoryRepository.delete(id);
 
         return true;
     }

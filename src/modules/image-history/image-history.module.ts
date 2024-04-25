@@ -8,5 +8,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     controllers: [ImageHistoryController],
     providers: [ImageHistoryService],
     imports: [TypeOrmModule.forFeature([ImageHistory])],
+    exports: [ImageHistoryService],
 })
 export class ImageHistoryModule {}
