@@ -24,6 +24,15 @@ export class FormSubmitsService {
             const existedQuestion = form.formQuestions.find((existedQuestion) => existedQuestion.id === question.id);
 
             if (question instanceof CreateSingleQuestionSubmitTemp) {
+                if (SELECTION_QUESTION_TYPES.includes(question.attributeType)) {
+                    question.singleQuestion.guestAnswer.choiceIds = question.singleQuestion.guestAnswer.choiceIds.map((choice) => {
+                        return {
+                            ...choice,
+                            value: question.singleQuestion.singleQuestionValues.find((value) => value.id === choice.id).value,
+                        };
+                    });
+                }
+
                 return {
                     ...question,
                     singleQuestion: {
@@ -121,16 +130,17 @@ export class FormSubmitsService {
                     // Get all unique rowIds from the guestAnswer
                     const rowIdsSet = [...new Set(formQuestion.groupQuestion.rows.map((row) => row.id))];
                     const colIdsSet = [...new Set(formQuestion.groupQuestion.columns.map((col) => col.id))];
+                    const guestGridIds = formQuestion.groupQuestion.guestAnswer.gridIds;
 
                     if (formQuestion.require) {
-                        if (formQuestion.groupQuestion.guestAnswer.length === 0) {
+                        if (guestGridIds.length === 0) {
                             throw new BadRequestException(`Câu hỏi ${formQuestion.id} không được để trống vì đây là câu hỏi bắt buộc`);
                         }
 
                         // Check each rowId
                         for (const rowId of rowIdsSet) {
                             // If there is no groupQuestionAnswer for this rowId, throw an error
-                            if (!formQuestion.groupQuestion.guestAnswer.some((answer) => answer.rowId === rowId)) {
+                            if (!guestGridIds.some((answer) => answer.rowId === rowId)) {
                                 throw new BadRequestException(`Câu hỏi ${formQuestion.id} không được để trống vì đây là câu hỏi bắt buộc`);
                             }
                         }
@@ -138,9 +148,9 @@ export class FormSubmitsService {
 
                     if (formQuestion.attributeType === AttributeType.RADIO_GRID) {
                         // Kiểm tra nếu câu hỏi group có mỗi row đều nhiều hơn 1 câu trả lời thì throw error
-                        formQuestion.groupQuestion.guestAnswer.forEach((answer) => {
+                        guestGridIds.forEach((answer) => {
                             // Đếm số lượng câu trả lời cho mỗi hàng, nếu có nhiều hơn 1 cột được chọn thì ném ra lỗi
-                            const count = formQuestion.groupQuestion.guestAnswer.filter((a) => a.rowId === answer.rowId).length;
+                            const count = guestGridIds.filter((a) => a.rowId === answer.rowId).length;
                             if (count > 1) {
                                 throw new BadRequestException(`Câu hỏi ${formQuestion.id} chỉ được chọn 1 câu trả lời cho mỗi hàng`);
                             }
@@ -148,7 +158,7 @@ export class FormSubmitsService {
                     }
 
                     // Kiểm tra nếu câu hỏi group có đáp án không hợp lệ thì throw error
-                    formQuestion.groupQuestion.guestAnswer.forEach((answer) => {
+                    guestGridIds.forEach((answer) => {
                         if (!rowIdsSet.includes(answer.rowId) || !colIdsSet.includes(answer.columnId)) {
                             throw new BadRequestException(
                                 `Câu hỏi ${formQuestion.id} có đáp án không hợp lệ. Vui lòng kiểm tra lại columnId hoặc rowId`,

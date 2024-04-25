@@ -44,14 +44,38 @@ export class SingleQuestionValueSubmit {
         example: true,
     })
     isCorrect: boolean;
+
+    @ApiProperty({
+        example: true,
+    })
+    isOther: boolean;
+}
+
+export class GuestAnswerId {
+    @ApiProperty()
+    id: string;
+
+    @ApiProperty()
+    value: string;
+}
+
+export class GuestFileValue {
+    @ApiProperty()
+    id: string;
+
+    @ApiProperty()
+    bytes: number;
 }
 
 export class GuestAnswerFormSingle {
     @ApiPropertyOptional()
-    choiceIds?: string[];
+    choiceIds?: GuestAnswerId[];
 
     @ApiPropertyOptional()
     textValue?: string;
+
+    @ApiPropertyOptional()
+    fileValues?: GuestFileValue[];
 }
 
 export class SingleQuestionSubmit {
@@ -90,6 +114,10 @@ export class SingleQuestionSubmit {
     guestAnswer: GuestAnswerFormSingle;
 }
 
+export class GridId {
+    gridIds: GuestAnswerFormGroup[];
+}
+
 export class GroupQuestionSubmit {
     @Type(() => GroupQuestionRowSubmit)
     rows: GroupQuestionRowSubmit[];
@@ -100,7 +128,7 @@ export class GroupQuestionSubmit {
     @Type(() => GroupQuestionAnswerSubmit)
     answers: GroupQuestionAnswerSubmit[];
 
-    guestAnswer: GuestAnswerFormGroup[];
+    guestAnswer: GridId[];
 }
 
 export class GroupQuestionRowSubmit {

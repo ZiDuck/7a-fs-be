@@ -10,9 +10,6 @@ export class GetSingleQuestionAttribute {
     @ApiProperty({ example: 1 })
     score: number;
 
-    @ApiProperty({ example: false })
-    isOther: boolean;
-
     @ApiProperty()
     questionId: string;
 

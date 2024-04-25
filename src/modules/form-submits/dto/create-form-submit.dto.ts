@@ -40,10 +40,10 @@ export class CreateSingleQuestionValueSubmit {
     })
     image: ImageOutput | null;
 
-    // @ApiProperty({
-    //     example: true,
-    // })
-    // isCorrect: boolean;
+    @ApiProperty({
+        example: true,
+    })
+    isOther: boolean;
 }
 
 export class CreateGuestAnswerId {
@@ -106,6 +106,10 @@ export class CreateSingleQuestionSubmit {
     guestAnswer: CreateGuestAnswerFormSingle;
 }
 
+export class CreateGridId {
+    gridIds: CreateGuestAnswerFormGroup[];
+}
+
 export class CreateGroupQuestionSubmit {
     @Type(() => CreateGroupQuestionRowSubmit)
     rows: CreateGroupQuestionRowSubmit[];
@@ -116,8 +120,8 @@ export class CreateGroupQuestionSubmit {
     // @Type(() => GroupQuestionAnswerSubmit)
     // answers: GroupQuestionAnswerSubmit[];
 
-    @Type(() => CreateGuestAnswerFormGroup)
-    guestAnswer: CreateGuestAnswerFormGroup[];
+    @Type(() => CreateGridId)
+    guestAnswer: CreateGridId;
 }
 
 export class CreateGroupQuestionRowSubmit {
@@ -146,28 +150,6 @@ export class CreateGroupQuestionColumnSubmit {
     @ApiProperty()
     order: number;
 }
-
-// export class GroupQuestionAnswerSubmit {
-//     @ApiProperty()
-//     id: string;
-
-//     @ApiPropertyOptional()
-//     rowOrder?: number;
-
-//     @ApiPropertyOptional()
-//     columnOrder?: number;
-
-//     @ApiProperty({
-//         example: true,
-//     })
-//     isCorrect: boolean;
-
-//     @Exclude()
-//     rowId: string;
-
-//     @Exclude()
-//     columnId: string;
-// }
 
 export class CreateGuestAnswerFormGroup {
     rowId: string;

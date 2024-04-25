@@ -18,22 +18,31 @@
             "formId": "f453707a-86f2-4280-bf8a-7cad12eb87ea",
             "singleQuestion": {
                 "score": 1,
-                "isOther": false,
+
                 "singleQuestionValues": [
                     {
                         "value": "checkbox value 1",
                         "imageId": null,
-                        "isCorrect": true
+                        "isCorrect": true,
+                        "isOther": false
                     },
                     {
                         "value": "checkbox value 2",
                         "imageId": null,
-                        "isCorrect": false
+                        "isCorrect": false,
+                        "isOther": false
                     },
                     {
                         "value": "checkbox value 3",
                         "imageId": null,
-                        "isCorrect": false
+                        "isCorrect": false,
+                        "isOther": false
+                    },
+                    {
+                        "value": "",
+                        "imageId": null,
+                        "isCorrect": false,
+                        "isOther": true
                     }
                 ]
             }

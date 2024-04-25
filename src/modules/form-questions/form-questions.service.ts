@@ -54,7 +54,6 @@ export class FormQuestionsService {
 
             const attributeInput = new SingleQuestionAttribute({
                 score: singleQuestionInput.score,
-                isOther: singleQuestionInput.isOther,
                 fileConfig: fileConfig,
                 singleQuestionValues: attributeValues,
                 // question: question,
@@ -133,7 +132,15 @@ export class FormQuestionsService {
 
         if (data instanceof CreateSingleQuestionFormInput) {
             if (data.attributeType === AttributeType.FILE_UPLOAD && !data.singleQuestion?.fileConfig) {
-                throw new BadRequestException(`Câu hỏi kiểu FILE_UPLOAD phải có fileConfig`);
+                throw new BadRequestException(`Câu hỏi kiểu ${data.attributeType} phải có fileConfig`);
+            }
+
+            if (data.attributeType === AttributeType.CHECKBOX_BUTTON || data.attributeType === AttributeType.RADIO_BUTTON) {
+                const isCorrects = data.singleQuestion?.singleQuestionValues.filter((value) => value.isOther === true);
+
+                if (isCorrects.length > 1) {
+                    throw new BadRequestException(`Câu hỏi kiểu ${data.attributeType} chỉ được tồn tại một câu hỏi khác`);
+                }
             }
         }
 
@@ -219,7 +226,6 @@ export class FormQuestionsService {
 
             singleQuestion.id = question.formSingleAttribute.id;
             singleQuestion.score = question.formSingleAttribute.score;
-            singleQuestion.isOther = question.formSingleAttribute.isOther;
             singleQuestion.singleQuestionValues = await Promise.all(
                 question.formSingleAttribute.singleQuestionValues.map(async (value) => {
                     const result = {
@@ -227,6 +233,7 @@ export class FormQuestionsService {
                         value: value.value,
                         image: question.imageId ? await this.imagesService.checkImageHook(value.imageId) : null,
                         isCorrect: value.isCorrect,
+                        isOther: value.isOther,
                     };
                     return result;
                 }),

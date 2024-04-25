@@ -9,8 +9,8 @@ export class SingleQuestionAttribute extends AppBaseEntity {
     @Column('float', { default: 0 })
     score: number;
 
-    @Column('boolean', { default: false })
-    isOther: boolean;
+    // @Column('boolean', { default: false })
+    // isOther: boolean;
 
     @Column('uuid')
     questionId: FormQuestion['id'];

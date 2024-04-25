@@ -21,6 +21,11 @@ export class GetSingleQuestionValue {
     })
     isCorrect: boolean;
 
+    @ApiProperty({
+        example: true,
+    })
+    isOther: boolean;
+
     // @Exclude()
     // createdDate: Date;
 

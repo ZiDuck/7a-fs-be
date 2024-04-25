@@ -237,6 +237,8 @@ export class FormsService {
             .createQueryBuilder('formAudit')
             .select("formAudit.form ->> 'version'", 'version')
             .where(`formAudit.form ->> 'id' = :id`, { id })
+            // .orderBy("formAudit.form ->> 'version'", 'ASC')
+            .orderBy('formAudit.createdDate', 'ASC')
             .getRawMany();
 
         if (!result) throw new BadRequestException(`Form with id ${id} is not exists!`);
