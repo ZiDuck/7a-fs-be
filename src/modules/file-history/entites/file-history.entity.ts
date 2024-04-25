@@ -4,7 +4,7 @@ import { ResourceType } from '../../../cores/enums/resource-type.enum';
 
 @Entity()
 export class FileHistory extends AppBaseEntity {
-    @Column('uuid')
+    @Column('uuid', { unique: true })
     rawFileId: string;
 
     @Column('enum', { enum: ResourceType })
