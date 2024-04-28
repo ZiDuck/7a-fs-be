@@ -1,13 +1,11 @@
-import { Exclude, Expose } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { FormStatus } from '../enums/form-status.enum';
-import { FormCategory } from '../enums/form-category.enum';
+import { Exclude } from 'class-transformer';
 import { FormQuestion } from '../../form-questions/entities/form-question.entity';
-import { Form } from '../entities/form.entity';
+import { FormCategory } from '../../forms/enums/form-category.enum';
+import { FormStatus } from '../../forms/enums/form-status.enum';
 import { ImageOutput } from '../../images/dto/image.output';
 
-@Expose()
-export class GetFormDto extends Form {
+export class GetFormSubmitInfo {
     @ApiProperty({
         example: 'uuid',
     })
@@ -52,18 +50,11 @@ export class GetFormDto extends Form {
     })
     image: ImageOutput | null;
 
-    @Exclude()
-    imageId: string;
+    @ApiProperty({
+        example: 'uuid',
+    })
+    formSubmitId: string;
 
     @Exclude()
     formQuestions: FormQuestion[];
-
-    @Exclude()
-    createdDate: Date;
-
-    @Exclude()
-    updatedDate: Date;
-
-    @Exclude()
-    deletedDate: Date;
 }

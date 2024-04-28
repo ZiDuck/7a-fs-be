@@ -260,6 +260,9 @@ export class FormViewDto {
     @ApiProperty()
     hasAnswer: boolean;
 
+    @ApiProperty()
+    canSeeCorrectAnswer: boolean;
+
     @ApiProperty({
         enum: FormCategory,
     })

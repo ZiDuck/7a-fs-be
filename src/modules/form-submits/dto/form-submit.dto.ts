@@ -284,6 +284,9 @@ export class FormSubmitDto {
     @ApiProperty()
     hasAnswer: boolean;
 
+    @ApiProperty()
+    canSeeCorrectAnswer: boolean;
+
     @ApiProperty({
         enum: FormCategory,
     })

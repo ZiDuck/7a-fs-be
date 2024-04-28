@@ -70,7 +70,7 @@ export class FormsController {
     @Post('submit')
     @UsePipes(new ValidationPipe({ transform: true }))
     async submitForm(@Body() data: CreateFormSubmitDto) {
-        return await this.formsService.submitForm(data);
+        return plainToInstance(GetFormSubmit, await this.formsService.submitForm(data));
     }
 
     @UseRoleGuard()

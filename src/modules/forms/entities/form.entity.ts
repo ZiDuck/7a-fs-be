@@ -22,6 +22,9 @@ export class Form extends AuditEntity {
     @Column('boolean', { default: false })
     hasAnswer: boolean;
 
+    @Column('boolean', { default: false })
+    canSeeCorrectAnswer: boolean;
+
     @Column('enum', { enum: FormCategory })
     category: FormCategory;
 

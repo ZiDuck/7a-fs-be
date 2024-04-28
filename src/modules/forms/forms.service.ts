@@ -28,6 +28,7 @@ import { CreateFormSubmitDto } from '../form-submits/dto/create-form-submit.dto'
 import { FormSubmitsService } from '../form-submits/form-submits.service';
 import { FormViewDto } from './dto/view-form.dto';
 import { FormSubmitQuery } from './dto/form-submit-query.dto';
+import { FormSubmit } from '../form-submits/entities/form-submit.entity';
 
 type DefaultRelationType = FindOptionsRelations<Form> | FindOptionsRelationByString;
 
@@ -89,7 +90,7 @@ export class FormsService {
         return result ? true : false;
     }
 
-    async submitForm(data: CreateFormSubmitDto) {
+    async submitForm(data: CreateFormSubmitDto): Promise<FormSubmit> {
         const existedForm = await this.findFormQuestions(data.id);
 
         if (data.version !== existedForm.version) throw new BadRequestException(`Phiên bản form không hợp lệ. Vui lòng load lại trang!`);

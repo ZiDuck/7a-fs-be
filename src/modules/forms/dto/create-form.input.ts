@@ -36,6 +36,10 @@ export class CreateFormInput {
     @IsOptional()
     hasAnswer?: boolean;
 
+    @ApiPropertyOptional()
+    @IsOptional()
+    canSeeCorrectAnswer?: boolean;
+
     @ApiProperty({
         enum: FormCategory,
         enumName: 'FormCategory',

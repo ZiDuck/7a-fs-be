@@ -12,6 +12,7 @@ import {
 } from '../form-questions/enums/attribute-type.enum';
 import { Form } from '../forms/entities/form.entity';
 import { GetFormAllFormQuestionsDto } from '../forms/dto/get-form-all-form-questions.dto';
+import { FormSubmitDto, SingleQuestionSubmitTemp } from './dto/form-submit.dto';
 
 @Injectable()
 export class FormSubmitsService {
@@ -57,9 +58,9 @@ export class FormSubmitsService {
             metadata: data,
         });
 
-        await this.formSubmitRepository.save(formSubmit);
+        const result = await this.formSubmitRepository.save(formSubmit);
 
-        return true;
+        return result;
     }
 
     validateFormSubmit(data: CreateFormSubmitDto) {
@@ -177,7 +178,46 @@ export class FormSubmitsService {
             .getMany();
     }
 
-    findOne(id: number) {
-        return `This action returns a #${id} formSubmit`;
+    async findOne(id: string) {
+        const formSubmit = await this.formSubmitRepository.findOneBy({ id });
+
+        const formResult = formSubmit.metadata;
+
+        return {
+            ...formResult,
+            formSubmitId: formSubmit.id,
+        };
+    }
+
+    async findOneViewScore(id: string) {
+        const formSubmit = await this.formSubmitRepository.findOneBy({ id });
+
+        const formResult = formSubmit.metadata;
+
+        return {
+            ...formResult,
+            formSubmitId: formSubmit.id,
+            formQuestions: formResult.formQuestions,
+        };
+    }
+
+    calcCorrectAnswer(formSubmit: FormSubmitDto) {
+        const questions = formSubmit.formQuestions;
+
+        questions.reduce((acc, question) => {
+            if (question instanceof SingleQuestionSubmitTemp) {
+                if (ONE_SELECTION_QUESTION_TYPES.includes(question.attributeType)) {
+                    const correctAnswers = question.singleQuestion.singleQuestionValues.filter((value) => value.isCorrect);
+
+                    const correctChoiceIds = correctAnswers.map((value) => value.id);
+
+                    const guestChoiceId = question.singleQuestion.guestAnswer.choiceIds.map((choice) => choice.id)[0];
+
+                    if (correctChoiceIds.includes(guestChoiceId)) {
+                        return acc + question.singleQuestion.score;
+                    }
+                }
+            }
+        }, 0);
     }
 }
