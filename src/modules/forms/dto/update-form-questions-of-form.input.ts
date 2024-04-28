@@ -8,6 +8,7 @@ import { Form } from '../entities/form.entity';
 import { CreateFormInput } from './create-form.input';
 import { UpdateFormQuestionDto } from '../../form-questions/dto/update-form-question.dto';
 import { SINGLE_QUESTION_TYPES, GROUP_QUESTION_TYPES } from '../../form-questions/enums/attribute-type.enum';
+import { FormStatus } from '../enums/form-status.enum';
 
 export class UpdateFormQuestionOfFormInput extends CreateFormInput {
     @ApiProperty({
@@ -24,6 +25,11 @@ export class UpdateFormQuestionOfFormInput extends CreateFormInput {
     @IsOptional()
     @IsInt()
     version?: number;
+
+    @ApiProperty({
+        enum: FormStatus,
+    })
+    status: FormStatus;
 
     @ApiProperty({
         type: [UpdateFormQuestionDto],

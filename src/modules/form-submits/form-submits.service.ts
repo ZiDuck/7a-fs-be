@@ -6,13 +6,16 @@ import { FormSubmit } from './entities/form-submit.entity';
 import { FormStatus } from '../forms/enums/form-status.enum';
 import {
     AttributeType,
+    GROUP_QUESTION_TYPES,
     ONE_SELECTION_QUESTION_TYPES,
     SELECTION_QUESTION_TYPES,
+    SINGLE_QUESTION_TYPES,
     TEXT_QUESTION_TYPES,
 } from '../form-questions/enums/attribute-type.enum';
 import { Form } from '../forms/entities/form.entity';
 import { GetFormAllFormQuestionsDto } from '../forms/dto/get-form-all-form-questions.dto';
-import { FormSubmitDto, SingleQuestionSubmitTemp } from './dto/form-submit.dto';
+import { FormSubmitDto, GroupQuestionSubmitTemp, SingleQuestionSubmitTemp } from './dto/form-submit.dto';
+import { plainToInstance } from 'class-transformer';
 
 @Injectable()
 export class FormSubmitsService {
@@ -198,26 +201,96 @@ export class FormSubmitsService {
             ...formResult,
             formSubmitId: formSubmit.id,
             formQuestions: formResult.formQuestions,
+            correctPoint: this.calcCorrectAnswer(formResult),
         };
+    }
+
+    calculateScoreForSingleQuestion(question: SingleQuestionSubmitTemp) {
+        if (ONE_SELECTION_QUESTION_TYPES.includes(question.attributeType)) {
+            const correctChoiceIds = question.singleQuestion.singleQuestionValues.filter((value) => value.isCorrect).map((value) => value.id);
+
+            const guestChoiceId = question.singleQuestion.guestAnswer.choiceIds[0].id;
+
+            if (correctChoiceIds.includes(guestChoiceId)) {
+                return question.singleQuestion.score;
+            }
+        } else if (AttributeType.CHECKBOX_BUTTON === question.attributeType) {
+            const correctChoiceIds = question.singleQuestion.singleQuestionValues.filter((value) => value.isCorrect).map((value) => value.id);
+
+            const guestChoiceIds = question.singleQuestion.guestAnswer.choiceIds.map((choice) => choice.id);
+
+            if (correctChoiceIds.length === guestChoiceIds.length && correctChoiceIds.every((id) => guestChoiceIds.includes(id))) {
+                return question.singleQuestion.score;
+            }
+        } else if (TEXT_QUESTION_TYPES.includes(question.attributeType)) {
+            const correctAnswer = question.singleQuestion.singleQuestionValues.filter(
+                (value) => value.value === question.singleQuestion.guestAnswer.textValue,
+            );
+
+            if (correctAnswer.length > 0) {
+                return question.singleQuestion.score;
+            }
+        } else {
+            return question.singleQuestion.score;
+        }
+
+        return 0;
+    }
+
+    calculateScoreForGroupQuestion(question: GroupQuestionSubmitTemp) {
+        if (question.attributeType === AttributeType.RADIO_GRID) {
+            const correctAnswers = question.groupQuestion.answers.filter((ans) => ans.isCorrect);
+            const rows = question.groupQuestion.rows;
+            const guestChoices = question.groupQuestion.guestAnswer.gridIds;
+            let totalScore = 0;
+
+            rows.forEach((row) => {
+                const correctRowAnswers = correctAnswers.filter((ans) => ans.rowId === row.id);
+                const guestRowChoice = guestChoices.find((choice) => choice.rowId === row.id);
+
+                if (guestRowChoice && correctRowAnswers.some((ans) => ans.id === guestRowChoice.id)) {
+                    totalScore += row.score;
+                }
+            });
+
+            return totalScore;
+        } else if (question.attributeType === AttributeType.CHECKBOX_GRID) {
+            const correctAnswers = question.groupQuestion.answers.filter((ans) => ans.isCorrect);
+            const rows = question.groupQuestion.rows;
+            const guestChoices = question.groupQuestion.guestAnswer.gridIds;
+            let totalScore = 0;
+
+            rows.forEach((row) => {
+                const correctRowAnswers = correctAnswers.filter((ans) => ans.rowId === row.id);
+                const guestRowChoices = guestChoices.filter((choice) => choice.rowId === row.id);
+
+                if (
+                    correctRowAnswers.length === guestRowChoices.length &&
+                    correctRowAnswers.every((ans) => guestRowChoices.some((choice) => choice.id === ans.id))
+                ) {
+                    totalScore += row.score;
+                }
+            });
+
+            return totalScore;
+        }
+
+        return 0;
     }
 
     calcCorrectAnswer(formSubmit: FormSubmitDto) {
         const questions = formSubmit.formQuestions;
 
-        questions.reduce((acc, question) => {
-            if (question instanceof SingleQuestionSubmitTemp) {
-                if (ONE_SELECTION_QUESTION_TYPES.includes(question.attributeType)) {
-                    const correctAnswers = question.singleQuestion.singleQuestionValues.filter((value) => value.isCorrect);
-
-                    const correctChoiceIds = correctAnswers.map((value) => value.id);
-
-                    const guestChoiceId = question.singleQuestion.guestAnswer.choiceIds.map((choice) => choice.id)[0];
-
-                    if (correctChoiceIds.includes(guestChoiceId)) {
-                        return acc + question.singleQuestion.score;
-                    }
-                }
+        return questions.reduce((acc, question) => {
+            if (SINGLE_QUESTION_TYPES.includes(question.attributeType)) {
+                question = plainToInstance(SingleQuestionSubmitTemp, question);
+                return acc + this.calculateScoreForSingleQuestion(question);
+            } else if (GROUP_QUESTION_TYPES.includes(question.attributeType)) {
+                question = plainToInstance(GroupQuestionSubmitTemp, question);
+                return acc + this.calculateScoreForGroupQuestion(question);
             }
+
+            return acc;
         }, 0);
     }
 }

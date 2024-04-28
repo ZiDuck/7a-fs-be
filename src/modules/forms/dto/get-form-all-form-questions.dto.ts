@@ -5,6 +5,9 @@ import { GetFormDto } from './get-form.dto';
 
 @Expose()
 export class GetFormAllFormQuestionsDto extends OmitType(GetFormDto, ['formQuestions']) {
+    @ApiProperty()
+    totalScore: number;
+
     @ApiProperty({
         type: [GetFormQuestion],
     })

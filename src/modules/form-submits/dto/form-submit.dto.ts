@@ -128,7 +128,7 @@ export class GroupQuestionSubmit {
     @Type(() => GroupQuestionAnswerSubmit)
     answers: GroupQuestionAnswerSubmit[];
 
-    guestAnswer: GridId[];
+    guestAnswer: GridId;
 }
 
 export class GroupQuestionRowSubmit {
@@ -173,14 +173,14 @@ export class GroupQuestionAnswerSubmit {
     })
     isCorrect: boolean;
 
-    @Exclude()
     rowId: string;
 
-    @Exclude()
     columnId: string;
 }
 
 export class GuestAnswerFormGroup {
+    id: string;
+
     rowId: string;
 
     columnId: string;

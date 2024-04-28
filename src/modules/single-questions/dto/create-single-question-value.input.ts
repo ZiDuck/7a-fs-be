@@ -1,7 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsBoolean, IsNotEmpty, IsString, ValidateIf } from 'class-validator';
 import { IdExists } from '../../../common/validator/uuid.validator';
-import { Image } from '../../images/entites/image.entity';
+import { RawFile } from '../../raw-files/enitites/raw-file.entity';
 
 export class CreateSingleQuestionValueInput {
     @ApiProperty({
@@ -19,7 +19,7 @@ export class CreateSingleQuestionValueInput {
     @ValidateIf((d) => d.imageId !== null)
     @IsString()
     @IsNotEmpty()
-    @IdExists(Image)
+    @IdExists(RawFile)
     imageId: string | null;
 
     @ApiProperty({
@@ -30,6 +30,7 @@ export class CreateSingleQuestionValueInput {
     isCorrect: boolean;
 
     @ApiPropertyOptional()
+    @ValidateIf((o) => o.isOther !== undefined)
     @IsBoolean()
     isOther?: boolean;
 }

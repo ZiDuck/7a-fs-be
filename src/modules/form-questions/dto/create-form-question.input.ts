@@ -1,12 +1,12 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, ValidateIf, ValidateNested } from 'class-validator';
 import { AttributeType } from '../enums/attribute-type.enum';
-import { Image } from '../../images/entites/image.entity';
 import { Form } from '../../forms/entities/form.entity';
 import { IdExists } from '../../../common/validator/uuid.validator';
 import { CreateSingleQuestionAttributeInput } from '../../single-questions/dto/create-single-question-attribute.input';
 import { CreateGroupQuestionAttributeInput } from '../../group-questions/dto/create-group-question-attribute.input';
 import { Type } from 'class-transformer';
+import { RawFile } from '../../raw-files/enitites/raw-file.entity';
 
 export class CreateFormQuestionInput {
     @ApiProperty({
@@ -43,7 +43,7 @@ export class CreateFormQuestionInput {
     @ValidateIf((d) => d.imageId !== null)
     @IsString()
     @IsNotEmpty()
-    @IdExists(Image)
+    @IdExists(RawFile)
     imageId: string | null;
 
     @ApiProperty({

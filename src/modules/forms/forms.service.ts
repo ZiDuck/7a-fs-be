@@ -29,6 +29,7 @@ import { FormSubmitsService } from '../form-submits/form-submits.service';
 import { FormViewDto } from './dto/view-form.dto';
 import { FormSubmitQuery } from './dto/form-submit-query.dto';
 import { FormSubmit } from '../form-submits/entities/form-submit.entity';
+import { GROUP_QUESTION_TYPES, SINGLE_QUESTION_TYPES } from '../form-questions/enums/attribute-type.enum';
 
 type DefaultRelationType = FindOptionsRelations<Form> | FindOptionsRelationByString;
 
@@ -192,9 +193,20 @@ export class FormsService {
             ...existedForm,
             formQuestions: formQuestionsResult,
             image: existedForm.imageId ? await this.imagesService.checkImageHook(existedForm.imageId) : null,
+            totalScore: this.calcTotalScore(formQuestionsResult),
         });
 
         return customizeForm;
+    }
+
+    calcTotalScore(formQuestionsResult: GetFormQuestion[]) {
+        return formQuestionsResult.reduce((acc, question) => {
+            if (SINGLE_QUESTION_TYPES.includes(question.attributeType)) {
+                return acc + question.singleQuestion.score;
+            } else if (GROUP_QUESTION_TYPES.includes(question.attributeType)) {
+                return acc + question.groupQuestion.totalScore;
+            }
+        }, 0);
     }
 
     async findSubmitForm(id: string, query: FormSubmitQuery) {
@@ -218,6 +230,7 @@ export class FormsService {
             ...existedForm,
             formQuestions: formQuestionsResult,
             image: existedForm.imageId ? await this.imagesService.checkImageHook(existedForm.imageId) : null,
+            totalScore: this.calcTotalScore(formQuestionsResult),
         });
 
         return customizeForm;
@@ -255,6 +268,8 @@ export class FormsService {
             throw new BadRequestException(`Chỉ có thể cập nhật câu hỏi cho form ở trạng thái ${FormStatus.PENDING} hoặc ${FormStatus.ACCEPTED}`);
 
         if (existedForm.status === FormStatus.ACCEPTED) {
+            if (data.status === FormStatus.PENDING) throw new BadRequestException(`Không thể cập nhật trạng thái form từ ACCEPTED sang PENDING!`);
+
             const currentUserId = this.currentUserContext.getUserId();
 
             const user = await this.usersService.findOne(currentUserId);
@@ -281,7 +296,7 @@ export class FormsService {
                 throw new BadRequestException('Chỉ có người tạo form hoặc admin mới có thể cập nhật form ở trạng thái PENDING');
         }
 
-        await this.formRepository.update({ id: data.id }, omit(data, ['formQuestions']));
+        await this.formRepository.update({ id: data.id }, omit(data, ['formQuestions', 'status']));
 
         // TODO: Check this update logic again
         // const currentFormQuestions = await this.formQuestionService.findAllByFormId(data.id);
@@ -306,10 +321,29 @@ export class FormsService {
     }
 
     async updateStatus(id: string, data: UpdateFormStatusDto) {
-        return await this.updateInformation(id, data);
+        const existedForm = await this.findOne(id);
+
+        if (existedForm.status === FormStatus.CLOSED) throw new BadRequestException(`Không thể cập nhật trạng thái cho form đã đóng!`);
+
+        if (existedForm.status === FormStatus.ACCEPTED) {
+            if (data.status === FormStatus.PENDING) throw new BadRequestException(`Không thể chuyển trạng thái form từ ACCEPTED sang PENDING!`);
+            if (data.status === FormStatus.REJECTED) throw new BadRequestException(`Không thể chuyển trạng thái form từ ACCEPTED sang REJECTED!`);
+        }
+
+        if (existedForm.status === FormStatus.PENDING) {
+            if (data.status === FormStatus.CLOSED) throw new BadRequestException(`Không thể chuyển trạng thái form từ PENDING sang CLOSED!`);
+        }
+
+        if (existedForm.status === FormStatus.REJECTED) {
+            if (data.status === FormStatus.CLOSED) throw new BadRequestException(`Không thể chuyển trạng thái form từ REJECTED sang CLOSED!`);
+            if (data.status === FormStatus.ACCEPTED) throw new BadRequestException(`Không thể chuyển trạng thái form từ REJECTED sang ACCEPTED!`);
+        }
+        const result = await this.formRepository.update(id, data);
+
+        return result.affected ? true : false;
     }
 
-    async updateInformation(id: string, data: UpdateFormDto | UpdateFormStatusDto) {
+    async updateInformation(id: string, data: UpdateFormDto) {
         await this.findOne(id);
 
         const result = await this.formRepository.update(id, data);

@@ -99,7 +99,6 @@ export class GroupQuestionView {
     @Type(() => GroupQuestionColumnView)
     columns: GroupQuestionColumnView[];
 
-    @Exclude()
     @Type(() => GroupQuestionAnswerView)
     answers: GroupQuestionAnswerView[];
 }
@@ -141,15 +140,16 @@ export class GroupQuestionAnswerView {
     @ApiPropertyOptional()
     columnOrder?: number;
 
+    @Exclude()
     @ApiProperty({
         example: true,
     })
     isCorrect: boolean;
 
-    @Exclude()
+    // @Exclude()
     rowId: string;
 
-    @Exclude()
+    // @Exclude()
     columnId: string;
 }
 

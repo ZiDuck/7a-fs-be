@@ -1,9 +1,9 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { FormCategory } from '../enums/form-category.enum';
 import { IsDate, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator';
-import { Image } from '../../images/entites/image.entity';
 import { IdExists } from '../../../common/validator/uuid.validator';
 import { Type } from 'class-transformer';
+import { RawFile } from '../../raw-files/enitites/raw-file.entity';
 
 export class CreateFormInput {
     @ApiProperty({
@@ -54,6 +54,6 @@ export class CreateFormInput {
     @ValidateIf((d) => d.imageId !== null)
     @IsString()
     @IsNotEmpty()
-    @IdExists(Image)
+    @IdExists(RawFile)
     imageId: string | null;
 }

@@ -1,10 +1,12 @@
-import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Param, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
 import { FormSubmitsService } from './form-submits.service';
 import { UpdateFormSubmitDto } from './dto/update-form-submit.dto';
 import { plainToInstance } from 'class-transformer';
 import { GetFormSubmitInfo } from './dto/get-form-submit-info.dto';
 import { FormViewDto } from '../forms/dto/view-form.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('form-submits')
 @Controller('form-submits')
 export class FormSubmitsController {
     constructor(private readonly formSubmitsService: FormSubmitsService) {}
@@ -25,6 +27,7 @@ export class FormSubmitsController {
     }
 
     @Get(':id/view-score')
+    @UsePipes(new ValidationPipe({ transform: true }))
     async findOneDetail(@Param('id') id: string) {
         const result = await this.formSubmitsService.findOneViewScore(id);
 

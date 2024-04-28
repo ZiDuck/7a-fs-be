@@ -110,6 +110,28 @@ export class CreateGridId {
     gridIds: CreateGuestAnswerFormGroup[];
 }
 
+export class CreateGroupQuestionAnswerSubmit {
+    @ApiProperty()
+    id: string;
+
+    @ApiPropertyOptional()
+    rowOrder?: number;
+
+    @ApiPropertyOptional()
+    columnOrder?: number;
+
+    @ApiProperty({
+        example: true,
+    })
+    isCorrect: boolean;
+
+    // @Exclude()
+    rowId: string;
+
+    // @Exclude()
+    columnId: string;
+}
+
 export class CreateGroupQuestionSubmit {
     @Type(() => CreateGroupQuestionRowSubmit)
     rows: CreateGroupQuestionRowSubmit[];
@@ -117,8 +139,8 @@ export class CreateGroupQuestionSubmit {
     @Type(() => CreateGroupQuestionColumnSubmit)
     columns: CreateGroupQuestionColumnSubmit[];
 
-    // @Type(() => GroupQuestionAnswerSubmit)
-    // answers: GroupQuestionAnswerSubmit[];
+    @Type(() => CreateGroupQuestionAnswerSubmit)
+    answers: CreateGroupQuestionAnswerSubmit[];
 
     @Type(() => CreateGridId)
     guestAnswer: CreateGridId;
@@ -152,6 +174,8 @@ export class CreateGroupQuestionColumnSubmit {
 }
 
 export class CreateGuestAnswerFormGroup {
+    id: string;
+
     rowId: string;
 
     columnId: string;
@@ -279,215 +303,272 @@ export class CreateFormSubmitDto {
         //     },
         // },
         example: {
-            id: 'f453707a-86f2-4280-bf8a-7cad12eb87ea',
-            title: 'Standard Form',
+            id: '6894b510-46a1-4cb0-82cf-a6b917c97ba0',
+            title: 'Standard Form 2',
             description: null,
             startSurvey: '2024-04-03T17:00:00.000Z',
             status: 'ACCEPTED',
             hasAnswer: true,
+            canSeeCorrectAnswer: true,
             category: 'PATIENT_CATEGORY',
-            version: 0,
+            version: 1,
             formQuestions: [
                 {
-                    id: '9c2a4f19-65ca-4ed5-adf4-b6a2692c2210',
+                    id: 'c4d3b9ad-c49f-4368-a823-bad1b9fe5905',
                     label: 'Title of the CHECKBOX BUTTON',
                     description: 'Description of the CHECKBOX BUTTON',
                     require: true,
                     order: 0,
                     image: null,
-                    attributeType: 'DROPDOWN',
-                    formId: 'f453707a-86f2-4280-bf8a-7cad12eb87ea',
+                    attributeType: 'CHECKBOX_BUTTON',
+                    formId: '6894b510-46a1-4cb0-82cf-a6b917c97ba0',
                     singleQuestion: {
-                        id: 'd18e3239-7051-408f-8784-385a9a36e559',
+                        id: '00984a99-dfd1-4e4f-a33d-d1b0831e363c',
                         score: 1,
-                        isOther: false,
                         singleQuestionValues: [
                             {
-                                id: '56e93bef-2eb2-4057-9740-c288184a6434',
+                                id: '26bec405-1c3f-413f-b9be-ac276f17c23f',
                                 value: 'checkbox value 2',
                                 image: null,
+                                isOther: false,
                             },
                             {
-                                id: '5ff49055-d8f5-4170-b93a-276ea6ec3164',
-                                value: 'checkbox value 3',
-                                image: null,
-                            },
-                            {
-                                id: '98ca2f81-1842-4db0-bdb2-1154434cd744',
+                                id: '90002f57-ee51-4cee-a925-8360d0271533',
                                 value: 'checkbox value 1',
                                 image: null,
+                                isOther: false,
+                            },
+                            {
+                                id: 'fff60777-97a3-4b7d-9beb-c771b261f7de',
+                                value: 'checkbox value 3',
+                                image: null,
+                                isOther: false,
+                            },
+                            {
+                                id: '48fadfa0-8ea9-4c4e-9f70-a57ef3673f4f',
+                                value: '',
+                                image: null,
+                                isOther: true,
                             },
                         ],
                         fileConfig: null,
                         guestAnswer: {
                             choiceIds: [
                                 {
-                                    id: '56e93bef-2eb2-4057-9740-c288184a6434',
+                                    id: '90002f57-ee51-4cee-a925-8360d0271533',
+                                },
+                                {
+                                    id: '48fadfa0-8ea9-4c4e-9f70-a57ef3673f4f',
                                 },
                             ],
                         },
                     },
                 },
                 {
-                    id: '544a7e54-3758-4afe-ba07-df3337657f1c',
-                    label: 'Title of the dropdown',
-                    description: 'Description of the dropdown',
+                    id: '5455cb8e-f3d2-4e0b-9670-259d3a34857b',
+                    label: 'Title of the text box',
+                    description: 'Description of the text box',
                     require: true,
                     order: 1,
                     image: null,
                     attributeType: 'TEXT_BOX',
-                    formId: 'f453707a-86f2-4280-bf8a-7cad12eb87ea',
+                    formId: '6894b510-46a1-4cb0-82cf-a6b917c97ba0',
                     singleQuestion: {
-                        id: '72c2d46f-bed0-4934-891b-090f3bab5e3c',
-                        score: 0,
-                        isOther: false,
+                        id: '8eb1ed4d-0745-4296-91d4-bf2bb035909a',
+                        score: 5,
                         singleQuestionValues: [
                             {
-                                id: 'd923881e-7331-4e60-9951-88df0ecf3228',
+                                id: '7174f81f-38fe-4291-871d-b7be191a945b',
                                 value: 'true value',
                                 image: null,
+                                isOther: false,
                             },
                         ],
                         fileConfig: null,
                         guestAnswer: {
-                            textValue: 'hello everyone',
+                            textValue: 'true value',
                         },
                     },
                 },
                 {
-                    id: 'bee075cb-184e-46b8-b450-40f436731130',
-                    label: 'Title of the question',
-                    description: 'Description of the question',
+                    id: 'fbc9eb62-84f4-4957-a8c5-42e095bf87d2',
+                    label: 'Title of the paragraph',
+                    description: 'Description of the paragraph',
                     require: true,
                     order: 2,
                     image: null,
                     attributeType: 'PARAGRAPH',
-                    formId: 'f453707a-86f2-4280-bf8a-7cad12eb87ea',
+                    formId: '6894b510-46a1-4cb0-82cf-a6b917c97ba0',
                     singleQuestion: {
-                        id: '755c923b-c696-4a9a-86e9-439c28dbcd5f',
-                        score: 0,
-                        isOther: false,
+                        id: '5f5de2c7-42d1-425b-b232-a3084eea828f',
+                        score: 5,
                         singleQuestionValues: [
                             {
-                                id: '8c01c218-fe19-4911-9775-f0b3dae65fd7',
+                                id: '3ab2d69f-d86d-4f22-bdd8-586f864ccf98',
                                 value: 'Cau tra loi dung 1',
                                 image: null,
+                                isOther: false,
                             },
                             {
-                                id: '0f84fe98-0d2a-4044-9c72-e140a3417260',
+                                id: 'a798924b-d8cd-49ec-af47-231239c42479',
                                 value: 'Cau tra loi dung 2',
                                 image: null,
+                                isOther: false,
                             },
                         ],
                         fileConfig: null,
                         guestAnswer: {
-                            textValue: 'hello everyone',
+                            textValue: 'Cau tra loi dung 1',
                         },
                     },
                 },
                 {
-                    id: 'b08f7fd5-8adb-4385-a2b1-da978509978b',
+                    id: 'd3f400b0-67a3-45c1-9a5c-64aea4a52d32',
                     label: 'Title of the multi choice',
                     description: 'Description of multi choice',
                     require: true,
                     order: 3,
                     image: null,
                     attributeType: 'RADIO_GRID',
-                    formId: 'f453707a-86f2-4280-bf8a-7cad12eb87ea',
+                    formId: '6894b510-46a1-4cb0-82cf-a6b917c97ba0',
                     groupQuestion: {
                         rows: [
                             {
-                                id: '6499d05b-e83c-4557-af93-e5b171c5bafd',
-                                score: 0,
+                                id: '26d4312a-c894-48b5-a00f-fd746a61dbaa',
+                                score: 5,
                                 value: 'Row 1',
                                 order: 0,
                             },
                             {
-                                id: 'a9871f58-2c55-44ba-9ea4-672ea1dbb4c1',
-                                score: 0,
+                                id: 'da2025d6-c931-4084-9ce1-89e183b54ee4',
+                                score: 5,
                                 value: 'Row 2',
                                 order: 1,
                             },
                         ],
-                        totalScore: 0,
+                        totalScore: 10,
                         columns: [
                             {
-                                id: '01703735-4428-44ad-b8f8-71dcac797f3a',
+                                id: '76933dd6-385f-441d-91af-97e79faaf1a9',
                                 value: 'Column 1',
                                 order: 0,
                             },
                             {
-                                id: '221efa62-e700-41de-bd78-c3dbd695c74d',
+                                id: '9dc75a3a-e1d9-4a87-98fb-e6ccb33e7935',
                                 value: 'Column 2',
                                 order: 1,
                             },
                             {
-                                id: '935ef706-b751-439c-8922-2c5c80291c98',
+                                id: '63a854f3-2687-40f3-8c5e-beefa0324fc6',
                                 value: 'Column 3',
                                 order: 2,
                             },
                         ],
-                        guestAnswer: [
+                        answers: [
                             {
-                                rowId: '6499d05b-e83c-4557-af93-e5b171c5bafd',
-
-                                columnId: '01703735-4428-44ad-b8f8-71dcac797f3a',
+                                id: '5d03a715-2e3a-4896-b30b-6ad1ab243220',
+                                rowId: '26d4312a-c894-48b5-a00f-fd746a61dbaa',
+                                columnId: '9dc75a3a-e1d9-4a87-98fb-e6ccb33e7935',
+                                rowOrder: 0,
+                                columnOrder: 1,
                             },
                             {
-                                rowId: 'a9871f58-2c55-44ba-9ea4-672ea1dbb4c1',
-
-                                columnId: '935ef706-b751-439c-8922-2c5c80291c98',
+                                id: '3b50d32a-1799-4dca-9fd7-8a095aa43baf',
+                                rowId: '26d4312a-c894-48b5-a00f-fd746a61dbaa',
+                                columnId: '63a854f3-2687-40f3-8c5e-beefa0324fc6',
+                                rowOrder: 0,
+                                columnOrder: 2,
+                            },
+                            {
+                                id: '47df5de7-0440-4043-90d5-d278e9260360',
+                                rowId: '26d4312a-c894-48b5-a00f-fd746a61dbaa',
+                                columnId: '76933dd6-385f-441d-91af-97e79faaf1a9',
+                                rowOrder: 0,
+                                columnOrder: 0,
+                            },
+                            {
+                                id: '1e4e6922-88f5-41df-947f-e0d0d47c157e',
+                                rowId: 'da2025d6-c931-4084-9ce1-89e183b54ee4',
+                                columnId: '76933dd6-385f-441d-91af-97e79faaf1a9',
+                                rowOrder: 1,
+                                columnOrder: 0,
+                            },
+                            {
+                                id: '86bf9722-0039-4d92-88cd-e305249b062e',
+                                rowId: 'da2025d6-c931-4084-9ce1-89e183b54ee4',
+                                columnId: '63a854f3-2687-40f3-8c5e-beefa0324fc6',
+                                rowOrder: 1,
+                                columnOrder: 2,
+                            },
+                            {
+                                id: 'e2b344d5-e03e-4e69-aecc-714de25dc57f',
+                                rowId: 'da2025d6-c931-4084-9ce1-89e183b54ee4',
+                                columnId: '9dc75a3a-e1d9-4a87-98fb-e6ccb33e7935',
+                                rowOrder: 1,
+                                columnOrder: 1,
                             },
                         ],
-                    },
-                },
-                {
-                    id: 'f6c6a12a-a433-4c9a-ac51-e8edd3fb7f5d',
-                    label: 'Title of the file upload',
-                    description: null,
-                    require: true,
-                    order: 4,
-                    image: null,
-                    attributeType: 'FILE_UPLOAD',
-                    formId: 'f453707a-86f2-4280-bf8a-7cad12eb87ea',
-                    singleQuestion: {
-                        id: '09bdba7b-bbbd-4e82-a384-7b806776e027',
-                        score: 0,
-                        isOther: false,
-                        singleQuestionValues: [],
-                        fileConfig: {
-                            id: 'ce4dc57b-68c2-47c8-867d-4e35e1c2a7c4',
-                            maxNumOfFiles: 2,
-                            maxFileSize: 10485760,
-                            attributeId: '09bdba7b-bbbd-4e82-a384-7b806776e027',
-                        },
                         guestAnswer: {
-                            fileValues: [
+                            gridIds: [
                                 {
-                                    id: '4bd12abb-c6db-424a-b904-0043d0085cfd',
-                                    bytes: 620956,
+                                    id: '47df5de7-0440-4043-90d5-d278e9260360',
+                                    rowId: '26d4312a-c894-48b5-a00f-fd746a61dbaa',
+                                    columnId: '76933dd6-385f-441d-91af-97e79faaf1a9',
                                 },
                                 {
-                                    id: 'df220a2b-63a3-4f10-be36-f3e174e4ddb3',
-                                    bytes: 8822,
+                                    id: 'e2b344d5-e03e-4e69-aecc-714de25dc57f',
+                                    rowId: 'da2025d6-c931-4084-9ce1-89e183b54ee4',
+                                    columnId: '9dc75a3a-e1d9-4a87-98fb-e6ccb33e7935',
                                 },
                             ],
                         },
                     },
                 },
                 {
-                    id: '0ab0e403-8526-48ba-825b-5cb3d8b85629',
+                    id: '5273e7d2-c99f-44b3-b8c3-e977c475c0e5',
+                    label: 'Title of the file upload',
+                    description: null,
+                    require: true,
+                    order: 4,
+                    image: null,
+                    attributeType: 'FILE_UPLOAD',
+                    formId: '6894b510-46a1-4cb0-82cf-a6b917c97ba0',
+                    singleQuestion: {
+                        id: '59e572c5-87c4-4486-8afd-bc340bb2b42f',
+                        score: 5,
+                        singleQuestionValues: [],
+                        fileConfig: {
+                            id: 'edbb614b-4314-46c6-b4e1-6011efa5c05a',
+                            maxNumOfFiles: 2,
+                            maxFileSize: 10485760,
+                            attributeId: '59e572c5-87c4-4486-8afd-bc340bb2b42f',
+                        },
+                        guestAnswer: {
+                            fileValues: [
+                                {
+                                    id: '16a4d588-8f9f-430c-9e0f-0ea47e948586',
+                                    bytes: 13264,
+                                },
+                                {
+                                    id: '0ced3b23-29b6-4bcc-80ab-fd51b0c82cb0',
+                                    bytes: 13264,
+                                },
+                            ],
+                        },
+                    },
+                },
+                {
+                    id: '5e9d36af-d2e4-4c31-8493-4394986ca15c',
                     label: 'Title of the star',
                     description: null,
                     require: true,
                     order: 5,
                     image: null,
                     attributeType: 'STAR',
-                    formId: 'f453707a-86f2-4280-bf8a-7cad12eb87ea',
+                    formId: '6894b510-46a1-4cb0-82cf-a6b917c97ba0',
                     singleQuestion: {
-                        id: '5eaf177b-5f09-4ae8-b0b6-3facf284991a',
-                        score: 0,
-                        isOther: false,
+                        id: '870fdd1a-e636-49d7-a738-14f8f02a552b',
+                        score: 5,
                         singleQuestionValues: [],
                         fileConfig: null,
                     },
@@ -495,8 +576,57 @@ export class CreateFormSubmitDto {
                         textValue: '3.5',
                     },
                 },
+                {
+                    id: '8f09f75f-33cb-4229-9631-60d04eb78b90',
+                    label: 'Title of the RADIO BUTTON',
+                    description: 'Description of the RADIO BUTTON',
+                    require: true,
+                    order: 6,
+                    image: null,
+                    attributeType: 'RADIO_BUTTON',
+                    formId: '6894b510-46a1-4cb0-82cf-a6b917c97ba0',
+                    singleQuestion: {
+                        id: '354c9fa0-4664-4db5-8478-9caee50f008d',
+                        score: 5,
+                        singleQuestionValues: [
+                            {
+                                id: 'e2127734-1c39-46ad-a2c9-7915bfcd745b',
+                                value: '',
+                                image: null,
+                                isOther: true,
+                            },
+                            {
+                                id: '8b187661-9956-464d-a5da-f4aef19abfe9',
+                                value: 'radio value 2',
+                                image: null,
+                                isOther: false,
+                            },
+                            {
+                                id: '336b1226-8897-4072-b470-302297081bab',
+                                value: 'radio value 3',
+                                image: null,
+                                isOther: false,
+                            },
+                            {
+                                id: '6736fba1-30fa-41e5-a53b-bdcc565fffb6',
+                                value: 'radio value 1',
+                                image: null,
+                                isOther: false,
+                            },
+                        ],
+                        fileConfig: null,
+                        guestAnswer: {
+                            choiceIds: [
+                                {
+                                    id: '6736fba1-30fa-41e5-a53b-bdcc565fffb6',
+                                },
+                            ],
+                        },
+                    },
+                },
             ],
             image: null,
+            totalScore: 40,
         },
     })
     @Type(() => CreateFormQuestionSubmit, {

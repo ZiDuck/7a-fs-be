@@ -1,5 +1,5 @@
 {
-    "id": "f453707a-86f2-4280-bf8a-7cad12eb87ea",
+    "id": "6894b510-46a1-4cb0-82cf-a6b917c97ba0",
     "title": "Standard Form",
     "description": null,
     "startSurvey": "2024-04-03T17:00:00.000Z",
@@ -14,8 +14,8 @@
             "require": true,
             "order": 0,
             "imageId": null,
-            "attributeType": "DROPDOWN",
-            "formId": "f453707a-86f2-4280-bf8a-7cad12eb87ea",
+            "attributeType": "CHECKBOX_BUTTON",
+            "formId": "6894b510-46a1-4cb0-82cf-a6b917c97ba0",
             "singleQuestion": {
                 "score": 1,
 
@@ -48,15 +48,15 @@
             }
         },
         {
-            "label": "Title of the dropdown",
-            "description": "Description of the dropdown",
+            "label": "Title of the text box",
+            "description": "Description of the text box",
             "require": true,
             "order": 1,
             "imageId": null,
             "attributeType": "TEXT_BOX",
-            "formId": "f453707a-86f2-4280-bf8a-7cad12eb87ea",
+            "formId": "6894b510-46a1-4cb0-82cf-a6b917c97ba0",
             "singleQuestion": {
-                "score": 0,
+                "score": 5,
                 "isOther": false,
                 "singleQuestionValues": [
                     {
@@ -68,15 +68,15 @@
             }
         },
         {
-            "label": "Title of the question",
-            "description": "Description of the question",
+            "label": "Title of the paragraph",
+            "description": "Description of the paragraph",
             "require": true,
             "order": 2,
             "imageId": null,
             "attributeType": "PARAGRAPH",
-            "formId": "f453707a-86f2-4280-bf8a-7cad12eb87ea",
+            "formId": "6894b510-46a1-4cb0-82cf-a6b917c97ba0",
             "singleQuestion": {
-                "score": 0,
+                "score": 5,
                 "isOther": false,
                 "singleQuestionValues": [
                     {
@@ -99,17 +99,17 @@
             "order": 3,
             "imageId": null,
             "attributeType": "RADIO_GRID",
-            "formId": "f453707a-86f2-4280-bf8a-7cad12eb87ea",
+            "formId": "6894b510-46a1-4cb0-82cf-a6b917c97ba0",
             "groupQuestion": {
                 "rows": [
                     {
                         "order": 0,
-                        "score": 0,
+                        "score": 5,
                         "value": "Row 1"
                     },
                     {
                         "order": 1,
-                        "score": 0,
+                        "score": 5,
                         "value": "Row 2"
                     }
                 ],
@@ -168,9 +168,9 @@
             "order": 4,
             "imageId": null,
             "attributeType": "FILE_UPLOAD",
-            "formId": "f453707a-86f2-4280-bf8a-7cad12eb87ea",
+            "formId": "6894b510-46a1-4cb0-82cf-a6b917c97ba0",
             "singleQuestion": {
-                "score": 0,
+                "score": 5,
                 "isOther": false,
                 "singleQuestionValues": [],
                 "fileConfig": {
@@ -180,15 +180,15 @@
             }
         },
         {
-            "label": "Title of the file upload",
+            "label": "Title of the star",
             "description": null,
             "require": true,
             "order": 5,
             "imageId": null,
             "attributeType": "STAR",
-            "formId": "f453707a-86f2-4280-bf8a-7cad12eb87ea",
+            "formId": "6894b510-46a1-4cb0-82cf-a6b917c97ba0",
             "singleQuestion": {
-                "score": 0,
+                "score": 5,
                 "isOther": false,
                 "singleQuestionValues": []
             }
