@@ -34,6 +34,7 @@ import { CreateFormSubmitDto } from '../form-submits/dto/create-form-submit.dto'
 import { FormSubmitQuery } from './dto/form-submit-query.dto';
 import { GetFormSubmit } from '../form-submits/dto/get-form-submit.dto';
 import { GetVersion } from './dto/get-version.dto';
+import { FormViewDto } from './dto/view-form.dto';
 
 @ApiTags('forms')
 @Controller('forms')
@@ -104,7 +105,7 @@ export class FormsController {
         return result;
     }
 
-    @ApiOkResponseDto(GetFormAllFormQuestionsDto)
+    @ApiOkResponseDto(FormViewDto)
     @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
     @Get(':id/form-questions/view-form')
     async findFormQuestionsForViewFormPage(@Param('id', ParseUUIDPipe) id: string) {

@@ -8,15 +8,6 @@ import { Form } from '../entities/form.entity';
 import { FormCategory } from '../enums/form-category.enum';
 import { FormStatus } from '../enums/form-status.enum';
 
-// @Expose()
-// export class ViewForm extends GetFormAllFormQuestionsDto {
-//     @Exclude()
-//     createdBy: string;
-
-//     @Exclude()
-//     updatedBy: string;
-// }
-
 export class SingleQuestionFileConfigView {
     @ApiProperty()
     id: string;
@@ -163,13 +154,11 @@ export class FormQuestionView {
     label: string;
 
     @ApiProperty({
-        nullable: true,
         example: 'Description of the question',
     })
-    @ValidateIf((d) => d.description !== null)
+    @ValidateIf((d) => d.description !== '')
     @IsString()
-    @IsNotEmpty()
-    description: string | null;
+    description: string;
 
     @ApiPropertyOptional()
     @IsOptional()
@@ -261,12 +250,18 @@ export class FormViewDto {
     hasAnswer: boolean;
 
     @ApiProperty()
+    totalScore: number;
+
+    @ApiProperty()
     canSeeCorrectAnswer: boolean;
 
     @ApiProperty({
         enum: FormCategory,
     })
     category: FormCategory;
+
+    @ApiProperty()
+    version: number;
 
     @ApiProperty({
         type: ImageOutput,

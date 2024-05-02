@@ -14,13 +14,12 @@ export class CreateFormInput {
     title: string;
 
     @ApiProperty({
-        nullable: true,
         example: 'Description of the form',
     })
-    @ValidateIf((d) => d.description !== null)
+    // @ValidateIf((d) => d.description !== null)
     @IsString()
-    @IsNotEmpty()
-    description: string | null;
+    // @IsNotEmpty()
+    description: string;
 
     @ApiProperty({
         type: Date,
@@ -48,7 +47,6 @@ export class CreateFormInput {
     category: FormCategory;
 
     @ApiProperty({
-        nullable: true,
         type: String,
     })
     @ValidateIf((d) => d.imageId !== null)

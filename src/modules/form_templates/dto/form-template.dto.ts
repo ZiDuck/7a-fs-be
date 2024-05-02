@@ -1,31 +1,88 @@
 import { Exclude, Type } from 'class-transformer';
-import { GetFormQuestion } from '../../form-questions/dto/get-form-question.dto';
-import { GetSingleQuestionAttribute } from '../../single-questions/dto/get-single-question-attribute.dto';
-import { GetSingleQuestionValue } from '../../single-questions/dto/get-single-question-value.dto';
-import { GetSingleQuestionFileConfig } from '../../single-questions/dto/get-single-question-file-config.dto';
-import { GetGroupQuestionRow } from '../../group-questions/dto/get-group-question-row.dto';
-import { GetGroupQuestionColumn } from '../../group-questions/dto/get-group-question-column.dto';
-import { GetGroupQuestionAnswer } from '../../group-questions/dto/get-group-question-answer.dto';
-import { GetFormAllFormQuestionsDto } from '../../forms/dto/get-form-all-form-questions.dto';
-import { GetGroupQuestionValue } from '../../group-questions/dto/get-group-question-value.dto';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, IsNotEmpty, IsOptional, IsInt, IsEnum } from 'class-validator';
+import { AttributeType } from '../../form-questions/enums/attribute-type.enum';
+import { ImageOutput } from '../../images/dto/image.output';
+import { FormCategory } from '../../forms/enums/form-category.enum';
+import { FormStatus } from '../../forms/enums/form-status.enum';
 
-export class SingleQuestionFileConfigTemplate extends GetSingleQuestionFileConfig {
+export class SingleQuestionFileConfigTemplate {
     @Exclude()
     id: string;
+
+    @ApiProperty({
+        example: '1',
+        description: 'Maximum number of files that can be uploaded',
+    })
+    maxNumOfFiles: number;
+
+    @ApiProperty({
+        example: '10',
+        description: 'Maximum file size in MB',
+    })
+    maxFileSize: number;
+
+    @Exclude()
+    createdDate: Date;
+
+    @Exclude()
+    updatedDate: Date;
+
+    @Exclude()
+    deletedDate: Date;
 }
 
-export class SingleQuestionTemplate extends GetSingleQuestionAttribute {
+export class SingleQuestionValueTemplate {
     @Exclude()
     id: string;
 
+    @ApiProperty({
+        example: 'Value of the question',
+    })
+    value: string;
+
+    @ApiProperty({
+        type: ImageOutput,
+        nullable: true,
+    })
+    image: ImageOutput | null;
+
+    @Exclude()
+    @ApiProperty({
+        example: true,
+    })
+    isCorrect: boolean;
+}
+
+export class SingleQuestionTemplate {
+    @Exclude()
+    id: string;
+
+    @ApiProperty({ example: 1 })
+    score: number;
+
+    @ApiProperty({ example: false })
+    isOther: boolean;
+
+    // @ApiProperty()
+    @Exclude()
+    questionId: string;
+
+    @ApiProperty({
+        type: [SingleQuestionValueTemplate],
+    })
     @Type(() => SingleQuestionValueTemplate)
     singleQuestionValues: SingleQuestionValueTemplate[];
 
+    @ApiProperty({
+        nullable: true,
+        type: SingleQuestionFileConfigTemplate,
+    })
     @Type(() => SingleQuestionFileConfigTemplate)
     fileConfig: SingleQuestionFileConfigTemplate | null;
 }
 
-class GroupQuestionTemplate extends GetGroupQuestionValue {
+export class GroupQuestionTemplate {
     @Type(() => GroupQuestionRowTemplate)
     rows: GroupQuestionRowTemplate[];
 
@@ -36,47 +93,198 @@ class GroupQuestionTemplate extends GetGroupQuestionValue {
     answers: GroupQuestionAnswerTemplate[];
 }
 
-export class FormTemplateDto extends GetFormAllFormQuestionsDto {
+export class GroupQuestionRowTemplate {
     @Exclude()
     id: string;
 
-    @Type(() => FormQuestionTemplate)
-    formQuestions: FormQuestionTemplate[];
+    @ApiProperty({
+        example: 1,
+    })
+    score: number;
+
+    @ApiProperty()
+    value: string;
+
+    @ApiProperty()
+    order: number;
 }
 
-export class FormQuestionTemplate extends GetFormQuestion {
+export class GroupQuestionColumnTemplate {
     @Exclude()
     id: string;
 
-    @Type(() => SingleQuestionTemplate)
-    singleQuestion?: SingleQuestionTemplate;
+    @ApiProperty()
+    value: string;
 
-    @Type(() => GroupQuestionTemplate)
-    groupQuestion?: GroupQuestionTemplate;
+    @ApiProperty()
+    order: number;
 }
 
-export class SingleQuestionValueTemplate extends GetSingleQuestionValue {
+export class GroupQuestionAnswerTemplate {
     @Exclude()
     id: string;
-}
 
-class GroupQuestionRowTemplate extends GetGroupQuestionRow {
-    @Exclude()
-    id: string;
-}
+    @ApiProperty()
+    rowOrder: number;
 
-class GroupQuestionColumnTemplate extends GetGroupQuestionColumn {
-    @Exclude()
-    id: string;
-}
+    @ApiProperty()
+    columnOrder: number;
 
-class GroupQuestionAnswerTemplate extends GetGroupQuestionAnswer {
-    @Exclude()
-    id: string;
+    @ApiProperty({
+        example: true,
+    })
+    isCorrect: boolean;
 
     @Exclude()
     rowId: string;
 
     @Exclude()
     columnId: string;
+}
+
+export class FormQuestionTemplate {
+    @Exclude()
+    id: string;
+
+    @ApiProperty({
+        example: 'Title of the question',
+    })
+    label: string;
+
+    @ApiProperty({
+        example: 'Description of the question',
+    })
+    @IsString()
+    description: string;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    require: boolean;
+
+    @ApiProperty({
+        type: Number,
+    })
+    @IsNotEmpty()
+    @IsInt()
+    order: number;
+
+    @ApiProperty({
+        type: ImageOutput,
+        nullable: true,
+    })
+    image: ImageOutput | null;
+
+    @ApiProperty({
+        enum: AttributeType,
+        enumName: 'AttributeType',
+    })
+    @IsEnum(AttributeType)
+    attributeType: AttributeType;
+
+    // @ApiProperty({
+    //     type: String,
+    // })
+    // @IsString()
+    // @IsNotEmpty()
+    // @IdExists(Form)
+    @Exclude()
+    formId: string;
+
+    @ApiPropertyOptional({
+        type: SingleQuestionTemplate,
+    })
+    @Type(() => SingleQuestionTemplate)
+    singleQuestion?: SingleQuestionTemplate;
+
+    @ApiPropertyOptional({
+        type: GroupQuestionTemplate,
+    })
+    @Type(() => GroupQuestionTemplate)
+    groupQuestion?: GroupQuestionTemplate;
+}
+
+// export class SingleQuestionTemplateTemp extends FormQuestionTemplate {
+//     @ApiPropertyOptional({
+//         type: SingleQuestionTemplate,
+//     })
+//     @Type(() => SingleQuestionTemplate)
+//     singleQuestion?: SingleQuestionTemplate;
+// }
+
+// export class GroupQuestionTemplateTemp extends FormQuestionTemplate {
+//     @ApiPropertyOptional({
+//         type: GroupQuestionTemplate,
+//     })
+//     @Type(() => GroupQuestionTemplate)
+//     groupQuestion?: GroupQuestionTemplate;
+// }
+
+export class FormTemplateDto {
+    @ApiProperty({
+        example: 'uuid',
+    })
+    @Exclude()
+    id: string;
+
+    @ApiProperty({
+        example: 'Title of the form',
+    })
+    title: string;
+
+    @ApiProperty({
+        example: 'Description of the form',
+    })
+    description: string;
+
+    @ApiProperty()
+    startSurvey: Date;
+
+    @ApiProperty({
+        enum: FormStatus,
+    })
+    @Exclude()
+    status: FormStatus;
+
+    @ApiProperty()
+    hasAnswer: boolean;
+
+    @ApiProperty()
+    canSeeCorrectAnswer: boolean;
+
+    @ApiProperty({
+        enum: FormCategory,
+    })
+    category: FormCategory;
+
+    // @ApiProperty()
+    @Exclude()
+    version: number;
+
+    @ApiProperty({
+        type: ImageOutput,
+        nullable: true,
+    })
+    image: ImageOutput | null;
+
+    @ApiProperty()
+    @Type(() => FormQuestionTemplate)
+    formQuestions: FormQuestionTemplate[];
+
+    @Exclude()
+    imageId: string;
+
+    @Exclude()
+    createdBy: string;
+
+    @Exclude()
+    updatedBy: string;
+
+    @Exclude()
+    createdDate: Date;
+
+    @Exclude()
+    updatedDate: Date;
+
+    @Exclude()
+    deletedDate: Date;
 }
