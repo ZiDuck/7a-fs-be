@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { FileHistoryService } from '../file-history/file-history.service';
 import { RawFilesService } from '../raw-files/raw-files.service';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class TasksService {
@@ -14,6 +15,7 @@ export class TasksService {
         private rawFilesService: RawFilesService,
     ) {}
 
+    @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
     @Transactional()
     async removeFileOnCloudinary() {
         // Get all Files of this day from File history
@@ -22,10 +24,11 @@ export class TasksService {
         // Remove the File in File table
         // Update hasDeleted = true in File history table
         // Otherwise, remove the File in File table
-        // const currentDate = dayjs().startOf('h').toISOString();
-        const currentDate = dayjs('2024-04-26 00:00:00.000').toISOString();
-        // const oneDateAgo = dayjs().subtract(1, 'd').startOf('h').toISOString();
-        const oneDateAgo = dayjs('2024-04-26 00:00:00.000').subtract(1, 'd').toISOString();
+
+        const currentDate = dayjs().toISOString();
+        const oneDateAgo = dayjs().subtract(1, 'd').toISOString();
+        // const currentDate = dayjs('2024-04-26 00:00:00.000').toISOString();
+        // const oneDateAgo = dayjs('2024-04-26 00:00:00.000').subtract(1, 'd').toISOString();
 
         const filesHistory = await this.fileHistoryService.findAllHasNotDeletedAndNotPaginate({
             startDate: oneDateAgo,
@@ -46,5 +49,16 @@ export class TasksService {
         }
 
         return filesHistory;
+    }
+
+    @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_MIDNIGHT)
+    @Transactional()
+    async removeFileHistories() {
+        const currentDate = dayjs().startOf('h').toISOString();
+
+        this.fileHistoryService.removeRawFiles({
+            endDate: currentDate,
+            startDate: null,
+        });
     }
 }

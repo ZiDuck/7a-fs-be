@@ -12,8 +12,13 @@ export class FileHistoryController {
     constructor(private readonly fileHistoryService: FileHistoryService) {}
 
     @Post()
-    create(@Body() data: CreateFileHistoryDto) {
-        return this.fileHistoryService.create(data);
+    async create(@Body() data: CreateFileHistoryDto) {
+        try {
+            return await this.fileHistoryService.create(data);
+        } catch (error) {
+            if (error instanceof HttpException) throw error;
+            throw new InternalServerErrorException(error.message);
+        }
     }
 
     @Get()

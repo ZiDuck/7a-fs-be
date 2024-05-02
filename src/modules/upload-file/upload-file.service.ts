@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { fromBuffer } from 'file-type';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { CloudinaryApiResponse, CloudinaryErrorResponse } from '../cloudinary/dto/cloudinary-api-response.dto';
@@ -55,12 +55,13 @@ export class UploadFileService {
             return cloudinaryResult as CloudinaryErrorResponse;
         }
 
-        const imageResult = await this.imageService.create({
+        const imageResult = await this.rawService.create({
             publicId: cloudinaryResult.public_id,
             url: cloudinaryResult.url,
             bytes: cloudinaryResult.bytes,
             filename: file.originalname,
             secureUrl: cloudinaryResult.secure_url,
+            resourceType: cloudinaryResult.resource_type as ResourceType,
         });
 
         return {
@@ -96,10 +97,14 @@ export class UploadFileService {
     }
 
     async uploadFileSubmit(file: Express.Multer.File) {
+        if (!file) {
+            throw new BadRequestException('File không tồn tại. Vui lòng kiểm tra lại!');
+        }
+
         const fileTypeResult = await fromBuffer(file.buffer);
 
         if (!fileTypeResult) {
-            throw new Error('Cannot determine file type');
+            throw new BadRequestException('Không xác định được loại file. Vui lòng kiểm tra lại!');
         }
 
         const mimeType = fileTypeResult.mime;

@@ -4,6 +4,7 @@ import {
     FileNotDeletedInCloudinaryErrorBusinessException,
     FileNotFoundErrorBusinessException,
     FileNotFoundInCloudinaryErrorBusinessException,
+    FormNotFoundErrorBusinessException,
     ImageHistoryNotFoundErrorBusinessException,
     InternalServerErrorBusinessException,
     PassWordIncorrectException,
@@ -67,5 +68,9 @@ export class Errors {
 
     static FileNotDeletedInCloudinaryErrorBusiness(id: string) {
         return new FileNotDeletedInCloudinaryErrorBusinessException(id);
+    }
+
+    static FormNotFoundErrorBusiness(id: string) {
+        return new FormNotFoundErrorBusinessException(id);
     }
 }

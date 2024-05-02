@@ -184,6 +184,8 @@ export class FormSubmitsService {
     async findOne(id: string) {
         const formSubmit = await this.formSubmitRepository.findOneBy({ id });
 
+        if (!formSubmit) throw new BadRequestException(`Không tồn tại form submit có id ${id}`);
+
         const formResult = formSubmit.metadata;
 
         return {
@@ -194,6 +196,8 @@ export class FormSubmitsService {
 
     async findOneViewScore(id: string) {
         const formSubmit = await this.formSubmitRepository.findOneBy({ id });
+
+        if (!formSubmit) throw new BadRequestException(`Không tồn tại form submit có id ${id}`);
 
         const formResult = formSubmit.metadata;
 

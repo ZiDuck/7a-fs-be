@@ -30,6 +30,7 @@ import { FormViewDto } from './dto/view-form.dto';
 import { FormSubmitQuery } from './dto/form-submit-query.dto';
 import { FormSubmit } from '../form-submits/entities/form-submit.entity';
 import { GROUP_QUESTION_TYPES, SINGLE_QUESTION_TYPES } from '../form-questions/enums/attribute-type.enum';
+import { Errors } from '../../common/errors';
 
 type DefaultRelationType = FindOptionsRelations<Form> | FindOptionsRelationByString;
 
@@ -171,7 +172,7 @@ export class FormsService {
             relations: defaultRelation,
         });
 
-        if (!result) throw new BadRequestException(`Form with id ${id} is not exists!`);
+        if (!result) throw Errors.FormNotFoundErrorBusiness(id);
 
         return result;
     }
@@ -179,7 +180,7 @@ export class FormsService {
     async findOneDeleted(id: string): Promise<Form> {
         const result = await this.formRepository.findOne({ where: { id: id }, relations: defaultRelation, withDeleted: true });
 
-        if (!result) throw new BadRequestException(`Form with id ${id} is not exists!`);
+        if (!result) throw Errors.FormNotFoundErrorBusiness(id);
 
         return result;
     }
@@ -241,7 +242,7 @@ export class FormsService {
             where: { id: id },
         });
 
-        if (!result) throw new BadRequestException(`Form with id ${id} is not exists!`);
+        if (!result) throw Errors.FormNotFoundErrorBusiness(id);
 
         return { version: result.version };
     }
@@ -255,7 +256,7 @@ export class FormsService {
             .orderBy('formAudit.createdDate', 'ASC')
             .getRawMany();
 
-        if (!result) throw new BadRequestException(`Form with id ${id} is not exists!`);
+        if (!result) throw Errors.FormNotFoundErrorBusiness(id);
 
         return result;
     }

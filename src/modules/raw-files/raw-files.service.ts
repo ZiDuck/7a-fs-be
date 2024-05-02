@@ -33,4 +33,14 @@ export class RawFilesService {
 
         return true;
     }
+
+    async removeMany(ids: string[]) {
+        // const result = await this.rawFileRepository.findOneBy({ id });
+
+        if (ids.length === 0) return true;
+
+        await this.rawFileRepository.delete(ids);
+
+        return true;
+    }
 }

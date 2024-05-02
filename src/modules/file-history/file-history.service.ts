@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { FileHistory } from './entites/file-history.entity';
 import { InjectRepository, InjectDataSource } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
+import { Repository, DataSource, Between } from 'typeorm';
 import { CreateFileHistoryDto } from './dto/create-file-history.dto';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { RawFile } from '../raw-files/enitites/raw-file.entity';
@@ -99,6 +99,21 @@ export class FileHistoryService {
         return result;
     }
 
+    async findAllHasDeleted(condition: GetFileHistoryQuery) {
+        const results = await this.dataSource
+            .createQueryBuilder()
+            .select('history.id', 'id')
+            .addSelect('history.hasDeleted', 'hasDeleted')
+            .addSelect('history.rawFileId', 'rawFileId')
+            .from(FileHistory, 'history')
+            .where('history.hasDeleted = :hasDeleted', { hasDeleted: true })
+            .andWhere('(history.createdDate >= :startDate OR :startDate IS NULL)', { startDate: condition.startDate })
+            .andWhere('(history.createdDate <= :endDate OR :endDate IS NULL)', { endDate: condition.endDate })
+            .getRawMany();
+
+        return results;
+    }
+
     async findOne(id: string) {
         const builder = await this.dataSource
             .createQueryBuilder()
@@ -123,13 +138,14 @@ export class FileHistoryService {
         const result = await this.fileHistoryRepository.findOne({
             where: {
                 id,
-                hasDeleted: true,
             },
         });
 
         if (!result) {
             throw Errors.FileNotFoundErrorBusiness(id);
         }
+
+        if (!result.hasDeleted) throw new BadRequestException(`File có id ${id} chưa được xóa trên cloudinary!`);
 
         return result;
     }
@@ -207,9 +223,20 @@ export class FileHistoryService {
         return true;
     }
 
-    async remove(id: string) {
-        await this.fileHistoryRepository.delete(id);
+    @Transactional()
+    async removeRawFiles(condition: GetFileHistoryQuery) {
+        const fileExists = await this.findAllHasDeleted(condition);
+
+        await this.rawFileService.removeMany(fileExists.map((item) => item.rawFileId));
+
+        await this.fileHistoryRepository.remove(fileExists);
 
         return true;
     }
+
+    // async remove(id: string) {
+    //     await this.fileHistoryRepository.delete(id);
+
+    //     return true;
+    // }
 }

@@ -126,3 +126,9 @@ export class FileNotDeletedInCloudinaryErrorBusinessException extends BusinessEx
         super({ message: `Không thể xóa file trên cloudinary` }, HttpStatus.BAD_REQUEST);
     }
 }
+
+export class FormNotFoundErrorBusinessException extends BusinessException {
+    constructor(id?: string) {
+        super({ message: `Form có id #${id} không tồn tại` }, HttpStatus.BAD_REQUEST);
+    }
+}
