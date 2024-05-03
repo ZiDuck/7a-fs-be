@@ -5,8 +5,8 @@ import { TasksService } from './tasks.service';
 export class TasksController {
     constructor(private readonly tasksService: TasksService) {}
 
-    // @Post()
-    // async removeImageOnCloudinary() {
-    //     return await this.tasksService.removeFileHistories();
-    // }
+    @Post()
+    async removeImageOnCloudinary() {
+        return await this.tasksService.removeOldNotifications();
+    }
 }

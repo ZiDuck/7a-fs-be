@@ -6,9 +6,10 @@ import { ImageHistoryModule } from '../image-history/image-history.module';
 import { FileHistoryModule } from '../file-history/file-history.module';
 import { RawFilesModule } from '../raw-files/raw-files.module';
 import { BackupModule } from '../backup/backup.module';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
-    imports: [CloudinaryModule, ImageHistoryModule, FileHistoryModule, RawFilesModule, BackupModule],
+    imports: [CloudinaryModule, ImageHistoryModule, FileHistoryModule, RawFilesModule, BackupModule, NotificationsModule],
     controllers: [TasksController],
     providers: [TasksService],
 })
