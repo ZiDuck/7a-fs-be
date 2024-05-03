@@ -4,7 +4,7 @@ import { UpdateFormDto } from './dto/update-form.dto';
 import { Transactional } from 'typeorm-transactional';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Form } from './entities/form.entity';
-import { FindOptionsRelationByString, FindOptionsRelations, Repository, SelectQueryBuilder } from 'typeorm';
+import { FindOptionsOrder, FindOptionsRelationByString, FindOptionsRelations, Repository, SelectQueryBuilder } from 'typeorm';
 import { paginate } from '../../cores/utils/paginate.util';
 import { FormQuestionsService } from '../form-questions/form-questions.service';
 import { plainToInstance } from 'class-transformer';
@@ -45,6 +45,19 @@ const defaultRelation: DefaultRelationType = {
     },
 };
 
+const defaultOrder: FindOptionsOrder<Form> = {
+    formQuestions: {
+        order: 'ASC',
+        formGroupAttribute: {
+            groupQuestionRows: {
+                order: 'ASC',
+            },
+            groupQuestionColumns: {
+                order: 'ASC',
+            },
+        },
+    },
+};
 @Injectable()
 export class FormsService {
     constructor(
@@ -156,19 +169,7 @@ export class FormsService {
     async findOne(id: string) {
         const result = await this.formRepository.findOne({
             where: { id: id },
-            order: {
-                formQuestions: {
-                    order: 'ASC',
-                    formGroupAttribute: {
-                        groupQuestionRows: {
-                            order: 'ASC',
-                        },
-                        groupQuestionColumns: {
-                            order: 'ASC',
-                        },
-                    },
-                },
-            },
+            order: defaultOrder,
             relations: defaultRelation,
         });
 
@@ -187,6 +188,21 @@ export class FormsService {
 
     async findFormQuestions(id: string) {
         const existedForm = await this.findOne(id);
+
+        const formQuestionsResult = plainToInstance(GetFormQuestion, await this.formQuestionService.findAllByForm(existedForm));
+
+        const customizeForm = plainToInstance(GetFormAllFormQuestionsDto, {
+            ...existedForm,
+            formQuestions: formQuestionsResult,
+            image: existedForm.imageId ? await this.imagesService.checkImageHook(existedForm.imageId) : null,
+            totalScore: this.calcTotalScore(formQuestionsResult),
+        });
+
+        return customizeForm;
+    }
+
+    async findFormQuestionsDeleted(id: string) {
+        const existedForm = await this.findOneDeleted(id);
 
         const formQuestionsResult = plainToInstance(GetFormQuestion, await this.formQuestionService.findAllByForm(existedForm));
 

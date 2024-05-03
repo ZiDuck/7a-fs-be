@@ -105,6 +105,16 @@ export class FormsController {
         return result;
     }
 
+    @UseRoleGuard()
+    @AdminUserRole()
+    @ApiPaginatedResponse(GetFormDto)
+    @Get(':id/form-questions/is-deleted')
+    async findOneDeleted(@Param('id', ParseUUIDPipe) id: string) {
+        const result = await this.formsService.findFormQuestionsDeleted(id);
+
+        return result;
+    }
+
     @ApiOkResponseDto(FormViewDto)
     @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
     @Get(':id/form-questions/view-form')

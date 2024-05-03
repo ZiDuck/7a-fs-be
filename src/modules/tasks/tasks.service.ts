@@ -6,6 +6,7 @@ import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { FileHistoryService } from '../file-history/file-history.service';
 import { RawFilesService } from '../raw-files/raw-files.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
+import { BackupService } from '../backup/backup.service';
 
 @Injectable()
 export class TasksService {
@@ -13,6 +14,7 @@ export class TasksService {
         private cloudinaryService: CloudinaryService,
         private fileHistoryService: FileHistoryService,
         private rawFilesService: RawFilesService,
+        private backupService: BackupService,
     ) {}
 
     @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
@@ -60,5 +62,11 @@ export class TasksService {
             endDate: currentDate,
             startDate: null,
         });
+    }
+
+    @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_MIDNIGHT)
+    @Transactional()
+    async backupData() {
+        return this.backupService.dataBackupService();
     }
 }

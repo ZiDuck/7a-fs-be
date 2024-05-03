@@ -11,5 +11,6 @@ import { UsersModule } from '../users/users.module';
     controllers: [BackupController],
     providers: [BackupService],
     imports: [TypeOrmModule.forFeature([BackupHistory]), UploadFileModule, CloudinaryModule, UsersModule],
+    exports: [BackupService],
 })
 export class BackupModule {}
