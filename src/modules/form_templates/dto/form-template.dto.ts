@@ -47,11 +47,13 @@ export class SingleQuestionValueTemplate {
     })
     image: ImageOutput | null;
 
-    @Exclude()
     @ApiProperty({
         example: true,
     })
     isCorrect: boolean;
+
+    @ApiProperty({ example: false })
+    isOther: boolean;
 }
 
 export class SingleQuestionTemplate {
@@ -60,9 +62,6 @@ export class SingleQuestionTemplate {
 
     @ApiProperty({ example: 1 })
     score: number;
-
-    @ApiProperty({ example: false })
-    isOther: boolean;
 
     // @ApiProperty()
     @Exclude()

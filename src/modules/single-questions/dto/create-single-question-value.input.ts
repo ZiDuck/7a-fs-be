@@ -22,12 +22,12 @@ export class CreateSingleQuestionValueInput {
     @IdExists(RawFile)
     imageId: string | null;
 
-    @ApiProperty({
+    @ApiPropertyOptional({
         type: Boolean,
     })
+    @ValidateIf((o) => o.isCorrect !== undefined)
     @IsBoolean()
-    @IsNotEmpty()
-    isCorrect: boolean;
+    isCorrect?: boolean;
 
     @ApiPropertyOptional()
     @ValidateIf((o) => o.isOther !== undefined)

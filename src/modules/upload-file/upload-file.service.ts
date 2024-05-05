@@ -125,7 +125,7 @@ export class UploadFileService {
     }
 
     async deleteOneImage(data: DeleteImageInput) {
-        await this.imageService.deleteOne(data);
+        await this.rawService.remove(data.publicId);
     }
 
     async getDetailFile(publicId: string) {
