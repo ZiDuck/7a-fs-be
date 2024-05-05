@@ -13,16 +13,16 @@ import { GroupQuestionRow } from '../group-questions/entities/group-question-row
 import { GroupQuestionAnswer } from '../group-questions/entities/group-question-answer.entity';
 import { GetGroupQuestionValue } from '../group-questions/dto/get-group-question-value.dto';
 import { GetSingleQuestionAttribute } from '../single-questions/dto/get-single-question-attribute.dto';
-import { ImagesService } from '../images/images.service';
 import { SingleQuestionAttribute } from '../single-questions/entities/single-question-attribute.entity';
 import { Form } from '../forms/entities/form.entity';
+import { RawFilesService } from '../raw-files/raw-files.service';
 @Injectable()
 export class FormQuestionsService {
     constructor(
         @InjectRepository(FormQuestion) private formQuestionRepository: Repository<FormQuestion>,
         private singleQuestionsService: SingleQuestionsService,
         private groupQuestionsService: GroupQuestionsService,
-        private imagesService: ImagesService,
+        private rawFilesService: RawFilesService,
     ) {}
 
     async create(data: CreateFormQuestionInput) {
@@ -174,7 +174,7 @@ export class FormQuestionsService {
         result.description = question.description;
         result.require = question.require;
         result.order = question.order;
-        result.image = question.imageId ? await this.imagesService.checkImageHook(question.imageId) : null;
+        result.image = question.imageId ? await this.rawFilesService.checkFileHook(question.imageId) : null;
         result.attributeType = question.attributeType;
         result.formId = question.formId;
 
@@ -231,7 +231,7 @@ export class FormQuestionsService {
                     const result = {
                         id: value.id,
                         value: value.value,
-                        image: question.imageId ? await this.imagesService.checkImageHook(value.imageId) : null,
+                        image: question.imageId ? await this.rawFilesService.checkFileHook(value.imageId) : null,
                         isCorrect: value.isCorrect,
                         isOther: value.isOther,
                     };

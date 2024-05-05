@@ -31,6 +31,7 @@ import { FormSubmitQuery } from './dto/form-submit-query.dto';
 import { FormSubmit } from '../form-submits/entities/form-submit.entity';
 import { GROUP_QUESTION_TYPES, SINGLE_QUESTION_TYPES } from '../form-questions/enums/attribute-type.enum';
 import { Errors } from '../../common/errors';
+import { RawFilesService } from '../raw-files/raw-files.service';
 
 type DefaultRelationType = FindOptionsRelations<Form> | FindOptionsRelationByString;
 
@@ -64,7 +65,7 @@ export class FormsService {
         @InjectRepository(Form) private formRepository: Repository<Form>,
         @InjectRepository(FormAudit) private formAuditRepository: Repository<FormAudit>,
         private readonly formQuestionService: FormQuestionsService,
-        private imagesService: ImagesService,
+        private rawFilesService: RawFilesService,
         private formTemplatesService: FormTemplatesService,
         private usersService: UsersService,
         private formSubmitService: FormSubmitsService,
@@ -157,7 +158,7 @@ export class FormsService {
             result.items.map(async (item) => {
                 const customizeForm = plainToInstance(GetFormDto, {
                     ...item,
-                    image: item.imageId ? await this.imagesService.checkImageHook(item.imageId) : null,
+                    image: item.imageId ? await this.rawFilesService.checkFileHook(item.imageId) : null,
                 });
 
                 return customizeForm;
@@ -194,7 +195,7 @@ export class FormsService {
         const customizeForm = plainToInstance(GetFormAllFormQuestionsDto, {
             ...existedForm,
             formQuestions: formQuestionsResult,
-            image: existedForm.imageId ? await this.imagesService.checkImageHook(existedForm.imageId) : null,
+            image: existedForm.imageId ? await this.rawFilesService.checkFileHook(existedForm.imageId) : null,
             totalScore: this.calcTotalScore(formQuestionsResult),
         });
 
@@ -209,7 +210,7 @@ export class FormsService {
         const customizeForm = plainToInstance(GetFormAllFormQuestionsDto, {
             ...existedForm,
             formQuestions: formQuestionsResult,
-            image: existedForm.imageId ? await this.imagesService.checkImageHook(existedForm.imageId) : null,
+            image: existedForm.imageId ? await this.rawFilesService.checkFileHook(existedForm.imageId) : null,
             totalScore: this.calcTotalScore(formQuestionsResult),
         });
 
@@ -246,7 +247,7 @@ export class FormsService {
         const customizeForm = plainToInstance(FormViewDto, {
             ...existedForm,
             formQuestions: formQuestionsResult,
-            image: existedForm.imageId ? await this.imagesService.checkImageHook(existedForm.imageId) : null,
+            image: existedForm.imageId ? await this.rawFilesService.checkFileHook(existedForm.imageId) : null,
             totalScore: this.calcTotalScore(formQuestionsResult),
         });
 

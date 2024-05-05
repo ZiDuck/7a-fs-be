@@ -24,6 +24,18 @@ export class RawFilesService {
         return result;
     }
 
+    async checkFileHook(id: string) {
+        const rawFile = await this.rawFileRepository.findOneBy({ id });
+
+        if (!rawFile) return null;
+
+        return {
+            id: rawFile.id,
+            publicId: rawFile.publicId,
+            url: rawFile.url,
+        };
+    }
+
     async remove(id: string) {
         const result = await this.rawFileRepository.findOneBy({ id });
 
