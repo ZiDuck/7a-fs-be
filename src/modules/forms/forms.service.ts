@@ -281,18 +281,20 @@ export class FormsService {
     async updateQuestions(data: UpdateFormQuestionOfFormInput) {
         const existedForm = await this.findOne(data.id);
 
-        if (existedForm.status !== FormStatus.PENDING && existedForm.status !== FormStatus.ACCEPTED)
-            throw new BadRequestException(`Chỉ có thể cập nhật câu hỏi cho form ở trạng thái ${FormStatus.PENDING} hoặc ${FormStatus.ACCEPTED}`);
-
-        if (existedForm.status === FormStatus.ACCEPTED) {
-            if (data.status === FormStatus.PENDING) throw new BadRequestException(`Không thể cập nhật trạng thái form từ ACCEPTED sang PENDING!`);
+        if (existedForm.status === FormStatus.CLOSED)
+            throw new BadRequestException(`Không thể cập nhật câu hỏi cho form ở trạng thái ${FormStatus.CLOSED}`);
+        else if (existedForm.status === FormStatus.ACCEPTED) {
+            if (data.status === FormStatus.PENDING || data.status === FormStatus.REJECTED)
+                throw new BadRequestException(
+                    `Không thể cập nhật trạng thái form từ ${FormStatus.ACCEPTED} sang ${FormStatus.PENDING} hoặc ${FormStatus.REJECTED}!`,
+                );
 
             const currentUserId = this.currentUserContext.getUserId();
 
             const user = await this.usersService.findOne(currentUserId);
 
             if (user.role.value !== RoleType.ADMIN)
-                throw new BadRequestException('Chỉ có admin mới có thể cập nhật câu hỏi cho form ở trạng thái ACCEPTED');
+                throw new BadRequestException(`Chỉ có admin mới có thể cập nhật câu hỏi cho form ở trạng thái ${FormStatus.ACCEPTED}`);
 
             // Save form information to form audit
             const formAuditInput = this.formAuditRepository.create({
@@ -304,16 +306,18 @@ export class FormsService {
 
             // Update version of the form
             data.version = existedForm.version + 1;
-        }
-
-        if (existedForm.status === FormStatus.PENDING) {
+        } else if (existedForm.status === FormStatus.PENDING || existedForm.status === FormStatus.REJECTED) {
             const currentUser = await this.usersService.findOne(this.currentUserContext.getUserId());
 
             if (currentUser.role.value === RoleType.USER && existedForm.createdBy !== currentUser.id)
-                throw new BadRequestException('Chỉ có người tạo form hoặc admin mới có thể cập nhật form ở trạng thái PENDING');
+                throw new BadRequestException(
+                    `Chỉ có người tạo form hoặc admin mới có thể cập nhật form ở trạng thái ${FormStatus.PENDING} hoặc ${FormStatus.REJECTED}!`,
+                );
+
+            data.status = FormStatus.PENDING;
         }
 
-        await this.formRepository.update({ id: data.id }, omit(data, ['formQuestions', 'status']));
+        await this.formRepository.update({ id: data.id }, omit(data, ['formQuestions']));
 
         // TODO: Check this update logic again
         // const currentFormQuestions = await this.formQuestionService.findAllByFormId(data.id);
