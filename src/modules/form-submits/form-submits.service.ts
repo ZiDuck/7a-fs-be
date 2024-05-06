@@ -41,10 +41,8 @@ export class FormSubmitsService {
                     ...question,
                     singleQuestion: {
                         ...question.singleQuestion,
-                        singleQuestionValues: {
-                            ...existedQuestion.singleQuestion.singleQuestionValues,
-                            guestAnswer: question.singleQuestion.guestAnswer,
-                        },
+                        singleQuestionValues: existedQuestion.singleQuestion.singleQuestionValues,
+                        guestAnswer: question.singleQuestion.guestAnswer,
                     },
                 };
             } else if (question instanceof CreateGroupQuestionSubmitTemp) {
