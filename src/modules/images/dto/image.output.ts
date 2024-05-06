@@ -5,9 +5,12 @@ export class ImageOutput {
     @ApiProperty()
     id: string;
 
-    @Exclude()
+    // @Exclude()
     url: string;
 
-    @Exclude()
+    // @Exclude()
+    secureUrl: string;
+
+    // @Exclude()
     publicId: string;
 }

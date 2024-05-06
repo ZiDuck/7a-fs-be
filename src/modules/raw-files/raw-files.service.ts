@@ -33,6 +33,7 @@ export class RawFilesService {
             id: rawFile.id,
             publicId: rawFile.publicId,
             url: rawFile.url,
+            secureUrl: rawFile.secureUrl,
         };
     }
 

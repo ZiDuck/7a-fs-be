@@ -3,6 +3,7 @@ import { FormCategory } from '../../forms/enums/form-category.enum';
 import { FormTemplateDto } from './form-template.dto';
 import { Exclude } from 'class-transformer';
 import { FormTemplate } from '../entities/form-template.entity';
+import { ImageOutput } from '../../images/dto/image.output';
 
 export class GetFormTemplate extends FormTemplate {
     @ApiProperty()
@@ -12,6 +13,12 @@ export class GetFormTemplate extends FormTemplate {
         enum: FormCategory,
     })
     category: FormCategory;
+
+    @ApiProperty({
+        type: ImageOutput,
+        nullable: true,
+    })
+    image: ImageOutput | null;
 
     @ApiProperty({
         type: FormTemplateDto,

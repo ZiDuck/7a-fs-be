@@ -6,8 +6,8 @@ import { ImageOutput } from './dto/image.output';
 export class ImagesController {
     constructor(private readonly imageService: ImagesService) {}
 
-    @Get()
-    async getAllImages(): Promise<ImageOutput[]> {
-        return await this.imageService.getAll();
-    }
+    // @Get()
+    // async getAllImages(): Promise<ImageOutput[]> {
+    //     return await this.imageService.getAll();
+    // }
 }

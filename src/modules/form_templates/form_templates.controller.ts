@@ -18,11 +18,18 @@ export class FormTemplatesController {
     @ApiPaginatedResponse(GetFormTemplate)
     @Get()
     async findAll(@Query() query: PageQueryDto) {
-        const result = await this.formTemplatesService.findAll(query);
+        const results = await this.formTemplatesService.findAll(query);
 
-        result.items = plainToInstance(GetFormTemplate, result.items);
+        const customizeItems = results.items.map((item) => {
+            return {
+                ...item,
+                image: item.metadata.image ? item.metadata.image : null,
+            };
+        });
 
-        return result;
+        results.items = plainToInstance(GetFormTemplate, customizeItems);
+
+        return results;
     }
 
     @AdminUserRole()
