@@ -1,4 +1,4 @@
-import { Exclude, Type } from 'class-transformer';
+import { Type } from 'class-transformer';
 import { AttributeType, GROUP_QUESTION_TYPES, SINGLE_QUESTION_TYPES } from '../../form-questions/enums/attribute-type.enum';
 import { ImageOutput } from '../../images/dto/image.output';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
@@ -49,6 +49,9 @@ export class SingleQuestionValueSubmit {
         example: true,
     })
     isOther: boolean;
+
+    @ApiProperty()
+    order: number;
 }
 
 export class GuestAnswerId {

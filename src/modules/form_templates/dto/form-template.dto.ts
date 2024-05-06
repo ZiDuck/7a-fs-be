@@ -54,6 +54,9 @@ export class SingleQuestionValueTemplate {
 
     @ApiProperty({ example: false })
     isOther: boolean;
+
+    @ApiProperty()
+    order: number;
 }
 
 export class SingleQuestionTemplate {

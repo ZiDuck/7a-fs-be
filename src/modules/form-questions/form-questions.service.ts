@@ -234,6 +234,7 @@ export class FormQuestionsService {
                         image: question.imageId ? await this.rawFilesService.checkFileHook(value.imageId) : null,
                         isCorrect: value.isCorrect,
                         isOther: value.isOther,
+                        order: value.order,
                     };
                     return result;
                 }),

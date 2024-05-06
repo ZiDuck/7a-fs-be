@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsNotEmpty, IsString, ValidateIf } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsNumber, IsString, ValidateIf } from 'class-validator';
 import { IdExists } from '../../../common/validator/uuid.validator';
 import { RawFile } from '../../raw-files/enitites/raw-file.entity';
 
@@ -33,4 +33,9 @@ export class CreateSingleQuestionValueInput {
     @ValidateIf((o) => o.isOther !== undefined)
     @IsBoolean()
     isOther?: boolean;
+
+    @ApiProperty()
+    @IsNumber()
+    @IsNotEmpty()
+    order: number;
 }

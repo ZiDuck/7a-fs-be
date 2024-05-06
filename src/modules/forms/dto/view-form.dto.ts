@@ -54,6 +54,9 @@ export class SingleQuestionValueView {
         example: true,
     })
     isCorrect: boolean;
+
+    @ApiProperty()
+    order: number;
 }
 
 export class SingleQuestionView {

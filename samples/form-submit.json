@@ -1,83 +1,81 @@
 {
-    "id": "6894b510-46a1-4cb0-82cf-a6b917c97ba0",
-    "title": "Standard Form 2",
-    "description": null,
+    "id": "4d5afa48-b7f3-4b68-a59e-f61eb5b4e7ae",
+    "title": "Standard Form",
+    "description": "null",
     "startSurvey": "2024-04-03T17:00:00.000Z",
     "status": "ACCEPTED",
     "hasAnswer": true,
-    "canSeeCorrectAnswer": true,
+    "canSeeCorrectAnswer": false,
     "category": "PATIENT_CATEGORY",
-    "version": 1,
+    "version": 0,
     "formQuestions": [
         {
-            "id": "c4d3b9ad-c49f-4368-a823-bad1b9fe5905",
+            "id": "3b3e8f8f-8d8d-4084-b170-67f3241e6ade",
             "label": "Title of the CHECKBOX BUTTON",
             "description": "Description of the CHECKBOX BUTTON",
             "require": true,
             "order": 0,
             "image": null,
             "attributeType": "CHECKBOX_BUTTON",
-            "formId": "6894b510-46a1-4cb0-82cf-a6b917c97ba0",
+            "formId": "4d5afa48-b7f3-4b68-a59e-f61eb5b4e7ae",
             "singleQuestion": {
-                "id": "00984a99-dfd1-4e4f-a33d-d1b0831e363c",
+                "id": "8f077b8b-4324-4777-866a-26520d11a931",
                 "score": 1,
                 "singleQuestionValues": [
                     {
-                        "id": "26bec405-1c3f-413f-b9be-ac276f17c23f",
-                        "value": "checkbox value 2",
-                        "image": null,
-                        "isOther": false
-                    },
-                    {
-                        "id": "90002f57-ee51-4cee-a925-8360d0271533",
+                        "id": "616eec00-43ef-4f4b-89a2-639bcebc6321",
                         "value": "checkbox value 1",
                         "image": null,
-                        "isOther": false
+                        "isOther": false,
+                        "order": 0
                     },
                     {
-                        "id": "fff60777-97a3-4b7d-9beb-c771b261f7de",
+                        "id": "c1763c53-b194-4168-93e6-a4c13286d75a",
+                        "value": "checkbox value 2",
+                        "image": null,
+                        "isOther": false,
+                        "order": 1
+                    },
+                    {
+                        "id": "93c99d01-1517-40d1-919b-b9b4398fcb44",
                         "value": "checkbox value 3",
                         "image": null,
-                        "isOther": false
-                    },
-                    {
-                        "id": "48fadfa0-8ea9-4c4e-9f70-a57ef3673f4f",
-                        "value": "",
-                        "image": null,
-                        "isOther": true
+                        "isOther": false,
+                        "order": 2
                     }
                 ],
                 "fileConfig": null,
                 "guestAnswer": {
                     "choiceIds": [
                         {
-                            "id": "90002f57-ee51-4cee-a925-8360d0271533"
+                            "id": "616eec00-43ef-4f4b-89a2-639bcebc6321"
                         },
                         {
-                            "id": "48fadfa0-8ea9-4c4e-9f70-a57ef3673f4f"
+                            "id": "93c99d01-1517-40d1-919b-b9b4398fcb44"
                         }
                     ]
                 }
             }
         },
         {
-            "id": "5455cb8e-f3d2-4e0b-9670-259d3a34857b",
+            "id": "01c141b3-b3fe-4409-8f3c-32cabd3d1744",
             "label": "Title of the text box",
             "description": "Description of the text box",
             "require": true,
             "order": 1,
             "image": null,
             "attributeType": "TEXT_BOX",
-            "formId": "6894b510-46a1-4cb0-82cf-a6b917c97ba0",
+            "formId": "4d5afa48-b7f3-4b68-a59e-f61eb5b4e7ae",
             "singleQuestion": {
-                "id": "8eb1ed4d-0745-4296-91d4-bf2bb035909a",
+                "id": "4c79134a-1c1e-454c-88c5-843887c24c9d",
                 "score": 5,
                 "singleQuestionValues": [
                     {
-                        "id": "7174f81f-38fe-4291-871d-b7be191a945b",
+                        "id": "1adea6e5-b9bb-42b7-ae64-1d1dce279931",
                         "value": "true value",
                         "image": null,
-                        "isOther": false
+                        "isOther": false,
+                        "order": 0
                     }
                 ],
                 "fileConfig": null,
@@ -87,29 +85,31 @@
             }
         },
         {
-            "id": "fbc9eb62-84f4-4957-a8c5-42e095bf87d2",
+            "id": "f9cdb4da-b99c-4d23-bb2d-11146963b661",
             "label": "Title of the paragraph",
             "description": "Description of the paragraph",
             "require": true,
             "order": 2,
             "image": null,
             "attributeType": "PARAGRAPH",
-            "formId": "6894b510-46a1-4cb0-82cf-a6b917c97ba0",
+            "formId": "4d5afa48-b7f3-4b68-a59e-f61eb5b4e7ae",
             "singleQuestion": {
-                "id": "5f5de2c7-42d1-425b-b232-a3084eea828f",
+                "id": "62d74608-f13f-40e9-9bd3-9833c077494e",
                 "score": 5,
                 "singleQuestionValues": [
                     {
-                        "id": "3ab2d69f-d86d-4f22-bdd8-586f864ccf98",
+                        "id": "716459e4-7f27-4f8d-bae7-5428f832a899",
                         "value": "Cau tra loi dung 1",
                         "image": null,
-                        "isOther": false
+                        "isOther": false,
+                        "order": 0
                     },
                     {
-                        "id": "a798924b-d8cd-49ec-af47-231239c42479",
+                        "id": "b437f7fc-2d73-4ee8-9154-af45ed161db2",
                         "value": "Cau tra loi dung 2",
                         "image": null,
-                        "isOther": false
+                        "isOther": false,
+                        "order": 1
                     }
                 ],
                 "fileConfig": null,
@@ -119,24 +119,24 @@
             }
         },
         {
-            "id": "d3f400b0-67a3-45c1-9a5c-64aea4a52d32",
+            "id": "8a51b8c9-1d7e-4f74-b664-e5590d8e9e9e",
             "label": "Title of the multi choice",
             "description": "Description of multi choice",
             "require": true,
             "order": 3,
             "image": null,
             "attributeType": "RADIO_GRID",
-            "formId": "6894b510-46a1-4cb0-82cf-a6b917c97ba0",
+            "formId": "4d5afa48-b7f3-4b68-a59e-f61eb5b4e7ae",
             "groupQuestion": {
                 "rows": [
                     {
-                        "id": "26d4312a-c894-48b5-a00f-fd746a61dbaa",
+                        "id": "efabd440-45f9-4ce6-8ec9-297e8e63632d",
                         "score": 5,
                         "value": "Row 1",
                         "order": 0
                     },
                     {
-                        "id": "da2025d6-c931-4084-9ce1-89e183b54ee4",
+                        "id": "d4834c17-3a7a-4944-ba2a-055e7c5feffc",
                         "score": 5,
                         "value": "Row 2",
                         "order": 1
@@ -145,108 +145,104 @@
                 "totalScore": 10,
                 "columns": [
                     {
-                        "id": "76933dd6-385f-441d-91af-97e79faaf1a9",
+                        "id": "f7a01aea-595a-4c65-b2bf-f47c32624310",
                         "value": "Column 1",
                         "order": 0
                     },
                     {
-                        "id": "9dc75a3a-e1d9-4a87-98fb-e6ccb33e7935",
+                        "id": "746da547-6137-4ccb-ad86-a175d63f21ac",
                         "value": "Column 2",
                         "order": 1
                     },
                     {
-                        "id": "63a854f3-2687-40f3-8c5e-beefa0324fc6",
+                        "id": "20794512-aa12-4cba-8217-f3a7a36de2e4",
                         "value": "Column 3",
                         "order": 2
                     }
                 ],
                 "answers": [
                     {
-                        "id": "5d03a715-2e3a-4896-b30b-6ad1ab243220",
-                        "rowId": "26d4312a-c894-48b5-a00f-fd746a61dbaa",
-                        "columnId": "9dc75a3a-e1d9-4a87-98fb-e6ccb33e7935",
-                        "rowOrder": 0,
-                        "columnOrder": 1
-                    },
-                    {
-                        "id": "3b50d32a-1799-4dca-9fd7-8a095aa43baf",
-                        "rowId": "26d4312a-c894-48b5-a00f-fd746a61dbaa",
-                        "columnId": "63a854f3-2687-40f3-8c5e-beefa0324fc6",
-                        "rowOrder": 0,
-                        "columnOrder": 2
-                    },
-                    {
-                        "id": "47df5de7-0440-4043-90d5-d278e9260360",
-                        "rowId": "26d4312a-c894-48b5-a00f-fd746a61dbaa",
-                        "columnId": "76933dd6-385f-441d-91af-97e79faaf1a9",
+                        "id": "0c3cb4d9-e534-4686-ae91-3a840f6c0568",
+                        "rowId": "efabd440-45f9-4ce6-8ec9-297e8e63632d",
+                        "columnId": "f7a01aea-595a-4c65-b2bf-f47c32624310",
                         "rowOrder": 0,
                         "columnOrder": 0
                     },
                     {
-                        "id": "1e4e6922-88f5-41df-947f-e0d0d47c157e",
-                        "rowId": "da2025d6-c931-4084-9ce1-89e183b54ee4",
-                        "columnId": "76933dd6-385f-441d-91af-97e79faaf1a9",
+                        "id": "540fff59-a119-49df-94bd-e61db2809e51",
+                        "rowId": "efabd440-45f9-4ce6-8ec9-297e8e63632d",
+                        "columnId": "746da547-6137-4ccb-ad86-a175d63f21ac",
+                        "rowOrder": 0,
+                        "columnOrder": 1
+                    },
+                    {
+                        "id": "7632f475-aaaf-4786-92f2-39a50437e65a",
+                        "rowId": "efabd440-45f9-4ce6-8ec9-297e8e63632d",
+                        "columnId": "20794512-aa12-4cba-8217-f3a7a36de2e4",
+                        "rowOrder": 0,
+                        "columnOrder": 2
+                    },
+                    {
+                        "id": "876bba74-ca3b-4cc3-b9ab-0b23e87bc805",
+                        "rowId": "d4834c17-3a7a-4944-ba2a-055e7c5feffc",
+                        "columnId": "746da547-6137-4ccb-ad86-a175d63f21ac",
+                        "rowOrder": 1,
+                        "columnOrder": 1
+                    },
+                    {
+                        "id": "361dd63b-617a-492d-8e19-bc5e82b3d044",
+                        "rowId": "d4834c17-3a7a-4944-ba2a-055e7c5feffc",
+                        "columnId": "f7a01aea-595a-4c65-b2bf-f47c32624310",
                         "rowOrder": 1,
                         "columnOrder": 0
                     },
                     {
-                        "id": "86bf9722-0039-4d92-88cd-e305249b062e",
-                        "rowId": "da2025d6-c931-4084-9ce1-89e183b54ee4",
-                        "columnId": "63a854f3-2687-40f3-8c5e-beefa0324fc6",
+                        "id": "b7d41301-fe75-418b-b06f-55e2a7438844",
+                        "rowId": "d4834c17-3a7a-4944-ba2a-055e7c5feffc",
+                        "columnId": "20794512-aa12-4cba-8217-f3a7a36de2e4",
                         "rowOrder": 1,
                         "columnOrder": 2
-                    },
-                    {
-                        "id": "e2b344d5-e03e-4e69-aecc-714de25dc57f",
-                        "rowId": "da2025d6-c931-4084-9ce1-89e183b54ee4",
-                        "columnId": "9dc75a3a-e1d9-4a87-98fb-e6ccb33e7935",
-                        "rowOrder": 1,
-                        "columnOrder": 1
                     }
                 ],
                 "guestAnswer": {
                     "gridIds": [
                         {
-                            "id": "47df5de7-0440-4043-90d5-d278e9260360",
-                            "rowId": "26d4312a-c894-48b5-a00f-fd746a61dbaa",
-                            "columnId": "76933dd6-385f-441d-91af-97e79faaf1a9"
+                            "id": "0c3cb4d9-e534-4686-ae91-3a840f6c0568",
+                            "rowId": "efabd440-45f9-4ce6-8ec9-297e8e63632d",
+                            "columnId": "f7a01aea-595a-4c65-b2bf-f47c32624310"
                         },
                         {
-                            "id": "e2b344d5-e03e-4e69-aecc-714de25dc57f",
-                            "rowId": "da2025d6-c931-4084-9ce1-89e183b54ee4",
-                            "columnId": "9dc75a3a-e1d9-4a87-98fb-e6ccb33e7935"
+                            "id": "361dd63b-617a-492d-8e19-bc5e82b3d044",
+                            "rowId": "d4834c17-3a7a-4944-ba2a-055e7c5feffc",
+                            "columnId": "f7a01aea-595a-4c65-b2bf-f47c32624310"
                         }
                     ]
                 }
             }
         },
         {
-            "id": "5273e7d2-c99f-44b3-b8c3-e977c475c0e5",
+            "id": "57a63fd9-d721-49a4-a115-2ba45b39adff",
             "label": "Title of the file upload",
             "description": null,
             "require": true,
             "order": 4,
             "image": null,
             "attributeType": "FILE_UPLOAD",
-            "formId": "6894b510-46a1-4cb0-82cf-a6b917c97ba0",
+            "formId": "4d5afa48-b7f3-4b68-a59e-f61eb5b4e7ae",
             "singleQuestion": {
-                "id": "59e572c5-87c4-4486-8afd-bc340bb2b42f",
+                "id": "d2a8f6b5-5ed7-4398-a8ff-d7c7c782ea6e",
                 "score": 5,
                 "singleQuestionValues": [],
                 "fileConfig": {
-                    "id": "edbb614b-4314-46c6-b4e1-6011efa5c05a",
+                    "id": "e49f4d83-ca97-4e09-a748-93f69b7d943b",
                     "maxNumOfFiles": 2,
                     "maxFileSize": 10485760,
-                    "attributeId": "59e572c5-87c4-4486-8afd-bc340bb2b42f"
+                    "attributeId": "d2a8f6b5-5ed7-4398-a8ff-d7c7c782ea6e"
                 },
                 "guestAnswer": {
                     "fileValues": [
                         {
-                            "id": "16a4d588-8f9f-430c-9e0f-0ea47e948586",
-                            "bytes": 13264
-                        },
-                        {
-                            "id": "0ced3b23-29b6-4bcc-80ab-fd51b0c82cb0",
+                            "id": "f36f2bc4-fcb5-43d2-886b-e34d62153f7c",
                             "bytes": 13264
                         }
                     ]
@@ -254,73 +250,25 @@
             }
         },
         {
-            "id": "5e9d36af-d2e4-4c31-8493-4394986ca15c",
+            "id": "bec3a1fe-acfb-434f-904b-82081abe9480",
             "label": "Title of the star",
             "description": null,
             "require": true,
             "order": 5,
             "image": null,
             "attributeType": "STAR",
-            "formId": "6894b510-46a1-4cb0-82cf-a6b917c97ba0",
+            "formId": "4d5afa48-b7f3-4b68-a59e-f61eb5b4e7ae",
             "singleQuestion": {
-                "id": "870fdd1a-e636-49d7-a738-14f8f02a552b",
+                "id": "39922bb2-3a39-4c10-ab56-3af34a2f7ba8",
                 "score": 5,
                 "singleQuestionValues": [],
-                "fileConfig": null
-            },
-            "guestAnswer": {
-                "textValue": "3.5"
-            }
-        },
-        {
-            "id": "8f09f75f-33cb-4229-9631-60d04eb78b90",
-            "label": "Title of the RADIO BUTTON",
-            "description": "Description of the RADIO BUTTON",
-            "require": true,
-            "order": 6,
-            "image": null,
-            "attributeType": "RADIO_BUTTON",
-            "formId": "6894b510-46a1-4cb0-82cf-a6b917c97ba0",
-            "singleQuestion": {
-                "id": "354c9fa0-4664-4db5-8478-9caee50f008d",
-                "score": 5,
-                "singleQuestionValues": [
-                    {
-                        "id": "e2127734-1c39-46ad-a2c9-7915bfcd745b",
-                        "value": "",
-                        "image": null,
-                        "isOther": true
-                    },
-                    {
-                        "id": "8b187661-9956-464d-a5da-f4aef19abfe9",
-                        "value": "radio value 2",
-                        "image": null,
-                        "isOther": false
-                    },
-                    {
-                        "id": "336b1226-8897-4072-b470-302297081bab",
-                        "value": "radio value 3",
-                        "image": null,
-                        "isOther": false
-                    },
-                    {
-                        "id": "6736fba1-30fa-41e5-a53b-bdcc565fffb6",
-                        "value": "radio value 1",
-                        "image": null,
-                        "isOther": false
-                    }
-                ],
                 "fileConfig": null,
                 "guestAnswer": {
-                    "choiceIds": [
-                        {
-                            "id": "6736fba1-30fa-41e5-a53b-bdcc565fffb6"
-                        }
-                    ]
+                    "textValue": "3.5"
                 }
             }
         }
     ],
     "image": null,
-    "totalScore": 40
+    "totalScore": 31
 }

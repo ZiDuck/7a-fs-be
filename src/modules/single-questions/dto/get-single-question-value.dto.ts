@@ -26,6 +26,9 @@ export class GetSingleQuestionValue {
     })
     isOther: boolean;
 
+    @ApiProperty()
+    order: number;
+
     // @Exclude()
     // createdDate: Date;
 

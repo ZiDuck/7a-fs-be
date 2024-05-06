@@ -48,6 +48,11 @@ const defaultRelation: DefaultRelationType = {
 const defaultOrder: FindOptionsOrder<Form> = {
     formQuestions: {
         order: 'ASC',
+        formSingleAttribute: {
+            singleQuestionValues: {
+                order: 'ASC',
+            },
+        },
         formGroupAttribute: {
             groupQuestionRows: {
                 order: 'ASC',

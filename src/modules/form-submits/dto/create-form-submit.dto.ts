@@ -2,7 +2,7 @@ import { Type } from 'class-transformer';
 import { AttributeType, GROUP_QUESTION_TYPES, SINGLE_QUESTION_TYPES } from '../../form-questions/enums/attribute-type.enum';
 import { ImageOutput } from '../../images/dto/image.output';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator';
+import { IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateIf } from 'class-validator';
 import { FormCategory } from '../../forms/enums/form-category.enum';
 import { FormStatus } from '../../forms/enums/form-status.enum';
 import { IdExists } from '../../../common/validator/uuid.validator';
@@ -44,6 +44,11 @@ export class CreateSingleQuestionValueSubmit {
         example: true,
     })
     isOther: boolean;
+
+    @ApiProperty()
+    @IsNumber()
+    @IsNotEmpty()
+    order: number;
 }
 
 export class CreateGuestAnswerId {

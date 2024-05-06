@@ -17,6 +17,9 @@ export class SingleQuestionValue extends AppBaseEntity {
     @Column('boolean', { default: false })
     isOther: boolean;
 
+    @Column('int4')
+    order: number;
+
     @Column('uuid')
     attributeId: SingleQuestionAttribute['id'];
 
