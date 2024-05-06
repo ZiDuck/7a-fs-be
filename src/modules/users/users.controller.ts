@@ -18,7 +18,7 @@ import { GetUserDto } from './dto/get-user.dto';
 import { UsersService } from './users.service';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { UpdateUserInput } from './dto/update-user.input';
-import { AdminRole } from '../../cores/decorators/role.decorator';
+import { AdminRole, AdminUserRole } from '../../cores/decorators/role.decorator';
 import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
 import { CurrentUser } from '../../cores/decorators/user.decorator';
 import { Transactional } from 'typeorm-transactional';
@@ -105,7 +105,7 @@ export class UsersController {
         return plainToInstance(GetUserDto, await this.userService.findOneDeleted(id));
     }
 
-    @AdminRole()
+    @AdminUserRole()
     @Transactional()
     @UseInterceptors(AuthLoggingInterceptor)
     @AuthLogging(ActionType.UPDATE_USER)
