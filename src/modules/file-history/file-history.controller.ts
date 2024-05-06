@@ -21,11 +21,15 @@ export class FileHistoryController {
         }
     }
 
+    @UseRoleGuard()
+    @AdminUserRole()
     @Get()
     async findAll(@Query() query: PageQueryDto) {
         return await this.fileHistoryService.findAll(query);
     }
 
+    @UseRoleGuard()
+    @AdminUserRole()
     @Get(':id')
     async findOne(@Param('id') id: string) {
         return await this.fileHistoryService.findOne(id);
@@ -43,6 +47,8 @@ export class FileHistoryController {
         }
     }
 
+    @UseRoleGuard()
+    @AdminUserRole()
     @Delete(':id')
     async remove(@Param('id') id: string) {
         try {

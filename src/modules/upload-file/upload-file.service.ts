@@ -3,9 +3,7 @@ import { fromBuffer } from 'file-type';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { CloudinaryApiResponse, CloudinaryErrorResponse } from '../cloudinary/dto/cloudinary-api-response.dto';
 import { CheckResourceExits } from '../cloudinary/dto/check-resource-exits.dto';
-import { ImagesService } from '../images/images.service';
 import { DeleteImageInput } from '../images/dto/delete-image.input';
-import { ImageUploadOutput } from './dto/image-upload.output';
 import { ArchiveFolder } from './enums/archive-folder.enum';
 import path from 'path';
 import { RawFilesService } from '../raw-files/raw-files.service';
@@ -15,11 +13,10 @@ import { ResourceType } from '../../cores/enums/resource-type.enum';
 export class UploadFileService {
     constructor(
         private cloudinaryService: CloudinaryService,
-        private imageService: ImagesService,
         private rawService: RawFilesService,
     ) {}
 
-    async uploadImage(file: Express.Multer.File, folder: string): Promise<ImageUploadOutput> {
+    async uploadImage(file: Express.Multer.File, folder: string) {
         const cloudinaryResult = await this.cloudinaryService.uploadFile(file, folder);
 
         if (!cloudinaryResult?.public_id) {
@@ -39,12 +36,8 @@ export class UploadFileService {
         });
 
         return {
-            image: {
-                id: imageResult.id,
-                publicId: cloudinaryResult.public_id,
-                url: cloudinaryResult.secure_url,
-            },
-            imageCloudResponse: cloudinaryResult,
+            ...imageResult,
+            resourceType: cloudinaryResult.resource_type,
         };
     }
 

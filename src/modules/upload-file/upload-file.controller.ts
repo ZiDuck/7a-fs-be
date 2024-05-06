@@ -1,15 +1,14 @@
-import { Body, Controller, Delete, Get, HttpException, InternalServerErrorException, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, InternalServerErrorException, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { UploadFileService } from './upload-file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ArchiveFolder } from './enums/archive-folder.enum';
 import { Transactional } from 'typeorm-transactional';
-import { DeleteImageInput } from '../images/dto/delete-image.input';
-import { ApiBody, ApiConsumes, ApiNoContentResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
 import { FileUploadDto } from './enums/file-upload.dto';
 import { ApiException } from '../../cores/decorators/api-exception.decorator';
-import { ImageUploadOutput } from './dto/image-upload.output';
 import { plainToClass } from 'class-transformer';
+import { GetRawFile } from '../raw-files/dto/get-raw-file.dto';
 
 @ApiTags('upload-file')
 @Controller('upload-file')
@@ -26,15 +25,15 @@ export class UploadFileController {
     })
     @ApiOkResponse({
         description: 'The image has been uploaded to cloudinary',
-        type: ImageUploadOutput,
+        type: GetRawFile,
     })
     @ApiException(() => InternalServerErrorException, {
         description: 'Error when uploading image to cloudinary',
     })
     @Transactional()
-    async uploadImage(@UploadedFile() file: Express.Multer.File): Promise<ImageUploadOutput> {
+    async uploadImage(@UploadedFile() file: Express.Multer.File): Promise<GetRawFile> {
         try {
-            return plainToClass(ImageUploadOutput, await this.uploadFileService.uploadImage(file, ArchiveFolder.images));
+            return plainToClass(GetRawFile, await this.uploadFileService.uploadImage(file, ArchiveFolder.images));
             // return await this.uploadFileService.uploadImage(file, ArchiveFolder.images);
         } catch (error) {
             throw new InternalServerErrorException(error.message);

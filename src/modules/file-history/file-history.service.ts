@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { FileHistory } from './entites/file-history.entity';
 import { InjectRepository, InjectDataSource } from '@nestjs/typeorm';
-import { Repository, DataSource, Between } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { CreateFileHistoryDto } from './dto/create-file-history.dto';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { RawFile } from '../raw-files/enitites/raw-file.entity';
@@ -46,6 +46,8 @@ export class FileHistoryService {
             .addSelect('file.fileName', 'fileName')
             .addSelect('file.resourceType', 'resourceType')
             .addSelect('file.bytes', 'bytes')
+            .addSelect('history.createdDate', 'createdDate')
+            .addSelect('history.updatedDate', 'updatedDate')
             .from(FileHistory, 'history')
             .addFrom(RawFile, 'file')
             .where('file.id=history.rawFileId')
@@ -125,6 +127,8 @@ export class FileHistoryService {
             .addSelect('file.fileName', 'fileName')
             .addSelect('file.resourceType', 'resourceType')
             .addSelect('file.bytes', 'bytes')
+            .addSelect('history.createdDate', 'createdDate')
+            .addSelect('history.updatedDate', 'updatedDate')
             .from(FileHistory, 'history')
             .addFrom(RawFile, 'file')
             .where('file.id=history.rawFileId')
