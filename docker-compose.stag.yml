@@ -8,7 +8,7 @@ services:
             - app-network
             - web
         ports:
-            - 8512:${PORT}
+            #- 8512:${PORT}
             - 8513:9229
         depends_on:
             - postgres-fs-stag
@@ -50,16 +50,18 @@ services:
         labels:
             - traefik.enable=true
             - traefik.docker.network=web
-            - traefik.http.routers.fs-api-stag-http.rule=Host(`fsapi-stag.qkit.vn`) || (Host(`fsapi-stag.qkit.vn`) && PathPrefix(`/docs`))
-            - traefik.http.routers.fs-api-stag-http.entrypoints=web
+            #- traefik.http.routers.fs-api-stag-http.rule=Host(`fs-stag.qkit.vn`) && (PathPrefix(`/api`) || PathPrefix(`/docs`))
+            #- traefik.http.routers.fs-api-stag-http.entrypoints=web
+            #- traefik.http.routers.fs-api-stag-http.middlewares=api-stripping
             #- traefik.http.routers.qet-api-http.priority=5
 
-            - traefik.http.routers.fs-api-stag-https.rule=(Host(`fsapi-stag.qkit.vn`)) || (Host(`fsapi-stag.qkit.vn`) && PathPrefix(`/docs`))
+            - traefik.http.routers.fs-api-stag-https.rule=Host(`fs-stag.qkit.vn`) && (PathPrefix(`/api`) || PathPrefix(`/docs`))
             - traefik.http.routers.fs-api-stag-https.entrypoints=websecure
-            - traefik.http.routers.fs-api-stag-https.service=fs-api-stag
+            #- traefik.http.routers.fs-api-stag-https.service=7a-fs-api-stag
             - traefik.http.services.fs-api-stag.loadbalancer.server.port=${PORT}
+            - traefik.http.routers.fs-api-stag-https.middlewares=api-stripping@file  
             #- traefik.http.routers.qet-api-https.priority=5
-            
+
     postgres-fs-stag:
         container_name: postgres-fs-stag
         image: postgres:15-alpine
