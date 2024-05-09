@@ -231,7 +231,7 @@ export class FormQuestionsService {
                     const result = {
                         id: value.id,
                         value: value.value,
-                        image: question.imageId ? await this.rawFilesService.checkFileHook(value.imageId) : null,
+                        image: value.imageId ? await this.rawFilesService.checkFileHook(value.imageId) : null,
                         isCorrect: value.isCorrect,
                         isOther: value.isOther,
                         order: value.order,
