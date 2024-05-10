@@ -1,12 +1,13 @@
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
+import { CallHandler, ExecutionContext, Injectable, NestInterceptor } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { ClsService } from 'nestjs-cls';
-import { Observable, catchError, tap } from 'rxjs';
-import { AUTH_LOGGING_DATA, ActionType, NotificationStatus, NotificationType, USER_AUDIT } from '../constants';
-import { UsersService } from '../../modules/users/users.service';
-import { Transactional } from 'typeorm-transactional';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { ClsService } from 'nestjs-cls';
+import { catchError, Observable, tap } from 'rxjs';
+import { Transactional } from 'typeorm-transactional';
+
 import { CreateNotificationEvent } from '../../modules/notifications/events/create-notification.event';
+import { UsersService } from '../../modules/users/users.service';
+import { ActionType, AUTH_LOGGING_DATA, NotificationStatus, NotificationType, USER_AUDIT } from '../constants';
 
 @Injectable()
 export class AuthLoggingInterceptor implements NestInterceptor {

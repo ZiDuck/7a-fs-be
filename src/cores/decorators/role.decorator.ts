@@ -1,7 +1,8 @@
-import { SetMetadata, applyDecorators } from '@nestjs/common';
+import { applyDecorators, SetMetadata } from '@nestjs/common';
+import { ApiBearerAuth } from '@nestjs/swagger';
+
 import { RoleType } from './../constants/index';
 import { UseRoleGuard } from './use-role.decorator';
-import { ApiBearerAuth } from '@nestjs/swagger';
 
 export const ROLES_KEY = 'roles';
 export const Roles = (...roles: RoleType[]) => applyDecorators(ApiBearerAuth(), UseRoleGuard(), SetMetadata(ROLES_KEY, roles));

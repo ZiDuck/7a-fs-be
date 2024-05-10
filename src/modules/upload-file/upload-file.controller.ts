@@ -1,14 +1,15 @@
 import { Controller, Get, InternalServerErrorException, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
-import { UploadFileService } from './upload-file.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ArchiveFolder } from './enums/archive-folder.enum';
-import { Transactional } from 'typeorm-transactional';
 import { ApiBody, ApiConsumes, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
-import { FileUploadDto } from './enums/file-upload.dto';
-import { ApiException } from '../../cores/decorators/api-exception.decorator';
 import { plainToClass } from 'class-transformer';
+import { Transactional } from 'typeorm-transactional';
+
+import { ApiException } from '../../cores/decorators/api-exception.decorator';
+import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
 import { GetRawFile } from '../raw-files/dto/get-raw-file.dto';
+import { ArchiveFolder } from './enums/archive-folder.enum';
+import { FileUploadDto } from './enums/file-upload.dto';
+import { UploadFileService } from './upload-file.service';
 
 @ApiTags('upload-file')
 @Controller('upload-file')

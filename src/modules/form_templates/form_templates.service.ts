@@ -1,10 +1,11 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { FormTemplate } from './entities/form-template.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CreateFormTemplateInput } from './dto/create-form-template.input';
+
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { paginate } from '../../cores/utils/paginate.util';
+import { CreateFormTemplateInput } from './dto/create-form-template.input';
+import { FormTemplate } from './entities/form-template.entity';
 
 @Injectable()
 export class FormTemplatesService {

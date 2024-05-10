@@ -1,7 +1,8 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, Relation } from 'typeorm';
+
 import { AppBaseEntity } from '../../../common/entities/base.entity';
-import { SingleQuestionAttribute } from './single-question-attribute.entity';
 import { Image } from '../../images/entites/image.entity';
+import { SingleQuestionAttribute } from './single-question-attribute.entity';
 
 @Entity()
 export class SingleQuestionValue extends AppBaseEntity {

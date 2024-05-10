@@ -1,7 +1,8 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { PageQueryDto } from '../../../common/dtos/page-query.dto';
-import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
+
+import { PageQueryDto } from '../../../common/dtos/page-query.dto';
 import { OrderByDirection } from '../../../cores/constants';
 
 export class FormFilterQuery extends PageQueryDto {

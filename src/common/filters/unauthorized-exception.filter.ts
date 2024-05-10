@@ -1,6 +1,7 @@
-import { Response as ExpressResponse } from 'express';
 import { ArgumentsHost, Catch, ExceptionFilter, HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { HttpArgumentsHost } from '@nestjs/common/interfaces';
+import { Response as ExpressResponse } from 'express';
+
 import { ExceptionResponse } from './interface/exception-response.interface';
 
 @Catch(UnauthorizedException)

@@ -1,40 +1,45 @@
 import {
-    Controller,
-    Get,
-    Post,
-    Body,
-    Patch,
-    Param,
-    Delete,
-    Query,
     BadRequestException,
-    ParseUUIDPipe,
+    Body,
+    Controller,
+    Delete,
+    Get,
     HttpException,
     InternalServerErrorException,
+    Param,
+    ParseUUIDPipe,
+    Patch,
+    Post,
+    Query,
+    UseInterceptors,
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
-import { FormsService } from './forms.service';
-import { CreateFormInput } from './dto/create-form.input';
-import { UpdateFormDto } from './dto/update-form.dto';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
-import { GetFormDto } from './dto/get-form.dto';
-import { ApiPaginatedResponse } from '../../cores/decorators/api-paginated-dto.decorator';
+
+import { ActionType } from '../../cores/constants';
 import { ApiException } from '../../cores/decorators/api-exception.decorator';
 import { ApiOkResponseDto } from '../../cores/decorators/api-ok-dto.decorator';
-import { GetFormAllFormQuestionsDto } from './dto/get-form-all-form-questions.dto';
-import { UpdateFormStatusDto } from './dto/update-form-status.dto';
-import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-form.input';
-import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
+import { ApiPaginatedResponse } from '../../cores/decorators/api-paginated-dto.decorator';
+import { FormLogging } from '../../cores/decorators/form-logging.decorator';
 import { AdminRole, AdminUserRole } from '../../cores/decorators/role.decorator';
-import { FormFilterQuery } from './dto/form-filter-query.dto';
-import { UpdateFormQuestionOfFormInput } from './dto/update-form-questions-of-form.input';
+import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
+import { FormLoggingInterceptor } from '../../cores/interceptors/form-logging.interceptor';
 import { CreateFormSubmitDto } from '../form-submits/dto/create-form-submit.dto';
-import { FormSubmitQuery } from './dto/form-submit-query.dto';
 import { GetFormSubmit } from '../form-submits/dto/get-form-submit.dto';
+import { CreateFormInput } from './dto/create-form.input';
+import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-form.input';
+import { FormFilterQuery } from './dto/form-filter-query.dto';
+import { FormSubmitQuery } from './dto/form-submit-query.dto';
+import { GetFormDto } from './dto/get-form.dto';
+import { GetFormAllFormQuestionsDto } from './dto/get-form-all-form-questions.dto';
 import { GetVersion } from './dto/get-version.dto';
+import { UpdateFormDto } from './dto/update-form.dto';
+import { UpdateFormQuestionOfFormInput } from './dto/update-form-questions-of-form.input';
+import { UpdateFormStatusDto } from './dto/update-form-status.dto';
 import { FormViewDto } from './dto/view-form.dto';
+import { FormsService } from './forms.service';
 
 @ApiTags('forms')
 @Controller('forms')
@@ -44,6 +49,8 @@ export class FormsController {
     @UseRoleGuard()
     @AdminUserRole()
     @ApiOkResponseDto(GetFormDto)
+    @UseInterceptors(FormLoggingInterceptor)
+    @FormLogging(ActionType.CREATE_FORM)
     @Post()
     async create(@Body() data: CreateFormInput) {
         try {
@@ -58,6 +65,8 @@ export class FormsController {
     @UseRoleGuard()
     @AdminUserRole()
     @UsePipes(new ValidationPipe({ transform: true }))
+    @UseInterceptors(FormLoggingInterceptor)
+    @FormLogging(ActionType.CREATE_FORM_QUESTION)
     @Post('form-questions')
     async createFormQuestions(@Body() data: CreateFormQuestionOfFormInput) {
         try {
@@ -173,6 +182,8 @@ export class FormsController {
     @UseRoleGuard()
     @AdminUserRole()
     @UsePipes(new ValidationPipe({ transform: true }))
+    @UseInterceptors(FormLoggingInterceptor)
+    @FormLogging(ActionType.UPDATE_FORM_QUESTION)
     @Patch('form-questions')
     async updateQuestions(@Body() data: UpdateFormQuestionOfFormInput) {
         try {
@@ -186,12 +197,16 @@ export class FormsController {
     @UseRoleGuard()
     @AdminRole()
     @Patch(':id/status')
+    @UseInterceptors(FormLoggingInterceptor)
+    @FormLogging(ActionType.UPDATE_STATUS)
     updateStatus(@Param('id') id: string, @Body() data: UpdateFormStatusDto) {
         return this.formsService.updateStatus(id, data);
     }
 
     @UseRoleGuard()
     @AdminUserRole()
+    @UseInterceptors(FormLoggingInterceptor)
+    @FormLogging(ActionType.UPDATE_FORM)
     @Patch(':id/info')
     async updateInformation(@Param('id') id: string, @Body() data: UpdateFormDto) {
         try {
@@ -204,6 +219,8 @@ export class FormsController {
 
     @UseRoleGuard()
     @AdminUserRole()
+    @UseInterceptors(FormLoggingInterceptor)
+    @FormLogging(ActionType.DELETE_FORM)
     @Delete(':id')
     async remove(@Param('id', ParseUUIDPipe) id: string) {
         try {
@@ -216,6 +233,8 @@ export class FormsController {
 
     @UseRoleGuard()
     @AdminUserRole()
+    @UseInterceptors(FormLoggingInterceptor)
+    @FormLogging(ActionType.RESTORE_FORM)
     @Patch(':id/restore')
     async restoreDeleted(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
         try {

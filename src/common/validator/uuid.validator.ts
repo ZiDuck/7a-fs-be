@@ -1,12 +1,11 @@
-import { Injectable, applyDecorators } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
-    ValidatorConstraint,
-    ValidatorConstraintInterface,
+    isUUID,
+    registerDecorator,
     ValidationArguments,
     ValidationOptions,
-    registerDecorator,
-    isUUID,
-    IsUUID,
+    ValidatorConstraint,
+    ValidatorConstraintInterface,
 } from 'class-validator';
 import { EntityManager } from 'typeorm';
 

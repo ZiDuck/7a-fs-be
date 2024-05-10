@@ -1,4 +1,5 @@
 import { DynamicModule } from '@nestjs/common';
+
 import { CurrentUserContext } from './providers/current-user-context.provider';
 
 interface AsyncContextModuleOptions {

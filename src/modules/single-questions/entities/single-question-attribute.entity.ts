@@ -1,8 +1,9 @@
 import { Column, DeepPartial, DeleteDateColumn, Entity, JoinColumn, OneToMany, OneToOne, Relation } from 'typeorm';
+
 import { AppBaseEntity } from '../../../common/entities/base.entity';
 import { FormQuestion } from '../../form-questions/entities/form-question.entity';
-import { SingleQuestionValue } from './single-question-value.entity';
 import { SingleQuestionFileConfig } from './single-question-file-config.entity';
+import { SingleQuestionValue } from './single-question-value.entity';
 
 @Entity()
 export class SingleQuestionAttribute extends AppBaseEntity {

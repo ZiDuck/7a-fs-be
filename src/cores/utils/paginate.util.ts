@@ -1,6 +1,7 @@
 import { SelectQueryBuilder } from 'typeorm';
-import { PageQueryDto } from '../../common/dtos/page-query.dto';
+
 import { PageDto } from '../../common/dtos/page.dto';
+import { PageQueryDto } from '../../common/dtos/page-query.dto';
 
 export async function paginate<T>(source: SelectQueryBuilder<T>, { page, take }: PageQueryDto) {
     const count$ = source.getCount();

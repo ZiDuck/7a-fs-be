@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ImageHistoryService } from './image-history.service';
-import { ImageHistoryController } from './image-history.controller';
-import { ImageHistory } from './entities/image-history.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { ImageHistory } from './entities/image-history.entity';
+import { ImageHistoryController } from './image-history.controller';
+import { ImageHistoryService } from './image-history.service';
 
 @Module({
     controllers: [ImageHistoryController],

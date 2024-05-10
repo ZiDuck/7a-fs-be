@@ -1,9 +1,7 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
-import { ImageHistoryService } from './image-history.service';
-import { CreateImageHistoryDto } from './dto/create-image-history.dto';
-import { UpdateImageHistoryDto } from './dto/update-image-history.dto';
+import { Controller } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { PageQueryDto } from '../../common/dtos/page-query.dto';
+
+import { ImageHistoryService } from './image-history.service';
 
 @ApiTags('Image History')
 // @ApiBearerAuth()

@@ -2,10 +2,11 @@
 
 import { Injectable } from '@nestjs/common';
 import { v2 as cloudinary } from 'cloudinary';
-import { CloudinaryApiResponse, CloudinaryErrorResponse } from './dto/cloudinary-api-response.dto';
+import streamifier from 'streamifier';
+
 import { env } from '../../cores/utils/env.util';
 import { CheckResourceExits } from './dto/check-resource-exits.dto';
-import streamifier from 'streamifier';
+import { CloudinaryApiResponse, CloudinaryErrorResponse } from './dto/cloudinary-api-response.dto';
 
 export type ResourceType = 'image' | 'video' | 'raw';
 

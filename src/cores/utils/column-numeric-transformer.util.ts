@@ -1,4 +1,5 @@
 import { ValueTransformer } from 'typeorm';
+
 import { isNullOrUndefined } from './null-or-undefined.util';
 
 export class ColumnNumericTransformer implements ValueTransformer {

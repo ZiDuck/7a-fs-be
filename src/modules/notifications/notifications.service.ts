@@ -1,13 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateNotificationDto } from './dto/create-notification.dto';
-import { Notification } from './entities/notification.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ClsService } from 'nestjs-cls';
 import { Repository } from 'typeorm';
-import { GetNotificationOutput } from './dto/get-notification.output';
+
+import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { CurrentUserContext } from '../../cores/providers/current-user-context.provider';
 import { paginate } from '../../cores/utils/paginate.util';
-import { PageQueryDto } from '../../common/dtos/page-query.dto';
+import { CreateNotificationDto } from './dto/create-notification.dto';
+import { GetNotificationOutput } from './dto/get-notification.output';
+import { Notification } from './entities/notification.entity';
 
 @Injectable()
 export class NotificationsService {

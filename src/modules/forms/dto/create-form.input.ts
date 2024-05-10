@@ -1,9 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { FormCategory } from '../enums/form-category.enum';
-import { IsDate, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator';
-import { IdExists } from '../../../common/validator/uuid.validator';
 import { Type } from 'class-transformer';
+import { IsDate, IsEnum, IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator';
+
+import { IdExists } from '../../../common/validator/uuid.validator';
 import { RawFile } from '../../raw-files/enitites/raw-file.entity';
+import { FormCategory } from '../enums/form-category.enum';
 
 export class CreateFormInput {
     @ApiProperty({

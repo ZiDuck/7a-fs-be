@@ -3,14 +3,15 @@ import * as dotenvExpand from 'dotenv-expand';
 // Load environment variables from .env file
 dotenvExpand.expand(dotenv.config());
 
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { StorageDriver, initializeTransactionalContext } from 'typeorm-transactional';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
+import { initializeTransactionalContext, StorageDriver } from 'typeorm-transactional';
+
+import { AppModule } from './app.module';
 import { BusinessExceptionFilter, HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { UnauthorizedExceptionFilter } from './common/filters/unauthorized-exception.filter';
-import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
     initializeTransactionalContext({

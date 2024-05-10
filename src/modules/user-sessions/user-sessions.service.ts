@@ -1,11 +1,11 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { UserSession } from './entities/user-session.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { QueryRunner, Repository, UpdateResult } from 'typeorm';
-import { CreateUserSessionInput, DeleteUserSessionInput, UpdateUserSessionInput } from './dto/user-session-token.input';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, UpdateResult } from 'typeorm';
+
 import { env } from '../../cores/utils/env.util';
-import { Errors } from '../../common/errors';
+import { CreateUserSessionInput, DeleteUserSessionInput, UpdateUserSessionInput } from './dto/user-session-token.input';
+import { UserSession } from './entities/user-session.entity';
 
 @Injectable()
 export class UserSessionsService {

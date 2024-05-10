@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { GetSingleQuestionValue } from './get-single-question-value.dto';
 import { Exclude, Type } from 'class-transformer';
+
 import { GetSingleQuestionFileConfig } from './get-single-question-file-config.dto';
+import { GetSingleQuestionValue } from './get-single-question-value.dto';
 
 export class GetSingleQuestionAttribute {
     @ApiProperty()

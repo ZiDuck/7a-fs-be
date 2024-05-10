@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
+
 import { ImagePublicIdExists } from '../../../cores/decorators/image-public-id-exists.decorator';
 
 export class DeleteImageInput {

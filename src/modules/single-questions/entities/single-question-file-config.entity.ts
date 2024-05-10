@@ -1,4 +1,5 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, OneToOne, Relation } from 'typeorm';
+
 import { AppBaseEntity } from '../../../common/entities/base.entity';
 import { SingleQuestionAttribute } from './single-question-attribute.entity';
 

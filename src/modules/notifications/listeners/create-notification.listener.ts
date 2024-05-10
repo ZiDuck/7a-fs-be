@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { OnEvent } from '@nestjs/event-emitter';
+
 import { CreateNotificationEvent } from '../events/create-notification.event';
 import { NotificationsService } from '../notifications.service';
 

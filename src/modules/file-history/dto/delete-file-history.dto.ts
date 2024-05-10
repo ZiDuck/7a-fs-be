@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
+
 import { RSFilePublicIdExists } from '../../../common/validator/resource-type-file.validator';
 
 export class DeleteFileInput {

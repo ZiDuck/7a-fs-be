@@ -1,7 +1,10 @@
-import { DataSource, EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from 'typeorm';
 import { Injectable } from '@nestjs/common';
-import { Form } from '../entities/form.entity';
+import { ClsService } from 'nestjs-cls';
+import { DataSource, EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from 'typeorm';
+
+import { FORM_AUDIT } from '../../../cores/constants';
 import { CurrentUserContext } from '../../../cores/providers/current-user-context.provider';
+import { Form } from '../entities/form.entity';
 
 @Injectable()
 @EventSubscriber()
@@ -9,6 +12,7 @@ export class FormSubscriber implements EntitySubscriberInterface<Form> {
     constructor(
         dataSource: DataSource,
         private readonly currentUserContext: CurrentUserContext,
+        private readonly cls: ClsService,
     ) {
         dataSource.subscribers.push(this);
     }
@@ -24,4 +28,12 @@ export class FormSubscriber implements EntitySubscriberInterface<Form> {
     beforeUpdate(event: UpdateEvent<Form>) {
         event.entity.updatedBy = this.currentUserContext.getUserId();
     }
+
+    afterInsert(event: InsertEvent<Form>) {
+        this.cls.set(FORM_AUDIT, event.entityId);
+    }
+
+    // afterUpdate(event: UpdateEvent<Form>) {
+    //     this.cls.set(FORM_AUDIT, event.entity.id);
+    // }
 }

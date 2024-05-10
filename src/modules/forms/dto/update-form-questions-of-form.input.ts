@@ -2,13 +2,14 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsOptional, IsUUID, ValidateNested } from 'class-validator';
 import { UUID } from 'typeorm/driver/mongodb/bson.typings';
+
 import { IdExists } from '../../../common/validator/uuid.validator';
 import { CreateGroupQuestionFormInput, CreateSingleQuestionFormInput } from '../../form-questions/dto/create-form-question.input';
-import { Form } from '../entities/form.entity';
-import { CreateFormInput } from './create-form.input';
 import { UpdateFormQuestionDto } from '../../form-questions/dto/update-form-question.dto';
-import { SINGLE_QUESTION_TYPES, GROUP_QUESTION_TYPES } from '../../form-questions/enums/attribute-type.enum';
+import { GROUP_QUESTION_TYPES, SINGLE_QUESTION_TYPES } from '../../form-questions/enums/attribute-type.enum';
+import { Form } from '../entities/form.entity';
 import { FormStatus } from '../enums/form-status.enum';
+import { CreateFormInput } from './create-form.input';
 
 export class UpdateFormQuestionOfFormInput extends CreateFormInput {
     @ApiProperty({

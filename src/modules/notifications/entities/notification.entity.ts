@@ -1,7 +1,8 @@
 import { ChildEntity, Column, Entity, JoinColumn, ManyToOne, Relation, TableInheritance } from 'typeorm';
+
 import { AppBaseEntity } from '../../../common/entities/base.entity';
-import { User } from '../../users/entities/user.entity';
 import { NotificationStatus, NotificationType } from '../../../cores/constants';
+import { User } from '../../users/entities/user.entity';
 
 type NotificationInfo = {
     title: string;
@@ -152,6 +153,25 @@ export class CreateFormNotification extends Notification {
     }
 }
 
+@ChildEntity(NotificationType.CREATE_FORM_QUESTION)
+export class CreateFormQuestionNotification extends Notification {
+    getNotificationInfo(): NotificationInfo {
+        if (this.status === NotificationStatus.SUCCESS) {
+            if (this.userSent.id === this.userReceived.id) {
+                return {
+                    title: 'Tạo mới câu hỏi cho form',
+                    description: `Bạn vừa tạo thành công câu hỏi cho form với id #${this.formId}`,
+                };
+            }
+
+            return {
+                title: 'Tạo mới câu hỏi cho form',
+                description: `${this.userSent.getName()} vừa tạo thành công câu hỏi cho form với id #${this.formId}`,
+            };
+        }
+    }
+}
+
 @ChildEntity(NotificationType.UPDATE_FORM)
 export class UpdateFormNotification extends Notification {
     getNotificationInfo(): NotificationInfo {
@@ -166,6 +186,25 @@ export class UpdateFormNotification extends Notification {
             return {
                 title: 'Cập nhật form',
                 description: `${this.userSent.getName()} vừa cập nhật thành công form với id #${this.formId}`,
+            };
+        }
+    }
+}
+
+@ChildEntity(NotificationType.UPDATE_FORM_QUESTION)
+export class UpdateFormQuestionNotification extends Notification {
+    getNotificationInfo(): NotificationInfo {
+        if (this.status === NotificationStatus.SUCCESS) {
+            if (this.userSent.id === this.userReceived.id) {
+                return {
+                    title: 'Cập nhật câu hỏi cho form',
+                    description: `Bạn vừa cập nhật thành công câu hỏi cho form với id #${this.formId}`,
+                };
+            }
+
+            return {
+                title: 'Cập nhật câu hỏi cho form',
+                description: `${this.userSent.getName()} vừa cập nhật thành công câu hỏi cho form với id #${this.formId}`,
             };
         }
     }
@@ -190,7 +229,7 @@ export class DeleteFormNotification extends Notification {
     }
 }
 
-@ChildEntity(NotificationType.ACCEPTED_FORM)
+@ChildEntity(NotificationType.ACCEPT_FORM)
 export class AcceptedFormNotification extends Notification {
     getNotificationInfo(): NotificationInfo {
         if (this.status === NotificationStatus.SUCCESS) {
@@ -228,7 +267,7 @@ export class CancelFormNotification extends Notification {
     }
 }
 
-@ChildEntity(NotificationType.REJECTED_FORM)
+@ChildEntity(NotificationType.REJECT_FORM)
 export class RejectedFormNotification extends Notification {
     getNotificationInfo(): NotificationInfo {
         if (this.status === NotificationStatus.SUCCESS) {
@@ -247,7 +286,7 @@ export class RejectedFormNotification extends Notification {
     }
 }
 
-@ChildEntity(NotificationType.REJECTED_FORM)
+@ChildEntity(NotificationType.RESTORE_FORM)
 export class RestoreFormNotification extends Notification {
     getNotificationInfo(): NotificationInfo {
         if (this.status === NotificationStatus.SUCCESS) {
@@ -266,6 +305,25 @@ export class RestoreFormNotification extends Notification {
     }
 }
 
+@ChildEntity(NotificationType.CLOSE_FORM)
+export class CloseFormNotification extends Notification {
+    getNotificationInfo(): NotificationInfo {
+        if (this.status === NotificationStatus.SUCCESS) {
+            if (this.userSent.id === this.userReceived.id) {
+                return {
+                    title: 'Đóng form',
+                    description: `Bạn đã đóng thành công form với id #${this.formId}`,
+                };
+            }
+
+            return {
+                title: 'Đóng form',
+                description: `${this.userSent.getName()} đã đóng thành công form với id # #${this.formId}`,
+            };
+        }
+    }
+}
+
 export const entities = [
     Notification,
     CreateUserNotification,
@@ -278,4 +336,6 @@ export const entities = [
     DeleteFormNotification,
     AcceptedFormNotification,
     CancelFormNotification,
+    CreateFormQuestionNotification,
+    UpdateFormQuestionNotification,
 ];

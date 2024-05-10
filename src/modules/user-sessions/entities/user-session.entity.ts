@@ -1,4 +1,5 @@
-import { Entity, Column, ManyToOne, PrimaryColumn, JoinColumn, CreateDateColumn, UpdateDateColumn, Relation } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn, Relation, UpdateDateColumn } from 'typeorm';
+
 import { AppBaseEntity } from '../../../common/entities/base.entity';
 import { User } from '../../users/entities/user.entity';
 

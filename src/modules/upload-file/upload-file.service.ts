@@ -1,13 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { fromBuffer } from 'file-type';
-import { CloudinaryService } from '../cloudinary/cloudinary.service';
-import { CloudinaryApiResponse, CloudinaryErrorResponse } from '../cloudinary/dto/cloudinary-api-response.dto';
-import { CheckResourceExits } from '../cloudinary/dto/check-resource-exits.dto';
-import { DeleteImageInput } from '../images/dto/delete-image.input';
-import { ArchiveFolder } from './enums/archive-folder.enum';
 import path from 'path';
-import { RawFilesService } from '../raw-files/raw-files.service';
+
 import { ResourceType } from '../../cores/enums/resource-type.enum';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { CheckResourceExits } from '../cloudinary/dto/check-resource-exits.dto';
+import { CloudinaryApiResponse, CloudinaryErrorResponse } from '../cloudinary/dto/cloudinary-api-response.dto';
+import { DeleteImageInput } from '../images/dto/delete-image.input';
+import { RawFilesService } from '../raw-files/raw-files.service';
+import { ArchiveFolder } from './enums/archive-folder.enum';
 
 @Injectable()
 export class UploadFileService {

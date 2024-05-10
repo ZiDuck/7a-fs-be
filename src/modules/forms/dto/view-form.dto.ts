@@ -1,6 +1,7 @@
-import { Exclude, Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { ValidateIf, IsString, IsNotEmpty, IsOptional, IsInt, IsEnum } from 'class-validator';
+import { Exclude, Type } from 'class-transformer';
+import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator';
+
 import { IdExists } from '../../../common/validator/uuid.validator';
 import { AttributeType } from '../../form-questions/enums/attribute-type.enum';
 import { ImageOutput } from '../../images/dto/image.output';

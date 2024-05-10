@@ -1,12 +1,13 @@
-import { Global, Module, forwardRef } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
+import { forwardRef, Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { AuthModule } from '../auth/auth.module';
 import { RolesModule } from '../roles/roles.module';
 import { UserSessionsModule } from '../user-sessions/user-sessions.module';
 import { User } from './entities/user.entity';
-import { AuthModule } from '../auth/auth.module';
 import { UserSubscriber } from './subcribers/user.subcriber';
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
 
 @Global()
 @Module({

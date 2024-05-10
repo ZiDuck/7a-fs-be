@@ -1,23 +1,22 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-
 import { InjectRepository } from '@nestjs/typeorm';
+import { ClsService } from 'nestjs-cls';
 import { Not, Repository } from 'typeorm';
 
-import { PasswordService } from '../auth/password.service';
-import { RolesService } from '../roles/roles.service';
-import { CreateUserInput } from './dto/create-user.input';
-import { User } from './entities/user.entity';
-import { UserSession } from '../user-sessions/entities/user-session.entity';
-import { UserSessionsService } from '../user-sessions/user-sessions.service';
-import { UpdateUserInput } from './dto/update-user.input';
-import { Role } from '../roles/entities/role.entity';
-import { EmailExistException, EmailNotExistException, UserNotExistException } from '../../common/exceptions/business.exception';
-import { RoleType, USER_AUDIT } from '../../cores/constants';
-import { paginate } from '../../cores/utils/paginate.util';
 import { PageDto } from '../../common/dtos/page.dto';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { QueryDto } from '../../common/dtos/query.dto';
-import { ClsService } from 'nestjs-cls';
+import { EmailExistException, EmailNotExistException, UserNotExistException } from '../../common/exceptions/business.exception';
+import { RoleType, USER_AUDIT } from '../../cores/constants';
+import { paginate } from '../../cores/utils/paginate.util';
+import { PasswordService } from '../auth/password.service';
+import { Role } from '../roles/entities/role.entity';
+import { RolesService } from '../roles/roles.service';
+import { UserSession } from '../user-sessions/entities/user-session.entity';
+import { UserSessionsService } from '../user-sessions/user-sessions.service';
+import { CreateUserInput } from './dto/create-user.input';
+import { UpdateUserInput } from './dto/update-user.input';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -69,6 +68,19 @@ export class UsersService {
     }
 
     async findAllNotCurrUser(userId: string): Promise<User[]> {
+        const results = await this.usersRepository.find({
+            where: {
+                id: Not(userId),
+                role: {
+                    value: RoleType.ADMIN,
+                },
+            },
+        });
+
+        return results;
+    }
+
+    async findAllAdminNotCurrUser(userId: string): Promise<User[]> {
         const results = await this.usersRepository.find({
             where: {
                 id: Not(userId),

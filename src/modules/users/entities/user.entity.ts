@@ -1,8 +1,9 @@
-import { Entity, Column, DeleteDateColumn, OneToMany, JoinColumn, ManyToOne, Relation } from 'typeorm';
-import { Role } from '../../roles/entities/role.entity';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
+
 import { AppBaseEntity } from '../../../common/entities/base.entity';
-import { UserSession } from '../../user-sessions/entities/user-session.entity';
 import { Notification } from '../../notifications/entities/notification.entity';
+import { Role } from '../../roles/entities/role.entity';
+import { UserSession } from '../../user-sessions/entities/user-session.entity';
 
 @Entity()
 export class User extends AppBaseEntity {

@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { GroupQuestionAttribute } from './entities/group-question-attribute.entity';
-import { GroupQuestionRow } from './entities/group-question-row.entity';
-import { GroupQuestionColumn } from './entities/group-question-column.entity';
+
 import { GroupQuestionAnswer } from './entities/group-question-answer.entity';
+import { GroupQuestionAttribute } from './entities/group-question-attribute.entity';
+import { GroupQuestionColumn } from './entities/group-question-column.entity';
+import { GroupQuestionRow } from './entities/group-question-row.entity';
 
 @Injectable()
 export class GroupQuestionsService {

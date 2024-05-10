@@ -1,7 +1,8 @@
-import { Exclude, Expose, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { ImageHistory } from '../entities/image-history.entity';
+import { Exclude, Expose, Type } from 'class-transformer';
+
 import { ImageOutput } from '../../images/dto/image.output';
+import { ImageHistory } from '../entities/image-history.entity';
 
 @Expose()
 export class GetImageHistoryOutput extends ImageHistory {

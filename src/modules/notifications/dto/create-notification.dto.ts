@@ -1,4 +1,5 @@
 import { IsEnum, IsOptional, IsString, IsUUID } from 'class-validator';
+
 import { NotificationStatus, NotificationType } from '../../../cores/constants';
 
 export class CreateNotificationDto {

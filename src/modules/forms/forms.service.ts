@@ -1,36 +1,38 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
-import { CreateFormInput } from './dto/create-form.input';
-import { UpdateFormDto } from './dto/update-form.dto';
-import { Transactional } from 'typeorm-transactional';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Form } from './entities/form.entity';
-import { FindOptionsOrder, FindOptionsRelationByString, FindOptionsRelations, Repository, SelectQueryBuilder } from 'typeorm';
-import { paginate } from '../../cores/utils/paginate.util';
-import { FormQuestionsService } from '../form-questions/form-questions.service';
 import { plainToInstance } from 'class-transformer';
+import omit from 'lodash/omit';
+import { ClsService } from 'nestjs-cls';
+import { FindOptionsOrder, FindOptionsRelationByString, FindOptionsRelations, Repository, SelectQueryBuilder } from 'typeorm';
+import { Transactional } from 'typeorm-transactional';
+
+import { Errors } from '../../common/errors';
+import { FORM_AUDIT, RoleType } from '../../cores/constants';
+import { CurrentUserContext } from '../../cores/providers/current-user-context.provider';
+import { paginate } from '../../cores/utils/paginate.util';
 import { GetFormQuestion } from '../form-questions/dto/get-form-question.dto';
-import { GetFormAllFormQuestionsDto } from './dto/get-form-all-form-questions.dto';
-import { GetFormDto } from './dto/get-form.dto';
+import { GROUP_QUESTION_TYPES, SINGLE_QUESTION_TYPES } from '../form-questions/enums/attribute-type.enum';
+import { FormQuestionsService } from '../form-questions/form-questions.service';
+import { CreateFormSubmitDto } from '../form-submits/dto/create-form-submit.dto';
+import { FormSubmit } from '../form-submits/entities/form-submit.entity';
+import { FormSubmitsService } from '../form-submits/form-submits.service';
 import { FormTemplateDto } from '../form_templates/dto/form-template.dto';
 import { FormTemplatesService } from '../form_templates/form_templates.service';
-import { UpdateFormStatusDto } from './dto/update-form-status.dto';
-import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-form.input';
-import { FormStatus } from './enums/form-status.enum';
-import omit from 'lodash/omit';
-import { FormFilterQuery } from './dto/form-filter-query.dto';
-import { UpdateFormQuestionOfFormInput } from './dto/update-form-questions-of-form.input';
-import { FormAudit } from './entities/form-audit.entity';
-import { CurrentUserContext } from '../../cores/providers/current-user-context.provider';
-import { UsersService } from '../users/users.service';
-import { RoleType } from '../../cores/constants';
-import { CreateFormSubmitDto } from '../form-submits/dto/create-form-submit.dto';
-import { FormSubmitsService } from '../form-submits/form-submits.service';
-import { FormViewDto } from './dto/view-form.dto';
-import { FormSubmitQuery } from './dto/form-submit-query.dto';
-import { FormSubmit } from '../form-submits/entities/form-submit.entity';
-import { GROUP_QUESTION_TYPES, SINGLE_QUESTION_TYPES } from '../form-questions/enums/attribute-type.enum';
-import { Errors } from '../../common/errors';
 import { RawFilesService } from '../raw-files/raw-files.service';
+import { UsersService } from '../users/users.service';
+import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-form.input';
+import { CreateFormInput } from './dto/create-form.input';
+import { FormFilterQuery } from './dto/form-filter-query.dto';
+import { FormSubmitQuery } from './dto/form-submit-query.dto';
+import { GetFormAllFormQuestionsDto } from './dto/get-form-all-form-questions.dto';
+import { GetFormDto } from './dto/get-form.dto';
+import { UpdateFormQuestionOfFormInput } from './dto/update-form-questions-of-form.input';
+import { UpdateFormStatusDto } from './dto/update-form-status.dto';
+import { UpdateFormDto } from './dto/update-form.dto';
+import { FormViewDto } from './dto/view-form.dto';
+import { FormAudit } from './entities/form-audit.entity';
+import { Form } from './entities/form.entity';
+import { FormStatus } from './enums/form-status.enum';
 
 type DefaultRelationType = FindOptionsRelations<Form> | FindOptionsRelationByString;
 
@@ -73,6 +75,7 @@ export class FormsService {
         private formTemplatesService: FormTemplatesService,
         private usersService: UsersService,
         private formSubmitService: FormSubmitsService,
+        private readonly cls: ClsService,
         private readonly currentUserContext: CurrentUserContext,
     ) {}
 
@@ -365,6 +368,10 @@ export class FormsService {
             if (data.status === FormStatus.ACCEPTED) throw new BadRequestException(`Không thể chuyển trạng thái form từ REJECTED sang ACCEPTED!`);
         }
         const result = await this.formRepository.update(id, data);
+
+        if (!result.affected) throw new BadRequestException('Cập nhật status cho form thất bại!');
+
+        this.cls.set(FORM_AUDIT, id);
 
         return result.affected ? true : false;
     }

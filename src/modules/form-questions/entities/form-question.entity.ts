@@ -1,10 +1,11 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToOne, Relation } from 'typeorm';
+
 import { AppBaseEntity } from '../../../common/entities/base.entity';
-import { AttributeType } from '../enums/attribute-type.enum';
 import { Form } from '../../forms/entities/form.entity';
+import { GroupQuestionAttribute } from '../../group-questions/entities/group-question-attribute.entity';
 import { Image } from '../../images/entites/image.entity';
 import { SingleQuestionAttribute } from '../../single-questions/entities/single-question-attribute.entity';
-import { GroupQuestionAttribute } from '../../group-questions/entities/group-question-attribute.entity';
+import { AttributeType } from '../enums/attribute-type.enum';
 
 @Entity()
 export class FormQuestion extends AppBaseEntity {

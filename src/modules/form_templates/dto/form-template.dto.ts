@@ -1,10 +1,11 @@
-import { Exclude, Type } from 'class-transformer';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsOptional, IsInt, IsEnum } from 'class-validator';
+import { Exclude, Type } from 'class-transformer';
+import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+
 import { AttributeType } from '../../form-questions/enums/attribute-type.enum';
-import { ImageOutput } from '../../images/dto/image.output';
 import { FormCategory } from '../../forms/enums/form-category.enum';
 import { FormStatus } from '../../forms/enums/form-status.enum';
+import { ImageOutput } from '../../images/dto/image.output';
 
 export class SingleQuestionFileConfigTemplate {
     @Exclude()

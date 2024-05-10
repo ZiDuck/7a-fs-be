@@ -1,8 +1,9 @@
 import { Module } from '@nestjs/common';
-import { RawFilesService } from './raw-files.service';
-import { RawFilesController } from './raw-files.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
+
 import { RawFile } from './enitites/raw-file.entity';
+import { RawFilesController } from './raw-files.controller';
+import { RawFilesService } from './raw-files.service';
 
 @Module({
     imports: [TypeOrmModule.forFeature([RawFile])],

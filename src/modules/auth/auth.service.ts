@@ -1,21 +1,21 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
+import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
-import { PasswordService } from './password.service';
-import { LoginInput } from './dto/login.input';
-import { Token } from './dto/auth.output';
-import { Repository } from 'typeorm';
-import { env } from '../../cores/utils/env.util';
-import { UsersService } from '../users/users.service';
-import { ForgotPasswordInput } from './dto/forgot-password.input';
-import { ForgottenPassword } from '../users/entities/forgotten-password.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { EmailService } from '../email/email.service';
-import { ResetPasswordInput } from './dto/reset-password.input';
 import { Errors } from '../../common/errors';
 import { PassWordIncorrectException } from '../../common/exceptions/business.exception';
+import { env } from '../../cores/utils/env.util';
+import { EmailService } from '../email/email.service';
+import { ForgottenPassword } from '../users/entities/forgotten-password.entity';
+import { UsersService } from '../users/users.service';
+import { Token } from './dto/auth.output';
+import { ForgotPasswordInput } from './dto/forgot-password.input';
+import { LoginInput } from './dto/login.input';
+import { ResetPasswordInput } from './dto/reset-password.input';
+import { PasswordService } from './password.service';
 
 @Injectable()
 export class AuthService {

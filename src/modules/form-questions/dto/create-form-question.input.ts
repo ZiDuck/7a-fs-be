@@ -1,12 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, ValidateIf, ValidateNested } from 'class-validator';
-import { AttributeType } from '../enums/attribute-type.enum';
-import { Form } from '../../forms/entities/form.entity';
-import { IdExists } from '../../../common/validator/uuid.validator';
-import { CreateSingleQuestionAttributeInput } from '../../single-questions/dto/create-single-question-attribute.input';
-import { CreateGroupQuestionAttributeInput } from '../../group-questions/dto/create-group-question-attribute.input';
 import { Type } from 'class-transformer';
+import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, ValidateIf, ValidateNested } from 'class-validator';
+
+import { IdExists } from '../../../common/validator/uuid.validator';
+import { Form } from '../../forms/entities/form.entity';
+import { CreateGroupQuestionAttributeInput } from '../../group-questions/dto/create-group-question-attribute.input';
 import { RawFile } from '../../raw-files/enitites/raw-file.entity';
+import { CreateSingleQuestionAttributeInput } from '../../single-questions/dto/create-single-question-attribute.input';
+import { AttributeType } from '../enums/attribute-type.enum';
 
 export class CreateFormQuestionInput {
     @ApiProperty({

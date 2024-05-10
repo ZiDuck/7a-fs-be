@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FormCategory } from '../../forms/enums/form-category.enum';
-import { FormTemplateDto } from './form-template.dto';
 import { Exclude } from 'class-transformer';
-import { FormTemplate } from '../entities/form-template.entity';
+
+import { FormCategory } from '../../forms/enums/form-category.enum';
 import { ImageOutput } from '../../images/dto/image.output';
+import { FormTemplate } from '../entities/form-template.entity';
+import { FormTemplateDto } from './form-template.dto';
 
 export class GetFormTemplate extends FormTemplate {
     @ApiProperty()

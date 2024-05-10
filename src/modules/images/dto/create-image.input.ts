@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
+
 import { FilePublicIdExists } from '../../../common/validator/file.validator';
 import { ResourceType } from '../../../cores/enums/resource-type.enum';
 

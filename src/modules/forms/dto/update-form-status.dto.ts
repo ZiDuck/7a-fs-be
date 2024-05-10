@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { FormStatus } from '../enums/form-status.enum';
 import { IsEnum, IsNotEmpty } from 'class-validator';
+
+import { FormStatus } from '../enums/form-status.enum';
 
 export class UpdateFormStatusDto {
     @ApiProperty({

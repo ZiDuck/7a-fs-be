@@ -1,4 +1,5 @@
 import { Column, Entity } from 'typeorm';
+
 import { AppBaseEntity } from '../../../common/entities/base.entity';
 import { ResourceType } from '../../../cores/enums/resource-type.enum';
 

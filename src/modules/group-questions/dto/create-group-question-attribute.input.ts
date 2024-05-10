@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ValidateNested } from 'class-validator';
-import { CreateGroupQuestionRowInput } from './create-group-question-row.input';
-import { CreateGroupQuestionColumnInput } from './create-group-question-column.input';
-import { CreateGroupQuestionAnswerInput } from './create-group-question-answer.input';
 import { Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
+
+import { CreateGroupQuestionAnswerInput } from './create-group-question-answer.input';
+import { CreateGroupQuestionColumnInput } from './create-group-question-column.input';
+import { CreateGroupQuestionRowInput } from './create-group-question-row.input';
 
 export class CreateGroupQuestionAttributeInput {
     @ApiProperty({

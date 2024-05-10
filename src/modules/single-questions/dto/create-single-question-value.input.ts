@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsBoolean, IsNotEmpty, IsNumber, IsString, ValidateIf } from 'class-validator';
+
 import { IdExists } from '../../../common/validator/uuid.validator';
 import { RawFile } from '../../raw-files/enitites/raw-file.entity';
 

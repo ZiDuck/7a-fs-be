@@ -1,21 +1,22 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateFormQuestionInput, CreateGroupQuestionFormInput, CreateSingleQuestionFormInput } from './dto/create-form-question.input';
-import { FormQuestion } from './entities/form-question.entity';
-import { DeepPartial, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AttributeType, GROUP_QUESTION_TYPES, SINGLE_QUESTION_TYPES } from './enums/attribute-type.enum';
-import { SingleQuestionValue } from '../single-questions/entities/single-question-value.entity';
-import { SingleQuestionsService } from '../single-questions/single-questions.service';
-import { GetFormQuestion } from './dto/get-form-question.dto';
-import { GroupQuestionsService } from '../group-questions/group-questions.service';
+import { DeepPartial, Repository } from 'typeorm';
+
+import { Form } from '../forms/entities/form.entity';
+import { GetGroupQuestionValue } from '../group-questions/dto/get-group-question-value.dto';
+import { GroupQuestionAnswer } from '../group-questions/entities/group-question-answer.entity';
 import { GroupQuestionColumn } from '../group-questions/entities/group-question-column.entity';
 import { GroupQuestionRow } from '../group-questions/entities/group-question-row.entity';
-import { GroupQuestionAnswer } from '../group-questions/entities/group-question-answer.entity';
-import { GetGroupQuestionValue } from '../group-questions/dto/get-group-question-value.dto';
+import { GroupQuestionsService } from '../group-questions/group-questions.service';
+import { RawFilesService } from '../raw-files/raw-files.service';
 import { GetSingleQuestionAttribute } from '../single-questions/dto/get-single-question-attribute.dto';
 import { SingleQuestionAttribute } from '../single-questions/entities/single-question-attribute.entity';
-import { Form } from '../forms/entities/form.entity';
-import { RawFilesService } from '../raw-files/raw-files.service';
+import { SingleQuestionValue } from '../single-questions/entities/single-question-value.entity';
+import { SingleQuestionsService } from '../single-questions/single-questions.service';
+import { CreateFormQuestionInput, CreateGroupQuestionFormInput, CreateSingleQuestionFormInput } from './dto/create-form-question.input';
+import { GetFormQuestion } from './dto/get-form-question.dto';
+import { FormQuestion } from './entities/form-question.entity';
+import { AttributeType, GROUP_QUESTION_TYPES, SINGLE_QUESTION_TYPES } from './enums/attribute-type.enum';
 @Injectable()
 export class FormQuestionsService {
     constructor(

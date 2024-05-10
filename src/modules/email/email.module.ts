@@ -1,9 +1,10 @@
 import { Global, Module } from '@nestjs/common';
-import { EmailService } from './email.service';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { env } from '../../cores/utils/env.util';
-import { join } from 'path';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { join } from 'path';
+
+import { env } from '../../cores/utils/env.util';
+import { EmailService } from './email.service';
 @Global()
 @Module({
     imports: [

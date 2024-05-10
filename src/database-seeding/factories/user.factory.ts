@@ -1,6 +1,7 @@
 import { define } from 'typeorm-seeding';
-import { User } from '../../modules/users/entities/user.entity';
 import { v4 as uuid } from 'uuid';
+
+import { User } from '../../modules/users/entities/user.entity';
 
 define(User, () => {
     const user = new User();

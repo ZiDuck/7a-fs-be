@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { NotificationStatus, NotificationType } from '../../../cores/constants';
 import { Expose } from 'class-transformer';
+
+import { NotificationStatus, NotificationType } from '../../../cores/constants';
 
 class GetUser {
     @ApiProperty({ type: String })

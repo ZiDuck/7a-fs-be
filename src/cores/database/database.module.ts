@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { env } from '../utils/env.util';
 import { DataSource, DataSourceOptions } from 'typeorm';
-import entities from './entities';
 import { addTransactionalDataSource } from 'typeorm-transactional';
+
+import { env } from '../utils/env.util';
+import entities from './entities';
 
 export function getTypeOrmConfig(): DataSourceOptions {
     return {

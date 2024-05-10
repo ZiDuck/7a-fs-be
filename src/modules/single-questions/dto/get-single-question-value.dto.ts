@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+
 import { ImageOutput } from '../../images/dto/image.output';
 
 export class GetSingleQuestionValue {

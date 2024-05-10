@@ -1,7 +1,8 @@
 import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, Relation } from 'typeorm';
+
 import { AppBaseEntity } from '../../../common/entities/base.entity';
-import { GroupQuestionRow } from './group-question-row.entity';
 import { GroupQuestionColumn } from './group-question-column.entity';
+import { GroupQuestionRow } from './group-question-row.entity';
 
 @Entity()
 export class GroupQuestionAnswer extends AppBaseEntity {

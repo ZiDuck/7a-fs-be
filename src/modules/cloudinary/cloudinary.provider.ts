@@ -1,6 +1,7 @@
 // cloudinary.provider.ts
 
 import { v2 as cloudinary } from 'cloudinary';
+
 import { env } from '../../cores/utils/env.util';
 
 export const CloudinaryProvider = {

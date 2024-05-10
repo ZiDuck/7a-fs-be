@@ -1,9 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { AttributeType } from '../enums/attribute-type.enum';
 import { Type } from 'class-transformer';
-import { ImageOutput } from '../../images/dto/image.output';
+
 import { GetGroupQuestionValue } from '../../group-questions/dto/get-group-question-value.dto';
+import { ImageOutput } from '../../images/dto/image.output';
 import { GetSingleQuestionAttribute } from '../../single-questions/dto/get-single-question-attribute.dto';
+import { AttributeType } from '../enums/attribute-type.enum';
 
 export class GetFormQuestion {
     @ApiProperty()

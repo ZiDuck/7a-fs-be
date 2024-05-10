@@ -1,17 +1,18 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { FileHistory } from './entites/file-history.entity';
-import { InjectRepository, InjectDataSource } from '@nestjs/typeorm';
-import { Repository, DataSource } from 'typeorm';
-import { CreateFileHistoryDto } from './dto/create-file-history.dto';
-import { PageQueryDto } from '../../common/dtos/page-query.dto';
-import { RawFile } from '../raw-files/enitites/raw-file.entity';
-import { paginateRaw } from '../../cores/utils/paginate.util';
-import { Errors } from '../../common/errors';
-import { RawFilesService } from '../raw-files/raw-files.service';
-import { UpdateFileHistoryDto } from './dto/update-file-history.dto';
-import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
+
+import { PageQueryDto } from '../../common/dtos/page-query.dto';
+import { Errors } from '../../common/errors';
+import { paginateRaw } from '../../cores/utils/paginate.util';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { RawFile } from '../raw-files/enitites/raw-file.entity';
+import { RawFilesService } from '../raw-files/raw-files.service';
+import { CreateFileHistoryDto } from './dto/create-file-history.dto';
 import { GetFileHistoryQuery } from './dto/get-file-history-query.dto';
+import { UpdateFileHistoryDto } from './dto/update-file-history.dto';
+import { FileHistory } from './entites/file-history.entity';
 
 @Injectable()
 export class FileHistoryService {

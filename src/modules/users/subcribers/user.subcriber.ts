@@ -1,8 +1,9 @@
-import { DataSource, EntitySubscriberInterface, EventSubscriber, InsertEvent, RecoverEvent, SoftRemoveEvent } from 'typeorm';
-import { User } from '../entities/user.entity';
-import { ClsService } from 'nestjs-cls';
 import { Injectable } from '@nestjs/common';
+import { ClsService } from 'nestjs-cls';
+import { DataSource, EntitySubscriberInterface, EventSubscriber, InsertEvent, RecoverEvent, SoftRemoveEvent } from 'typeorm';
+
 import { USER_AUDIT } from '../../../cores/constants';
+import { User } from '../entities/user.entity';
 
 @Injectable()
 @EventSubscriber()

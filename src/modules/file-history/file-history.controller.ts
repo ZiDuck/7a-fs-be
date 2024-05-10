@@ -1,10 +1,11 @@
 import { Body, Controller, Delete, Get, HttpException, InternalServerErrorException, Param, Patch, Post, Query } from '@nestjs/common';
-import { FileHistoryService } from './file-history.service';
-import { CreateFileHistoryDto } from './dto/create-file-history.dto';
-import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { ApiTags } from '@nestjs/swagger';
+
+import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { AdminUserRole } from '../../cores/decorators/role.decorator';
 import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
+import { CreateFileHistoryDto } from './dto/create-file-history.dto';
+import { FileHistoryService } from './file-history.service';
 
 @ApiTags('File History')
 @Controller('file-history')

@@ -1,11 +1,12 @@
-import { Controller, Get, Patch, Param, ParseUUIDPipe, HttpException, Query } from '@nestjs/common';
-import { NotificationsService } from './notifications.service';
-import { GetNotificationOutput } from './dto/get-notification.output';
-import { ApiTags, ApiOkResponse } from '@nestjs/swagger';
-import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
-import { AdminUserRole } from '../../cores/decorators/role.decorator';
-import { Errors } from '../../common/errors';
+import { Controller, Get, HttpException, Param, ParseUUIDPipe, Patch, Query } from '@nestjs/common';
+import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
+import { Errors } from '../../common/errors';
+import { AdminUserRole } from '../../cores/decorators/role.decorator';
+import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
+import { GetNotificationOutput } from './dto/get-notification.output';
+import { NotificationsService } from './notifications.service';
 
 @ApiTags('Notification')
 @UseRoleGuard()

@@ -1,8 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { RawFile } from './enitites/raw-file.entity';
+
 import { CreateRawFileInput } from './dto/create-raw-file.input';
+import { RawFile } from './enitites/raw-file.entity';
 
 @Injectable()
 export class RawFilesService {

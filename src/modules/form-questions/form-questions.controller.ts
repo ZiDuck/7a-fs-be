@@ -1,9 +1,10 @@
-import { Controller, Get, Param, BadRequestException } from '@nestjs/common';
-import { FormQuestionsService } from './form-questions.service';
+import { BadRequestException, Controller, Get, Param } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { GetFormQuestion } from './dto/get-form-question.dto';
-import { ApiOkResponseDto } from '../../cores/decorators/api-ok-dto.decorator';
+
 import { ApiException } from '../../cores/decorators/api-exception.decorator';
+import { ApiOkResponseDto } from '../../cores/decorators/api-ok-dto.decorator';
+import { GetFormQuestion } from './dto/get-form-question.dto';
+import { FormQuestionsService } from './form-questions.service';
 
 @ApiTags('form-questions')
 @Controller('form-questions')

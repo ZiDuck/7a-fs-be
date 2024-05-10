@@ -1,6 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsBoolean, IsOptional, IsString } from 'class-validator';
+
 import { PageQueryDto } from './page-query.dto';
 
 export class QueryDto extends PageQueryDto {
