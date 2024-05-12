@@ -10,28 +10,28 @@ import { Errors } from '../../common/errors';
 import { FORM_AUDIT, RoleType } from '../../cores/constants';
 import { CurrentUserContext } from '../../cores/providers/current-user-context.provider';
 import { paginate } from '../../cores/utils/paginate.util';
+import { FormTemplateDto } from '../form_templates/dto/form-template.dto';
+import { FormTemplatesService } from '../form_templates/form_templates.service';
 import { GetFormQuestion } from '../form-questions/dto/get-form-question.dto';
 import { GROUP_QUESTION_TYPES, SINGLE_QUESTION_TYPES } from '../form-questions/enums/attribute-type.enum';
 import { FormQuestionsService } from '../form-questions/form-questions.service';
 import { CreateFormSubmitDto } from '../form-submits/dto/create-form-submit.dto';
 import { FormSubmit } from '../form-submits/entities/form-submit.entity';
 import { FormSubmitsService } from '../form-submits/form-submits.service';
-import { FormTemplateDto } from '../form_templates/dto/form-template.dto';
-import { FormTemplatesService } from '../form_templates/form_templates.service';
 import { RawFilesService } from '../raw-files/raw-files.service';
 import { UsersService } from '../users/users.service';
-import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-form.input';
 import { CreateFormInput } from './dto/create-form.input';
+import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-form.input';
 import { FormFilterQuery } from './dto/form-filter-query.dto';
 import { FormSubmitQuery } from './dto/form-submit-query.dto';
-import { GetFormAllFormQuestionsDto } from './dto/get-form-all-form-questions.dto';
 import { GetFormDto } from './dto/get-form.dto';
+import { GetFormAllFormQuestionsDto } from './dto/get-form-all-form-questions.dto';
+import { UpdateFormDto } from './dto/update-form.dto';
 import { UpdateFormQuestionOfFormInput } from './dto/update-form-questions-of-form.input';
 import { UpdateFormStatusDto } from './dto/update-form-status.dto';
-import { UpdateFormDto } from './dto/update-form.dto';
 import { FormViewDto } from './dto/view-form.dto';
-import { FormAudit } from './entities/form-audit.entity';
 import { Form } from './entities/form.entity';
+import { FormAudit } from './entities/form-audit.entity';
 import { FormStatus } from './enums/form-status.enum';
 
 type DefaultRelationType = FindOptionsRelations<Form> | FindOptionsRelationByString;
@@ -95,6 +95,8 @@ export class FormsService {
         if (existedForm.formQuestions.length > 0) throw new BadRequestException(`Form có id ${data.id} đã tồn tại câu hỏi!`);
 
         await this.formRepository.update({ id: data.id }, omit(data, ['formQuestions', 'formId']));
+
+        this.cls.set(FORM_AUDIT, data.id);
 
         return await this.formQuestionService.createMany(data.formQuestions, data.id);
     }
@@ -327,6 +329,7 @@ export class FormsService {
 
         await this.formRepository.update({ id: data.id }, omit(data, ['formQuestions']));
 
+        this.cls.set(FORM_AUDIT, data.id);
         // TODO: Check this update logic again
         // const currentFormQuestions = await this.formQuestionService.findAllByFormId(data.id);
 
@@ -357,13 +360,16 @@ export class FormsService {
         if (existedForm.status === FormStatus.ACCEPTED) {
             if (data.status === FormStatus.PENDING) throw new BadRequestException(`Không thể chuyển trạng thái form từ ACCEPTED sang PENDING!`);
             if (data.status === FormStatus.REJECTED) throw new BadRequestException(`Không thể chuyển trạng thái form từ ACCEPTED sang REJECTED!`);
+            if (data.status === FormStatus.ACCEPTED) throw new BadRequestException(`Form đang ở trạng thái ACCEPTED!`);
         }
 
         if (existedForm.status === FormStatus.PENDING) {
+            if (data.status === FormStatus.PENDING) throw new BadRequestException(`Form đang ở trạng thái PENDING!`);
             if (data.status === FormStatus.CLOSED) throw new BadRequestException(`Không thể chuyển trạng thái form từ PENDING sang CLOSED!`);
         }
 
         if (existedForm.status === FormStatus.REJECTED) {
+            if (data.status === FormStatus.REJECTED) throw new BadRequestException(`Form đang ở trạng thái REJECTED!`);
             if (data.status === FormStatus.CLOSED) throw new BadRequestException(`Không thể chuyển trạng thái form từ REJECTED sang CLOSED!`);
             if (data.status === FormStatus.ACCEPTED) throw new BadRequestException(`Không thể chuyển trạng thái form từ REJECTED sang ACCEPTED!`);
         }
@@ -380,6 +386,10 @@ export class FormsService {
         await this.findOne(id);
 
         const result = await this.formRepository.update(id, data);
+
+        if (!result.affected) throw new BadRequestException('Cập nhật thông tin cho form thất bại!');
+
+        this.cls.set(FORM_AUDIT, id);
 
         return result.affected ? true : false;
     }

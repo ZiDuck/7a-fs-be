@@ -13,6 +13,26 @@ class GetUser {
     fullName: string;
 }
 
+export class GetUserMetadata {
+    @ApiProperty({ type: String })
+    @Expose()
+    userId: string;
+
+    @ApiProperty({ type: String })
+    @Expose()
+    fullName: string;
+}
+
+export class GetFormMetadata {
+    @ApiProperty({ type: String })
+    @Expose()
+    formId: string;
+
+    @ApiProperty({ type: String })
+    @Expose()
+    title: string;
+}
+
 export class GetNotificationOutput {
     @ApiProperty()
     id: string;
@@ -46,4 +66,7 @@ export class GetNotificationOutput {
 
     @ApiProperty()
     createdDate: Date;
+
+    @ApiProperty()
+    metadata: GetUserMetadata | GetFormMetadata | null;
 }

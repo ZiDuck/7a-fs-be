@@ -6,8 +6,10 @@ import { Repository } from 'typeorm';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { CurrentUserContext } from '../../cores/providers/current-user-context.provider';
 import { paginate } from '../../cores/utils/paginate.util';
+import { FormsService } from '../forms/forms.service';
+import { UsersService } from '../users/users.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
-import { GetNotificationOutput } from './dto/get-notification.output';
+import { GetFormMetadata, GetNotificationOutput, GetUserMetadata } from './dto/get-notification.output';
 import { Notification } from './entities/notification.entity';
 
 @Injectable()
@@ -15,6 +17,8 @@ export class NotificationsService {
     constructor(
         @InjectRepository(Notification) private notificationRepository: Repository<Notification>,
         private readonly currentUserContext: CurrentUserContext,
+        private readonly usersService: UsersService,
+        private readonly formsService: FormsService,
         private readonly cls: ClsService,
     ) {}
 
@@ -32,9 +36,11 @@ export class NotificationsService {
 
         const results = {
             ...result,
-            items: result.items.map((notification) => {
-                return this.customizeResult(notification);
-            }),
+            items: await Promise.all(
+                result.items.map((notification) => {
+                    return this.customizeResult(notification);
+                }),
+            ),
         };
 
         return results;
@@ -113,9 +119,11 @@ export class NotificationsService {
             },
         });
 
-        return results.map((notification) => {
-            return this.customizeResult(notification);
-        });
+        return await Promise.all(
+            results.map((notification) => {
+                return this.customizeResult(notification);
+            }),
+        );
     }
 
     async update(id: string) {
@@ -151,7 +159,7 @@ export class NotificationsService {
         }
     }
 
-    private customizeResult(notification: Notification) {
+    private async customizeResult(notification: Notification) {
         const data = new GetNotificationOutput();
 
         data.id = notification.id;
@@ -173,10 +181,21 @@ export class NotificationsService {
         data.createdDate = notification.createdDate;
         data.isRead = notification.isRead;
 
-        const notificationInfo = notification.getNotificationInfo();
+        let params: GetUserMetadata | GetFormMetadata | null = null;
+
+        if (notification.userId) {
+            const user = await this.usersService.findOne(notification.userId);
+            params = { userId: user.id, fullName: user.getName() };
+        } else if (notification.formId) {
+            const form = await this.formsService.findOne(notification.formId);
+            params = { formId: form.id, title: form.title };
+        }
+
+        const notificationInfo = notification.getNotificationInfo(params);
 
         data.title = notificationInfo.title;
         data.description = notificationInfo.description;
+        data.metadata = notificationInfo.metadata;
 
         return data;
     }

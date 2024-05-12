@@ -84,6 +84,7 @@ export class UsersService {
         const results = await this.usersRepository.find({
             where: {
                 id: Not(userId),
+                role: { value: RoleType.ADMIN },
             },
         });
 
