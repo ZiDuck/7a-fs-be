@@ -196,6 +196,12 @@ export class FormsService {
         return result;
     }
 
+    async findOneDeletedNotThrowError(id: string): Promise<Form> {
+        const result = await this.formRepository.findOne({ where: { id: id }, relations: defaultRelation, withDeleted: true });
+
+        return result;
+    }
+
     async findFormQuestions(id: string) {
         const existedForm = await this.findOne(id);
 

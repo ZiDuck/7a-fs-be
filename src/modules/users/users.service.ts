@@ -108,6 +108,12 @@ export class UsersService {
         return result;
     }
 
+    async findOneDeletedNotThrowError(id: string): Promise<User> {
+        const result = await this.usersRepository.findOne({ where: { id: id }, relations: { role: true }, withDeleted: true });
+
+        return result;
+    }
+
     async findAllDeleted(query: PageQueryDto): Promise<PageDto<User>> {
         const builder = this.usersRepository
             .createQueryBuilder('user')

@@ -369,4 +369,7 @@ export const entities = [
     CancelFormNotification,
     CreateFormQuestionNotification,
     UpdateFormQuestionNotification,
+    RestoreFormNotification,
+    CloseFormNotification,
+    RejectedFormNotification,
 ];

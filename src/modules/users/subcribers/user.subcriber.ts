@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { ClsService } from 'nestjs-cls';
 import { DataSource, EntitySubscriberInterface, EventSubscriber, InsertEvent, RecoverEvent, SoftRemoveEvent } from 'typeorm';
 
@@ -11,6 +12,7 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
     constructor(
         dataSource: DataSource,
         private readonly cls: ClsService,
+        private readonly eventEmitter: EventEmitter2,
     ) {
         dataSource.subscribers.push(this);
     }
@@ -38,6 +40,8 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
         // );
         // this.cls.set(USER_AUDIT, userAudit);
         this.cls.set(USER_AUDIT, event.entity.id);
+
+        // this.eventEmitter.emit('user.remove', event.entityId);
     }
 
     async afterRecover(event: RecoverEvent<User>) {

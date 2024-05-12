@@ -11,6 +11,8 @@ import { UsersService } from '../users/users.service';
 import { CreateNotificationDto } from './dto/create-notification.dto';
 import { GetFormMetadata, GetNotificationOutput, GetUserMetadata } from './dto/get-notification.output';
 import { Notification } from './entities/notification.entity';
+import { RemoveFormEvent } from './events/remove-form.event';
+import { RemoveUserEvent } from './events/remove-user.event';
 
 @Injectable()
 export class NotificationsService {
@@ -159,6 +161,28 @@ export class NotificationsService {
         }
     }
 
+    async removeNotificationByFormId(formId: RemoveFormEvent) {
+        const notifications = await this.notificationRepository
+            .createQueryBuilder('notification')
+            .where('notification.formId=:formId', { formId })
+            .getMany();
+
+        if (notifications.length > 0) {
+            await this.notificationRepository.remove(notifications);
+        }
+    }
+
+    async removeNotificationByUserId(userId: RemoveUserEvent) {
+        const notifications = await this.notificationRepository
+            .createQueryBuilder('notification')
+            .where('notification.userId=:userId', { userId })
+            .getMany();
+
+        if (notifications.length > 0) {
+            await this.notificationRepository.remove(notifications);
+        }
+    }
+
     private async customizeResult(notification: Notification) {
         const data = new GetNotificationOutput();
 
@@ -184,11 +208,11 @@ export class NotificationsService {
         let params: GetUserMetadata | GetFormMetadata | null = null;
 
         if (notification.userId) {
-            const user = await this.usersService.findOne(notification.userId);
-            params = { userId: user.id, fullName: user.getName() };
+            const user = await this.usersService.findOneDeletedNotThrowError(notification.userId);
+            params = { userId: user.id, fullName: user ? user.getName() : '' };
         } else if (notification.formId) {
-            const form = await this.formsService.findOne(notification.formId);
-            params = { formId: form.id, title: form.title };
+            const form = await this.formsService.findOneDeletedNotThrowError(notification.formId);
+            params = { formId: form.id, title: form ? form.title : '' };
         }
 
         const notificationInfo = notification.getNotificationInfo(params);
