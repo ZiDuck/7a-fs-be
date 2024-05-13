@@ -56,9 +56,11 @@ export class NotificationsService {
 
         const results = {
             ...result,
-            items: result.items.map((notification) => {
-                return this.customizeResult(notification);
-            }),
+            items: await Promise.all(
+                result.items.map((notification) => {
+                    return this.customizeResult(notification);
+                }),
+            ),
         };
 
         return results;
@@ -72,9 +74,11 @@ export class NotificationsService {
 
         const results = {
             ...result,
-            items: result.items.map((notification) => {
-                return this.customizeResult(notification);
-            }),
+            items: await Promise.all(
+                result.items.map((notification) => {
+                    return this.customizeResult(notification);
+                }),
+            ),
         };
 
         return results;
