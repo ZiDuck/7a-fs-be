@@ -69,7 +69,7 @@ export class AuthService {
             return tokenSession.token;
         }
 
-        throw new ForbiddenException();
+        throw new ForbiddenException('Không được quyền truy cập');
     }
 
     async createForgottenPasswordToken(email: string, userId: string): Promise<ForgottenPassword> {

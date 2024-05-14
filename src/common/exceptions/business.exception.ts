@@ -30,7 +30,7 @@ export class TokenJustSendException extends BusinessException {
 
 export class TokenInvalidException extends BusinessException {
     constructor(response?: Record<string, any>, options?: HttpExceptionOptions) {
-        super({ message: 'The token is invalid or has expired' }, HttpStatus.BAD_REQUEST, options);
+        super({ message: 'Token không hợp lệ hoặc đã hết hạn.' }, HttpStatus.BAD_REQUEST, options);
     }
 }
 
@@ -38,7 +38,7 @@ export class EmailExistException extends BusinessException {
     public email: string;
 
     constructor(email?: string) {
-        super({ message: `Email ${email} already exists` }, HttpStatus.BAD_REQUEST);
+        super({ message: `Email ${email} đã tồn tại trong hệ thống.` }, HttpStatus.BAD_REQUEST);
         this.email = email;
     }
 }
@@ -47,7 +47,7 @@ export class EmailNotExistException extends BusinessException {
     public email: string;
 
     constructor(email?: string) {
-        super({ message: `Email ${email} not exists` }, HttpStatus.BAD_REQUEST);
+        super({ message: `Email ${email} không tồn tại trong hệ thống.` }, HttpStatus.BAD_REQUEST);
         this.email = email;
     }
 }
@@ -56,7 +56,7 @@ export class UserExistException extends BusinessException {
     public userId: string;
 
     constructor(id?: string) {
-        super({ message: `User with id #${id} already exists` }, HttpStatus.BAD_REQUEST);
+        super({ message: `Người dùng với id #${id} đã tồn tại trong hệ thống` }, HttpStatus.BAD_REQUEST);
         this.userId = id;
     }
 }
@@ -65,7 +65,7 @@ export class UserNotExistException extends BusinessException {
     public userId: string;
 
     constructor(id?: string) {
-        super({ message: `User with id #${id} not exists` }, HttpStatus.BAD_REQUEST);
+        super({ message: `Người dùng với id #${id} không tồn tại trong hệ thống` }, HttpStatus.BAD_REQUEST);
         this.userId = id;
     }
 }
@@ -74,26 +74,26 @@ export class RoleNotExistException extends BusinessException {
     public roleId: string;
 
     constructor(id?: string) {
-        super({ message: `Role with id #${id} not exists` }, HttpStatus.BAD_REQUEST);
+        super({ message: `Role với id #${id} không tồn tại` }, HttpStatus.BAD_REQUEST);
         this.roleId = id;
     }
 }
 
 export class PassWordIncorrectException extends BusinessException {
     constructor(response?: Record<string, any>, options?: HttpExceptionOptions) {
-        super({ message: 'Password is incorrect' }, HttpStatus.BAD_REQUEST, options);
+        super({ message: 'Mật khẩu không đúng' }, HttpStatus.BAD_REQUEST, options);
     }
 }
 
 export class RefreshTokenNotFoundException extends BusinessException {
     constructor(response?: Record<string, any>, options?: HttpExceptionOptions) {
-        super({ message: 'Refresh token not found in the body' }, HttpStatus.BAD_REQUEST, options);
+        super({ message: 'Refresh token không tìm thấy trong body của request' }, HttpStatus.BAD_REQUEST, options);
     }
 }
 
 export class RefreshTokenInvalidException extends BusinessException {
     constructor(response?: Record<string, any>, options?: HttpExceptionOptions) {
-        super({ message: 'Refresh token is invalid' }, HttpStatus.BAD_REQUEST, options);
+        super({ message: 'Refresh token không hợp lệ' }, HttpStatus.BAD_REQUEST, options);
     }
 }
 

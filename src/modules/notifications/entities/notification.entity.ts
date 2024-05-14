@@ -55,14 +55,14 @@ export class CreateUserNotification extends Notification {
             if (this.userSent.id === this.userReceived.id) {
                 return {
                     title: 'Tạo mới người dùng',
-                    description: `Bạn vừa tạo mới một tài khoản ${params?.fullName}`,
+                    description: `Bạn vừa tạo mới tài khoản`,
                     metadata: { userId: this.userId, fullName: params?.fullName },
                 };
             }
 
             return {
                 title: 'Tạo mới người dùng',
-                description: `${this.userSent.getName()} vừa tạo mới một tài khoản ${params?.fullName}`,
+                description: `${this.userSent.getName()} vừa tạo mới tài khoản`,
                 metadata: { userId: this.userId, fullName: params?.fullName },
             };
         }
@@ -76,14 +76,14 @@ export class UpdateUserNotification extends Notification {
             if (this.userSent.id === this.userReceived.id) {
                 return {
                     title: 'Cập nhật người dùng',
-                    description: `Bạn vừa cập nhật tài khoản ${params?.fullName}`,
+                    description: `Bạn vừa cập nhật tài khoản`,
                     metadata: { userId: this.userId, fullName: params?.fullName },
                 };
             }
 
             return {
                 title: 'Tạo mới người dùng',
-                description: `${this.userSent.getName()} cập nhật tài khoản ${params?.fullName}`,
+                description: `${this.userSent.getName()} cập nhật tài khoản`,
                 metadata: { userId: this.userId, fullName: params?.fullName },
             };
         }
@@ -97,14 +97,14 @@ export class DeleteUserNotification extends Notification {
             if (this.userSent.id === this.userReceived.id) {
                 return {
                     title: 'Xóa người dùng',
-                    description: `Bạn vừa xóa tài khoản ${params?.fullName}`,
+                    description: `Bạn vừa xóa tài khoản`,
                     metadata: { userId: this.userId, fullName: params?.fullName },
                 };
             }
 
             return {
                 title: 'Xóa người dùng',
-                description: `${this.userSent.getName()} vừa xóa tài khoản ${params?.fullName}`,
+                description: `${this.userSent.getName()} vừa xóa tài khoản`,
                 metadata: { userId: this.userId, fullName: params?.fullName },
             };
         }
@@ -118,14 +118,14 @@ export class RestoreUserNotification extends Notification {
             if (this.userSent.id === this.userReceived.id) {
                 return {
                     title: 'Khôi phục tài khoản',
-                    description: `Bạn vừa khôi phục tài khoản ${params?.fullName}`,
+                    description: `Bạn vừa khôi phục tài khoản`,
                     metadata: { userId: this.userId, fullName: params?.fullName },
                 };
             }
 
             return {
                 title: 'Khôi phục người dùng',
-                description: `${this.userSent.getName()} vừa khôi phục tài khoản ${params?.fullName}`,
+                description: `${this.userSent.getName()} vừa khôi phục tài khoản`,
                 metadata: { userId: this.userId, fullName: params?.fullName },
             };
         }
@@ -152,14 +152,14 @@ export class CreateFormNotification extends Notification {
             if (this.userSent.id === this.userReceived.id) {
                 return {
                     title: 'Tạo mới form',
-                    description: `Bạn vừa tạo thành công form ${params?.title}`,
+                    description: `Bạn vừa tạo thành công form`,
                     metadata: { formId: this.formId, title: params?.title },
                 };
             }
 
             return {
                 title: 'Tạo mới form',
-                description: `${this.userSent.getName()} vừa tạo thành công form ${params?.title}`,
+                description: `${this.userSent.getName()} vừa tạo thành công form`,
                 metadata: { formId: this.formId, title: params?.title },
             };
         }
@@ -173,14 +173,14 @@ export class CreateFormQuestionNotification extends Notification {
             if (this.userSent.id === this.userReceived.id) {
                 return {
                     title: 'Tạo mới câu hỏi cho form',
-                    description: `Bạn vừa tạo thành công câu hỏi cho form ${params?.title}`,
+                    description: `Bạn vừa tạo thành công câu hỏi cho form`,
                     metadata: { formId: this.formId, title: params?.title },
                 };
             }
 
             return {
                 title: 'Tạo mới câu hỏi cho form',
-                description: `${this.userSent.getName()} vừa tạo thành công câu hỏi cho form ${params?.title}`,
+                description: `${this.userSent.getName()} vừa tạo thành công câu hỏi cho form`,
                 metadata: { formId: this.formId, title: params?.title },
             };
         }
@@ -194,14 +194,14 @@ export class UpdateFormNotification extends Notification {
             if (this.userSent.id === this.userReceived.id) {
                 return {
                     title: 'Cập nhật form',
-                    description: `Bạn vừa cập nhật thành công form ${params?.title}`,
+                    description: `Bạn vừa cập nhật thành công form`,
                     metadata: { formId: this.formId, title: params?.title },
                 };
             }
 
             return {
                 title: 'Cập nhật form',
-                description: `${this.userSent.getName()} vừa cập nhật thành công form ${params?.title}`,
+                description: `${this.userSent.getName()} vừa cập nhật thành công form`,
                 metadata: { formId: this.formId, title: params?.title },
             };
         }
@@ -215,14 +215,14 @@ export class UpdateFormQuestionNotification extends Notification {
             if (this.userSent.id === this.userReceived.id) {
                 return {
                     title: 'Cập nhật câu hỏi cho form',
-                    description: `Bạn vừa cập nhật thành công câu hỏi cho form ${params?.title}`,
+                    description: `Bạn vừa cập nhật thành công câu hỏi cho form`,
                     metadata: { formId: this.formId, title: params?.title },
                 };
             }
 
             return {
                 title: 'Cập nhật câu hỏi cho form',
-                description: `${this.userSent.getName()} vừa cập nhật thành công câu hỏi cho form ${params?.title}`,
+                description: `${this.userSent.getName()} vừa cập nhật thành công câu hỏi cho form`,
                 metadata: { formId: this.formId, title: params?.title },
             };
         }
@@ -236,14 +236,14 @@ export class DeleteFormNotification extends Notification {
             if (this.userSent.id === this.userReceived.id) {
                 return {
                     title: 'Xóa form',
-                    description: `Bạn đã xóa thành công form ${params?.title}`,
+                    description: `Bạn đã xóa thành công form`,
                     metadata: { formId: this.formId, title: params?.title },
                 };
             }
 
             return {
                 title: 'Xóa form',
-                description: `${this.userSent.getName()} đã xóa thành công form ${params?.title}`,
+                description: `${this.userSent.getName()} đã xóa thành công form`,
                 metadata: { formId: this.formId, title: params?.title },
             };
         }
@@ -257,14 +257,14 @@ export class AcceptedFormNotification extends Notification {
             if (this.userSent.id === this.userReceived.id) {
                 return {
                     title: 'Duyệt form',
-                    description: `Bạn vừa duyệt thành công form ${params?.title}`,
+                    description: `Bạn vừa duyệt thành công form`,
                     metadata: { formId: this.formId, title: params?.title },
                 };
             }
 
             return {
                 title: 'Duyệt form',
-                description: `${this.userSent.getName()} vừa duyệt thành công form ${params?.title}`,
+                description: `${this.userSent.getName()} vừa duyệt thành công form`,
                 metadata: { formId: this.formId, title: params?.title },
             };
         }
@@ -278,14 +278,14 @@ export class CancelFormNotification extends Notification {
             if (this.userSent.id === this.userReceived.id) {
                 return {
                     title: 'Hủy form',
-                    description: `Bạn đã hủy thành công  form ${params?.title}`,
+                    description: `Bạn đã hủy thành công form`,
                     metadata: { formId: this.formId, title: params?.title },
                 };
             }
 
             return {
                 title: 'Hủy form',
-                description: `${this.userSent.getName()} đã hủy thành công form ${params?.title}`,
+                description: `${this.userSent.getName()} đã hủy thành công form`,
                 metadata: { formId: this.formId, title: params?.title },
             };
         }
@@ -299,14 +299,14 @@ export class RejectedFormNotification extends Notification {
             if (this.userSent.id === this.userReceived.id) {
                 return {
                     title: 'Từ chối form',
-                    description: `Bạn đã từ chối thành công form ${params?.title}`,
+                    description: `Bạn đã từ chối thành công form`,
                     metadata: { formId: this.formId, title: params?.title },
                 };
             }
 
             return {
                 title: 'Từ chối form',
-                description: `${this.userSent.getName()} đã từ chối thành công cho form ${params?.title}`,
+                description: `${this.userSent.getName()} đã từ chối thành công form`,
                 metadata: { formId: this.formId, title: params?.title },
             };
         }
@@ -320,14 +320,14 @@ export class RestoreFormNotification extends Notification {
             if (this.userSent.id === this.userReceived.id) {
                 return {
                     title: 'Khôi phục form',
-                    description: `Bạn đã khôi phục thành công form ${params?.title}`,
+                    description: `Bạn đã khôi phục thành công form`,
                     metadata: { formId: this.formId, title: params?.title },
                 };
             }
 
             return {
                 title: 'Khôi phục form',
-                description: `${this.userSent.getName()} đã khôi phục thành công form ${params?.title}`,
+                description: `${this.userSent.getName()} đã khôi phục thành công form`,
                 metadata: { formId: this.formId, title: params?.title },
             };
         }
@@ -341,14 +341,14 @@ export class CloseFormNotification extends Notification {
             if (this.userSent.id === this.userReceived.id) {
                 return {
                     title: 'Đóng form',
-                    description: `Bạn đã đóng thành công form ${params?.title}`,
+                    description: `Bạn đã đóng thành công form`,
                     metadata: { formId: this.formId, title: params?.title },
                 };
             }
 
             return {
                 title: 'Đóng form',
-                description: `${this.userSent.getName()} đã đóng thành công form ${params?.title}`,
+                description: `${this.userSent.getName()} đã đóng thành công form`,
                 metadata: { formId: this.formId, title: params?.title },
             };
         }
