@@ -13,16 +13,10 @@ export class SingleQuestionFileConfigSubmit {
     @ApiProperty()
     id: string;
 
-    @ApiProperty({
-        example: '1',
-        description: 'Maximum number of files that can be uploaded',
-    })
+    @ApiProperty({ example: '1', description: 'Maximum number of files that can be uploaded' })
     maxNumOfFiles: number;
 
-    @ApiProperty({
-        example: '10',
-        description: 'Maximum file size in MB',
-    })
+    @ApiProperty({ example: '10', description: 'Maximum file size in MB' })
     maxFileSize: number;
 }
 
@@ -30,25 +24,16 @@ export class SingleQuestionValueSubmit {
     @ApiProperty()
     id: string;
 
-    @ApiProperty({
-        example: 'Value of the question',
-    })
+    @ApiProperty({ example: 'Value of the question' })
     value: string;
 
-    @ApiProperty({
-        type: ImageOutput,
-        nullable: true,
-    })
+    @ApiProperty({ type: ImageOutput, nullable: true })
     image: ImageOutput | null;
 
-    @ApiProperty({
-        example: true,
-    })
+    @ApiProperty({ example: true })
     isCorrect: boolean;
 
-    @ApiProperty({
-        example: true,
-    })
+    @ApiProperty({ example: true })
     isOther: boolean;
 
     @ApiProperty()
@@ -95,16 +80,11 @@ export class SingleQuestionSubmit {
     @ApiProperty()
     questionId: string;
 
-    @ApiProperty({
-        type: [SingleQuestionValueSubmit],
-    })
+    @ApiProperty({ type: [SingleQuestionValueSubmit] })
     @Type(() => SingleQuestionValueSubmit)
     singleQuestionValues: SingleQuestionValueSubmit[];
 
-    @ApiProperty({
-        nullable: true,
-        type: SingleQuestionFileConfigSubmit,
-    })
+    @ApiProperty({ nullable: true, type: SingleQuestionFileConfigSubmit })
     @Type(() => SingleQuestionFileConfigSubmit)
     fileConfig: SingleQuestionFileConfigSubmit | null;
 
@@ -139,9 +119,7 @@ export class GroupQuestionRowSubmit {
     @ApiProperty()
     id: string;
 
-    @ApiProperty({
-        example: 1,
-    })
+    @ApiProperty({ example: 1 })
     score: number;
 
     @ApiProperty()
@@ -172,21 +150,24 @@ export class GroupQuestionAnswerSubmit {
     @ApiPropertyOptional()
     columnOrder?: number;
 
-    @ApiProperty({
-        example: true,
-    })
+    @ApiProperty({ example: true })
     isCorrect: boolean;
 
+    @ApiProperty()
     rowId: string;
 
+    @ApiProperty()
     columnId: string;
 }
 
 export class GuestAnswerFormGroup {
+    @ApiProperty()
     id: string;
 
+    @ApiProperty()
     rowId: string;
 
+    @ApiProperty()
     columnId: string;
 }
 
@@ -194,15 +175,10 @@ export class FormQuestionSubmit {
     @ApiProperty()
     id: string;
 
-    @ApiProperty({
-        example: 'Title of the question',
-    })
+    @ApiProperty({ example: 'Title of the question' })
     label: string;
 
-    @ApiProperty({
-        nullable: true,
-        example: 'Description of the question',
-    })
+    @ApiProperty({ nullable: true, example: 'Description of the question' })
     @ValidateIf((d) => d.description !== null)
     @IsString()
     @IsNotEmpty()
@@ -212,29 +188,19 @@ export class FormQuestionSubmit {
     @IsOptional()
     require: boolean;
 
-    @ApiProperty({
-        type: Number,
-    })
+    @ApiProperty({ type: Number })
     @IsNotEmpty()
     @IsInt()
     order: number;
 
-    @ApiProperty({
-        type: ImageOutput,
-        nullable: true,
-    })
+    @ApiProperty({ type: ImageOutput, nullable: true })
     image: ImageOutput | null;
 
-    @ApiProperty({
-        enum: AttributeType,
-        enumName: 'AttributeType',
-    })
+    @ApiProperty({ enum: AttributeType, enumName: 'AttributeType' })
     @IsEnum(AttributeType)
     attributeType: AttributeType;
 
-    @ApiProperty({
-        type: String,
-    })
+    @ApiProperty({ type: String })
     @IsString()
     @IsNotEmpty()
     @IdExists(Form)
@@ -242,44 +208,31 @@ export class FormQuestionSubmit {
 }
 
 export class SingleQuestionSubmitTemp extends FormQuestionSubmit {
-    @ApiPropertyOptional({
-        type: SingleQuestionSubmit,
-    })
+    @ApiPropertyOptional({ type: SingleQuestionSubmit })
     @Type(() => SingleQuestionSubmit)
     singleQuestion?: SingleQuestionSubmit;
 }
 
 export class GroupQuestionSubmitTemp extends FormQuestionSubmit {
-    @ApiPropertyOptional({
-        type: GroupQuestionSubmit,
-    })
+    @ApiPropertyOptional({ type: GroupQuestionSubmit })
     @Type(() => GroupQuestionSubmit)
     groupQuestion?: GroupQuestionSubmit;
 }
 
 export class FormSubmitDto {
-    @ApiProperty({
-        example: 'uuid',
-    })
+    @ApiProperty({ example: 'uuid' })
     id: string;
 
-    @ApiProperty({
-        example: 'Title of the form',
-    })
+    @ApiProperty({ example: 'Title of the form' })
     title: string;
 
-    @ApiProperty({
-        nullable: true,
-        example: 'Description of the form',
-    })
+    @ApiProperty({ nullable: true, example: 'Description of the form' })
     description: string | null;
 
     @ApiProperty()
     startSurvey: Date;
 
-    @ApiProperty({
-        enum: FormStatus,
-    })
+    @ApiProperty({ enum: FormStatus })
     status: FormStatus;
 
     @ApiProperty()
@@ -291,26 +244,13 @@ export class FormSubmitDto {
     @ApiProperty()
     canSeeCorrectAnswer: boolean;
 
-    @ApiProperty({
-        enum: FormCategory,
-    })
+    @ApiProperty({ enum: FormCategory })
     category: FormCategory;
 
-    @ApiProperty({
-        type: ImageOutput,
-        nullable: true,
-    })
+    @ApiProperty({ type: ImageOutput, nullable: true })
     image: ImageOutput | null;
 
     @ApiProperty({
-        // type: [FormQuestionSubmit],
-        // discriminator: {
-        //     propertyName: 'attributeType',
-        //     mapping: {
-        //         ...SINGLE_QUESTION_TYPES.reduce((acc, value) => ({ ...acc, [value]: 'SingleQuestionSubmitTemp' }), {}),
-        //         ...GROUP_QUESTION_TYPES.reduce((acc, value) => ({ ...acc, [value]: 'GroupQuestionSubmitTemp' }), {}),
-        //     },
-        // },
         example: [
             {
                 id: 'ebca15ca-5001-4024-aeee-9fb581e1c51a',
@@ -346,9 +286,7 @@ export class FormSubmitDto {
                         },
                     ],
                     fileConfig: null,
-                    guestAnswer: {
-                        choiceIds: ['c5e2ff31-a82e-47c3-a68e-906acd3078d6'],
-                    },
+                    guestAnswer: { choiceIds: ['c5e2ff31-a82e-47c3-a68e-906acd3078d6'] },
                 },
             },
             {
@@ -379,9 +317,7 @@ export class FormSubmitDto {
                         },
                     ],
                     fileConfig: null,
-                    guestAnswer: {
-                        textValue: 'abc',
-                    },
+                    guestAnswer: { textValue: 'abc' },
                 },
             },
             {

@@ -1,6 +1,21 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
-import { IsEnum, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, ValidateIf } from 'class-validator';
+import {
+    IsArray,
+    IsBoolean,
+    IsDate,
+    IsEnum,
+    IsInt,
+    IsNotEmpty,
+    IsNotEmptyObject,
+    IsNumber,
+    IsObject,
+    IsOptional,
+    IsString,
+    IsUUID,
+    ValidateIf,
+    ValidateNested,
+} from 'class-validator';
 
 import { IdExists } from '../../../common/validator/uuid.validator';
 import { AttributeType, GROUP_QUESTION_TYPES, SINGLE_QUESTION_TYPES } from '../../form-questions/enums/attribute-type.enum';
@@ -28,11 +43,15 @@ export class CreateSingleQuestionFileConfigSubmit {
 
 export class CreateSingleQuestionValueSubmit {
     @ApiProperty()
+    @IsUUID()
     id: string;
 
     @ApiProperty({
         example: 'Value of the question',
     })
+    @ValidateIf((o: CreateSingleQuestionValueSubmit) => !o.isOther)
+    @IsString()
+    @IsNotEmpty()
     value: string;
 
     @ApiProperty({
@@ -44,6 +63,8 @@ export class CreateSingleQuestionValueSubmit {
     @ApiProperty({
         example: true,
     })
+    @IsNotEmpty()
+    @IsBoolean()
     isOther: boolean;
 
     @ApiProperty()
@@ -54,44 +75,66 @@ export class CreateSingleQuestionValueSubmit {
 
 export class CreateGuestAnswerId {
     @ApiProperty()
+    @IsNotEmpty()
     id: string;
 }
 
 export class CreateGuestFileValue {
     @ApiProperty()
+    @IsNotEmpty()
     id: string;
 
     @ApiProperty()
+    @IsNotEmpty()
+    @IsInt()
     bytes: number;
 }
 
 export class CreateGuestAnswerFormSingle {
     @ApiPropertyOptional()
+    @ValidateIf((o) => o.choiceIds !== undefined)
+    @IsNotEmpty()
+    @ValidateNested({ each: true })
+    @Type(() => CreateGuestAnswerId)
     choiceIds?: CreateGuestAnswerId[];
 
     @ApiPropertyOptional()
+    @ValidateIf((o) => o.textValue !== undefined && o.textValue !== '')
+    @IsString()
     textValue?: string;
 
     @ApiPropertyOptional()
+    @ValidateIf((o) => o.fileValues !== undefined)
+    @IsNotEmpty()
+    @ValidateNested({ each: true })
+    @Type(() => CreateGuestFileValue)
     fileValues?: CreateGuestFileValue[];
 }
 
 export class CreateSingleQuestionSubmit {
     @ApiProperty()
+    @IsNotEmpty()
+    @IsUUID()
     id: string;
 
     @ApiProperty({ example: 1 })
+    @IsNotEmpty()
+    @IsInt()
     score: number;
 
-    @ApiProperty({ example: false })
-    isOther: boolean;
+    @ApiPropertyOptional({ example: false })
+    @ValidateIf((o) => o.isOther !== undefined)
+    @IsBoolean()
+    isOther?: boolean;
 
-    @ApiProperty()
-    questionId: string;
+    @ApiPropertyOptional()
+    questionId?: string;
 
     @ApiProperty({
         type: [CreateSingleQuestionValueSubmit],
     })
+    @IsNotEmpty()
+    @ValidateNested({ each: true })
     @Type(() => CreateSingleQuestionValueSubmit)
     singleQuestionValues: CreateSingleQuestionValueSubmit[];
 
@@ -99,6 +142,8 @@ export class CreateSingleQuestionSubmit {
         nullable: true,
         type: CreateSingleQuestionFileConfigSubmit,
     })
+    @ValidateIf((o: CreateSingleQuestionSubmit) => o.fileConfig !== null)
+    @ValidateNested({ each: true })
     @Type(() => CreateSingleQuestionFileConfigSubmit)
     fileConfig: CreateSingleQuestionFileConfigSubmit | null;
 
@@ -108,11 +153,19 @@ export class CreateSingleQuestionSubmit {
         isArray: true,
         example: [{ id: 'uuid' }],
     })
+    @IsNotEmptyObject()
+    @IsObject()
+    @ValidateNested({ each: true })
     @Type(() => CreateGuestAnswerFormSingle)
     guestAnswer: CreateGuestAnswerFormSingle;
 }
 
 export class CreateGridId {
+    @ApiProperty()
+    @ValidateNested({
+        each: true,
+    })
+    @IsArray()
     gridIds: CreateGuestAnswerFormGroup[];
 }
 
@@ -136,20 +189,6 @@ export class CreateGroupQuestionAnswerSubmit {
 
     // @Exclude()
     columnId: string;
-}
-
-export class CreateGroupQuestionSubmit {
-    @Type(() => CreateGroupQuestionRowSubmit)
-    rows: CreateGroupQuestionRowSubmit[];
-
-    @Type(() => CreateGroupQuestionColumnSubmit)
-    columns: CreateGroupQuestionColumnSubmit[];
-
-    @Type(() => CreateGroupQuestionAnswerSubmit)
-    answers: CreateGroupQuestionAnswerSubmit[];
-
-    @Type(() => CreateGridId)
-    guestAnswer: CreateGridId;
 }
 
 export class CreateGroupQuestionRowSubmit {
@@ -180,20 +219,62 @@ export class CreateGroupQuestionColumnSubmit {
 }
 
 export class CreateGuestAnswerFormGroup {
+    @ApiProperty()
+    @IsUUID()
     id: string;
 
+    @ApiProperty({
+        example: 1,
+    })
+    @IsUUID()
     rowId: string;
 
+    @ApiProperty({
+        example: 1,
+    })
+    @IsUUID()
     columnId: string;
+}
+
+export class CreateGroupQuestionSubmit {
+    @ApiProperty({
+        type: [CreateGroupQuestionRowSubmit],
+    })
+    @Type(() => CreateGroupQuestionRowSubmit)
+    rows: CreateGroupQuestionRowSubmit[];
+
+    @ApiProperty({
+        type: [CreateGroupQuestionColumnSubmit],
+    })
+    @Type(() => CreateGroupQuestionColumnSubmit)
+    columns: CreateGroupQuestionColumnSubmit[];
+
+    @ApiProperty({
+        type: [CreateGroupQuestionAnswerSubmit],
+    })
+    @Type(() => CreateGroupQuestionAnswerSubmit)
+    answers: CreateGroupQuestionAnswerSubmit[];
+
+    @ApiProperty({
+        type: CreateGuestAnswerFormGroup,
+    })
+    @IsNotEmptyObject()
+    @IsObject()
+    @ValidateNested({ each: true })
+    @Type(() => CreateGridId)
+    guestAnswer: CreateGridId;
 }
 
 export class CreateFormQuestionSubmit {
     @ApiProperty()
+    @IsUUID()
     id: string;
 
     @ApiProperty({
         example: 'Title of the question',
     })
+    @IsNotEmpty()
+    @IsString()
     label: string;
 
     @ApiProperty({
@@ -202,7 +283,6 @@ export class CreateFormQuestionSubmit {
     })
     @ValidateIf((d) => d.description !== null)
     @IsString()
-    @IsNotEmpty()
     description: string | null;
 
     @ApiPropertyOptional()
@@ -239,19 +319,21 @@ export class CreateFormQuestionSubmit {
 }
 
 export class CreateSingleQuestionSubmitTemp extends CreateFormQuestionSubmit {
-    @ApiPropertyOptional({
+    @ApiProperty({
         type: CreateSingleQuestionSubmit,
     })
     @Type(() => CreateSingleQuestionSubmit)
-    singleQuestion?: CreateSingleQuestionSubmit;
+    @ValidateNested({ each: true })
+    singleQuestion: CreateSingleQuestionSubmit;
 }
 
 export class CreateGroupQuestionSubmitTemp extends CreateFormQuestionSubmit {
-    @ApiPropertyOptional({
+    @ApiProperty({
         type: CreateGroupQuestionSubmit,
     })
     @Type(() => CreateGroupQuestionSubmit)
-    groupQuestion?: CreateGroupQuestionSubmit;
+    @ValidateNested({ each: true })
+    groupQuestion: CreateGroupQuestionSubmit;
 }
 
 export class CreateFormSubmitDto {
@@ -263,34 +345,50 @@ export class CreateFormSubmitDto {
     @ApiProperty({
         example: 'Title of the form',
     })
+    @IsNotEmpty()
     title: string;
 
     @ApiProperty({
-        nullable: true,
         example: 'Description of the form',
     })
-    description: string | null;
+    @IsString()
+    description: string;
 
-    @ApiProperty()
-    startSurvey: Date;
+    @ApiProperty({
+        type: Date,
+        nullable: true,
+    })
+    @ValidateIf((d) => d.startSurvey !== null)
+    @Type(() => Date)
+    @IsNotEmpty()
+    @IsDate()
+    startSurvey: Date | null;
 
     @ApiProperty({
         enum: FormStatus,
     })
+    @IsEnum(FormStatus)
+    @IsNotEmpty()
     status: FormStatus;
 
     @ApiProperty()
+    @IsNotEmpty()
+    @IsInt()
     version: number;
 
     @ApiProperty()
+    @IsBoolean()
     hasAnswer: boolean;
 
     @ApiProperty()
+    @IsBoolean()
     canSeeCorrectAnswer: boolean;
 
     @ApiProperty({
         enum: FormCategory,
     })
+    @IsEnum(FormCategory)
+    @IsNotEmpty()
     category: FormCategory;
 
     @ApiProperty({
@@ -300,13 +398,24 @@ export class CreateFormSubmitDto {
     image: ImageOutput | null;
 
     @ApiProperty({
-        // type: [FormQuestionSubmit],
+        type: [CreateFormQuestionSubmit],
+        // type: 'array',
+        // items: {
+        //     oneOf: [
+        //         {
+        //             $ref: getSchemaPath(CreateFormQuestionSubmit),
+        //         },
+        //         {
+        //             $ref: getSchemaPath(CreateFormQuestionSubmit),
+        //         },
+        //     ],
+        // },
         // discriminator: {
-        //     propertyName: 'attributeType',
-        //     mapping: {
-        //         ...SINGLE_QUESTION_TYPES.reduce((acc, value) => ({ ...acc, [value]: 'SingleQuestionSubmitTemp' }), {}),
-        //         ...GROUP_QUESTION_TYPES.reduce((acc, value) => ({ ...acc, [value]: 'GroupQuestionSubmitTemp' }), {}),
-        //     },
+        // propertyName: 'attributeType',
+        // mapping: {
+        //     ...SINGLE_QUESTION_TYPES.reduce((acc, value) => ({ ...acc, [value]: getSchemaPath(CreateSingleQuestionSubmitTemp) }), {}),
+        //     ...GROUP_QUESTION_TYPES.reduce((acc, value) => ({ ...acc, [value]: getSchemaPath(CreateGroupQuestionSubmitTemp) }), {}),
+        // },
         // },
         example: {
             id: '6894b510-46a1-4cb0-82cf-a6b917c97ba0',
@@ -645,5 +754,7 @@ export class CreateFormSubmitDto {
             ],
         },
     })
+    @IsNotEmpty()
+    @ValidateNested({ each: true })
     formQuestions: CreateFormQuestionSubmit[];
 }

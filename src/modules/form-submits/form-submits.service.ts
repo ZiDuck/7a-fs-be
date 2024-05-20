@@ -76,6 +76,8 @@ export class FormSubmitsService {
                 if (formQuestion instanceof CreateSingleQuestionSubmitTemp) {
                     const guestAnswer = formQuestion.singleQuestion.guestAnswer;
 
+                    if (!guestAnswer) throw new BadRequestException(`Câu hỏi ${formQuestion.id} không gửi đúng đinh dạng câu trả lời`);
+
                     // Kiểm tra nếu câu hỏi text mà có nhiều hơn 1 câu trả lời thì throw error
                     if (TEXT_QUESTION_TYPES.includes(formQuestion.attributeType)) {
                         if (formQuestion.require && !guestAnswer?.textValue) {
