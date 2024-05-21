@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { registerDecorator, ValidationArguments, ValidationOptions, ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator';
 
+import { ResourceType } from '../../cores/enums/resource-type.enum';
 import { CloudinaryService } from '../../modules/cloudinary/cloudinary.service';
 
 @Injectable()
@@ -9,7 +10,11 @@ export class FilePublicIdExistsConstraint implements ValidatorConstraintInterfac
     constructor(private readonly cloudinaryService: CloudinaryService) {}
 
     async validate(value: string, args: ValidationArguments): Promise<boolean> {
-        const resourceType = args.constraints[0];
+        let resourceType = args.constraints[0];
+
+        const listResourceType = Object.values(ResourceType);
+
+        if (!listResourceType.includes(resourceType)) resourceType = (args.object as any)[resourceType];
         // const type = resourceType === ResourceType.RAW ? 'private' : '';
         const result: boolean = await this.cloudinaryService.checkResourcesExists({
             publicId: value,
