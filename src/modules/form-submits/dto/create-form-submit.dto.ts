@@ -88,6 +88,18 @@ export class CreateGuestFileValue {
     @IsNotEmpty()
     @IsInt()
     bytes: number;
+
+    @ApiProperty()
+    filename: string;
+
+    @ApiProperty()
+    publicId: string;
+
+    @ApiProperty()
+    secureUrl: string;
+
+    @ApiProperty()
+    resourceType: string;
 }
 
 export class CreateGuestAnswerFormSingle {
