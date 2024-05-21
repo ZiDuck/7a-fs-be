@@ -54,6 +54,18 @@ export class GuestFileValue {
 
     @ApiProperty()
     bytes: number;
+
+    @ApiProperty()
+    filename: string;
+
+    @ApiProperty()
+    publicId: string;
+
+    @ApiProperty()
+    secureUrl: string;
+
+    @ApiProperty()
+    resourceType: string;
 }
 
 export class GuestAnswerFormSingle {
