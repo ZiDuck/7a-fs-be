@@ -18,12 +18,14 @@ import { FormQuestionsService } from '../form-questions/form-questions.service';
 import { CreateFormSubmitDto } from '../form-submits/dto/create-form-submit.dto';
 import { FormSubmit } from '../form-submits/entities/form-submit.entity';
 import { FormSubmitsService } from '../form-submits/form-submits.service';
+import { FormSummaryService } from '../form-summary/form-summary.service';
 import { RawFilesService } from '../raw-files/raw-files.service';
 import { UsersService } from '../users/users.service';
 import { CreateFormInput } from './dto/create-form.input';
 import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-form.input';
 import { FormFilterQuery } from './dto/form-filter-query.dto';
 import { FormSubmitQuery } from './dto/form-submit-query.dto';
+import { FormSummaryQuery } from './dto/form-summary-query.input';
 import { GetFormDto } from './dto/get-form.dto';
 import { GetFormAllFormQuestionsDto } from './dto/get-form-all-form-questions.dto';
 import { UpdateFormDto } from './dto/update-form.dto';
@@ -65,6 +67,7 @@ const defaultOrder: FindOptionsOrder<Form> = {
         },
     },
 };
+
 @Injectable()
 export class FormsService {
     constructor(
@@ -75,6 +78,7 @@ export class FormsService {
         private formTemplatesService: FormTemplatesService,
         private usersService: UsersService,
         private formSubmitService: FormSubmitsService,
+        private formSummaryService: FormSummaryService,
         private readonly cls: ClsService,
         private readonly currentUserContext: CurrentUserContext,
     ) {}
@@ -291,6 +295,36 @@ export class FormsService {
         if (!result) throw Errors.FormNotFoundErrorBusiness(id);
 
         return result;
+    }
+
+    async findSummaryOfForm(id: string, query: FormSummaryQuery) {
+        let existedForm = await this.findOne(id);
+
+        const version = query?.version ?? existedForm.version;
+
+        if (existedForm.version === version) {
+        } else if (existedForm.version !== version) {
+            let formAudit = {} as FormAudit;
+
+            if (version === 0) {
+                formAudit = await this.formAuditRepository
+                    .createQueryBuilder('formAudit')
+                    .where('formAudit.isMaster = true')
+                    .andWhere(`formAudit.form ::jsonb @> \'{"id":"${id}"}\'`)
+                    .getOne();
+            } else if (version > 0 && version < existedForm.version) {
+                formAudit = await this.formAuditRepository
+                    .createQueryBuilder('formAudit')
+                    .where(`formAudit.form ::jsonb @> \'{"id":"${id}", "version":${query.version}}\'`)
+                    .getOne();
+            } else throw new BadRequestException(`Phiên bản form không hợp lệ!`);
+
+            existedForm = formAudit.form;
+        }
+
+        const summary = await this.formSummaryService.calculateSummary(existedForm, version);
+
+        return summary;
     }
 
     @Transactional()

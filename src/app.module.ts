@@ -17,6 +17,7 @@ import { FileHistoryModule } from './modules/file-history/file-history.module';
 import { FormTemplatesModule } from './modules/form_templates/form_templates.module';
 import { FormQuestionsModule } from './modules/form-questions/form-questions.module';
 import { FormSubmitsModule } from './modules/form-submits/form-submits.module';
+import { FormSummaryModule } from './modules/form-summary/form-summary.module';
 import { FormsModule } from './modules/forms/forms.module';
 import { GroupQuestionsModule } from './modules/group-questions/group-questions.module';
 import { ImageHistoryModule } from './modules/image-history/image-history.module';
@@ -64,6 +65,7 @@ import { UsersModule } from './modules/users/users.module';
         ImageHistoryModule,
         FileHistoryModule,
         TasksModule,
+        FormSummaryModule,
     ],
     controllers: [AppController],
     providers: [

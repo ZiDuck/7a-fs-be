@@ -32,6 +32,7 @@ import { CreateFormInput } from './dto/create-form.input';
 import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-form.input';
 import { FormFilterQuery } from './dto/form-filter-query.dto';
 import { FormSubmitQuery } from './dto/form-submit-query.dto';
+import { FormSummaryQuery } from './dto/form-summary-query.input';
 import { GetFormDto } from './dto/get-form.dto';
 import { GetFormAllFormQuestionsDto } from './dto/get-form-all-form-questions.dto';
 import { GetVersion } from './dto/get-version.dto';
@@ -156,6 +157,18 @@ export class FormsController {
     @Get(':id/versions/current')
     async findCurrentVersion(@Param('id', ParseUUIDPipe) id: string) {
         return plainToInstance(GetVersion, await this.formsService.findCurrentVersion(id));
+    }
+
+    @UseRoleGuard()
+    @AdminUserRole()
+    @ApiOkResponse({
+        type: [GetVersion],
+    })
+    @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
+    @UsePipes(new ValidationPipe({ transform: true }))
+    @Get(':id/form-summaries/summary')
+    async findSummaryOfForm(@Param('id', ParseUUIDPipe) id: string, @Query() query: FormSummaryQuery) {
+        return await this.formsService.findSummaryOfForm(id, query);
     }
 
     @UseRoleGuard()

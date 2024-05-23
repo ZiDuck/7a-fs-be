@@ -12,12 +12,15 @@ import {
     IsObject,
     IsOptional,
     IsString,
+    IsUrl,
     IsUUID,
     ValidateIf,
     ValidateNested,
 } from 'class-validator';
 
+import { FilePublicIdExists } from '../../../common/validator/file.validator';
 import { IdExists } from '../../../common/validator/uuid.validator';
+import { ResourceType } from '../../../cores/enums/resource-type.enum';
 import { AttributeType, GROUP_QUESTION_TYPES, SINGLE_QUESTION_TYPES } from '../../form-questions/enums/attribute-type.enum';
 import { Form } from '../../forms/entities/form.entity';
 import { FormCategory } from '../../forms/enums/form-category.enum';
@@ -90,16 +93,21 @@ export class CreateGuestFileValue {
     bytes: number;
 
     @ApiProperty()
+    @IsNotEmpty()
+    @IsString()
     filename: string;
 
     @ApiProperty()
+    @FilePublicIdExists('resourceType')
     publicId: string;
 
     @ApiProperty()
+    @IsUrl()
     secureUrl: string;
 
     @ApiProperty()
-    resourceType: string;
+    @IsEnum(ResourceType)
+    resourceType: ResourceType;
 }
 
 export class CreateGuestAnswerFormSingle {
