@@ -53,6 +53,16 @@
                         {
                             "id": "93c99d01-1517-40d1-919b-b9b4398fcb44"
                         }
+                    ],
+                    "summaries": [
+                        {
+                            "id": "616eec00-43ef-4f4b-89a2-639bcebc6321",
+                            "isCorrect": true
+                        },
+                        {
+                            "id": "93c99d01-1517-40d1-919b-b9b4398fcb44",
+                            "isCorrect": true
+                        }
                     ]
                 }
             }
@@ -80,7 +90,10 @@
                 ],
                 "fileConfig": null,
                 "guestAnswer": {
-                    "textValue": "true value"
+                    "textValue": "true value",
+                    "summaries": {
+                        "isCorrect": true
+                    }
                 }
             }
         },
@@ -215,6 +228,18 @@
                             "id": "361dd63b-617a-492d-8e19-bc5e82b3d044",
                             "rowId": "d4834c17-3a7a-4944-ba2a-055e7c5feffc",
                             "columnId": "f7a01aea-595a-4c65-b2bf-f47c32624310"
+                        }
+                    ],
+                    "summaries": [
+                        {
+                            "rowId": "efabd440-45f9-4ce6-8ec9-297e8e63632d",
+                            "score": 0,
+                            "isCorrect": true
+                        },
+                        {
+                            "rowId": "d4834c17-3a7a-4944-ba2a-055e7c5feffc",
+                            "score": 0,
+                            "isCorrect": true
                         }
                     ]
                 }

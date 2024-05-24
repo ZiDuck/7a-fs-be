@@ -1,0 +1,295 @@
+{
+    "id": "bdf749ac-2ffc-49a8-a930-c3c91c5b15e0",
+    "title": "Form Question data",
+    "description": "null",
+    "formQuestions": [
+        {
+            "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+            "label": "Textbox",
+            "description": null,
+            "attributeType": "TEXT_BOX",
+            "formId": "bdf749ac-2ffc-49a8-a930-c3c91c5b15e0",
+            "answerSummary": {
+                "totalResponses": 40,
+                "correctResponses": 20,
+                "answerResponses": [
+                    {
+                        "value": "textbox value 1",
+                        "isCorrect": true
+                    },
+                    {
+                        "value": "textbox value 2",
+                        "isCorrect": false
+                    },
+                    {
+                        "value": "textbox value 3",
+                        "isCorrect": false
+                    }
+                ],
+                "correctAnswer": [
+                    {
+                        "value": "textbox value 3"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "f5a7c0a0-e907-472f-bdc2-6b39d98c2a67",
+            "label": "Paragraph",
+            "description": null,
+            "attributeType": "PARAGRAPH",
+            "formId": "bdf749ac-2ffc-49a8-a930-c3c91c5b15e0",
+            "answerSummary": {
+                "totalResponses": 40,
+                "correctResponses": 20,
+                "answerResponses": [
+                    {
+                        "value": "paragraph value 1",
+                        "isCorrect": true
+                    },
+                    {
+                        "value": "paragraph value 2",
+                        "isCorrect": false
+                    },
+                    {
+                        "value": "paragraph value 3",
+                        "isCorrect": false
+                    }
+                ],
+                "correctAnswer": [
+                    {
+                        "value": "paragraph value 3"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "1208864f-1b71-4d4f-ae57-75b0691f109b",
+            "label": "Radio",
+            "description": null,
+            "attributeType": "RADIO_BUTTON",
+            "formId": "bdf749ac-2ffc-49a8-a930-c3c91c5b15e0",
+            "answerSummary": {
+                "totalResponses": 40,
+                "correctResponses": 20,
+                "answerResponses": [
+                    {
+                        "value": "RADIO value 1",
+                        "isCorrect": true
+                    },
+                    {
+                        "value": "RADIO value 2",
+                        "isCorrect": false
+                    },
+                    {
+                        "value": "RADIO value 3",
+                        "isCorrect": false
+                    }
+                ],
+                "correctAnswer": [
+                    {
+                        "value": "RADIO value 1",
+                        "imageId": null,
+                        "isCorrect": false,
+                        "isOther": false,
+                        "order": 0
+                    },
+                    {
+                        "value": "RADIO value 2",
+                        "imageId": null,
+                        "isCorrect": true,
+                        "isOther": false,
+                        "order": 1
+                    }
+                ]
+            }
+        },
+        {
+            "id": "ed1dad95-ecc1-48b6-b4f8-b97cf7da5ca6123",
+            "label": "Checkbox",
+            "description": null,
+            "attributeType": "CHECKBOX_BUTTON",
+            "formId": "bdf749ac-2ffc-49a8-a930-c3c91c5b15e0",
+            "answerSummary": {
+                "totalResponses": 40,
+                "correctResponses": 20,
+                "answerResponses": [
+                    {
+                        "value": "Checkbox value 1",
+                        "isCorrect": true
+                    },
+                    {
+                        "value": "Checkbox value 2",
+                        "isCorrect": false
+                    },
+                    {
+                        "value": "Checkbox value 3",
+                        "isCorrect": false
+                    }
+                ],
+                "correctAnswer": [
+                    {
+                        "value": "Checkbox value 1",
+                        "imageId": null,
+                        "isCorrect": false,
+                        "isOther": false,
+                        "order": 0
+                    },
+                    {
+                        "value": "Checkbox value 2",
+                        "imageId": null,
+                        "isCorrect": true,
+                        "isOther": false,
+                        "order": 1
+                    }
+                ]
+            }
+        },
+        {
+            "id": "ed1dad95-ecc1-48b6-b4f8-b97cf7da5ca6",
+            "label": "Dropdown",
+            "description": null,
+            "attributeType": "DROPDOWN",
+            "formId": "bdf749ac-2ffc-49a8-a930-c3c91c5b15e0",
+            "answerSummary": {
+                "totalResponses": 40,
+                "correctResponses": 20,
+                "answerResponses": [
+                    {
+                        "value": "Dropdown value 1",
+                        "isCorrect": true
+                    },
+                    {
+                        "value": "Dropdown value 2",
+                        "isCorrect": false
+                    },
+                    {
+                        "value": "Dropdown value 3",
+                        "isCorrect": false
+                    }
+                ],
+                "correctAnswer": [
+                    {
+                        "value": "Dropdown value 1",
+                        "imageId": null,
+                        "isCorrect": false,
+                        "isOther": false,
+                        "order": 0
+                    },
+                    {
+                        "value": "Dropdown value 2",
+                        "imageId": null,
+                        "isCorrect": true,
+                        "isOther": false,
+                        "order": 1
+                    }
+                ]
+            }
+        },
+        {
+            "id": "a602b703-a8ea-4e8d-bea8-0e798127e86",
+            "label": "RadioGrid",
+            "description": null,
+            "attributeType": "RADIO_GRID",
+            "formId": "bdf749ac-2ffc-49a8-a930-c3c91c5b15e0",
+            "answerSummary": {
+                "totalResponses": 40,
+                "correctResponses": 20,
+                "answerResponses": [
+                    {
+                        "columnId": "0ba99c99-093c-4ecc-a077-c88724ca7125",
+                        "value": "Dropdown value 1",
+                        "isCorrect": true
+                    },
+                    {
+                        "columnId": "0ba99c99-093c-4ecc-a077-c88724ca7125",
+                        "value": "",
+                        "isCorrect": false
+                    },
+                    {
+                        "columnId": "0ba99c99-093c-4ecc-a077-c88724ca7125",
+                        "value": "Dropdown value 3",
+                        "isCorrect": false
+                    },
+                    {
+                        "columnId": "d070c558-bf0a-400d-98d9-112d5dee3380",
+                        "value": "Dropdown value 4",
+                        "isCorrect": true
+                    },
+                    {
+                        "columnId": "d070c558-bf0a-400d-98d9-112d5dee3380",
+                        "value": "",
+                        "isCorrect": false
+                    },
+                    {
+                        "columnId": "d070c558-bf0a-400d-98d9-112d5dee3380",
+                        "value": "Dropdown value 6",
+                        "isCorrect": false
+                    }
+                ],
+                "correctAnswer": {
+                    "rows": [
+                        {
+                            "id": "b724b12a-c891-48be-988d-30e3d157aa7c",
+                            "order": 0,
+                            "score": 10,
+                            "value": "Hàng 1"
+                        },
+                        {
+                            "id": "6d1595cf-c7f7-4e8b-818a-f6df95a79a3b",
+                            "order": 1,
+                            "score": 10,
+                            "value": "Hàng 2"
+                        }
+                    ],
+                    "columns": [
+                        {
+                            "id": "0ba99c99-093c-4ecc-a077-c88724ca7125",
+                            "order": 0,
+                            "value": "Cột 1"
+                        },
+                        {
+                            "id": "d070c558-bf0a-400d-98d9-112d5dee3380",
+                            "order": 1,
+                            "value": "Cột 2"
+                        }
+                    ],
+                    "answers": [
+                        {
+                            "id": "70c22117-3288-4adb-9603-ee04f0186725",
+                            "rowId": "b724b12a-c891-48be-988d-30e3d157aa7c",
+                            "columnId": "0ba99c99-093c-4ecc-a077-c88724ca7125",
+                            "rowOrder": 0,
+                            "isCorrect": true,
+                            "columnOrder": 0
+                        },
+                        {
+                            "id": "7b92aa26-863c-4160-8158-1121f7b061d7",
+                            "rowId": "b724b12a-c891-48be-988d-30e3d157aa7c",
+                            "columnId": "d070c558-bf0a-400d-98d9-112d5dee3380",
+                            "rowOrder": 0,
+                            "isCorrect": false,
+                            "columnOrder": 1
+                        },
+                        {
+                            "id": "4546577a-8067-4266-b3b0-f059ac3730dc",
+                            "rowId": "6d1595cf-c7f7-4e8b-818a-f6df95a79a3b",
+                            "columnId": "0ba99c99-093c-4ecc-a077-c88724ca7125",
+                            "rowOrder": 1,
+                            "isCorrect": false,
+                            "columnOrder": 0
+                        },
+                        {
+                            "id": "6c53504f-86ed-4080-a953-7e65984bb934",
+                            "rowId": "6d1595cf-c7f7-4e8b-818a-f6df95a79a3b",
+                            "columnId": "d070c558-bf0a-400d-98d9-112d5dee3380",
+                            "rowOrder": 1,
+                            "isCorrect": true,
+                            "columnOrder": 1
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

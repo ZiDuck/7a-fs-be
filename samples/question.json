@@ -1,0 +1,51 @@
+{
+    "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+    "label": "Textbox",
+    "description": null,
+    "order": 0,
+    "attributeType": "TEXT_BOX",
+    "formId": "bdf749ac-2ffc-49a8-a930-c3c91c5b15e0",
+    "singleQuestion": {
+        "id": "9d4adae2-bddd-45f4-881a-20f9f44c850c",
+        "score": 0,
+        "isOther": false,
+        "singleQuestionValues": [
+            {
+                "id": "49ee7d69-ff58-41a3-9e96-c96483073200",
+                "value": "Cau tra loi dung 2",
+                "image": null,
+                "isCorrect": true
+            },
+            {
+                "id": "9ebe7556-f1d1-4de5-851c-1fbe1f64086e",
+                "value": "Cau tra loi dung 1",
+                "image": null,
+                "isCorrect": true
+            }
+        ],
+        "fileConfig": null
+    },
+    "answerSummary": {
+        "totalResponses": 40,
+        "correctResponses": 20,
+        "answerResponses": [
+            {
+                "value": "textbox value 1",
+                "isCorrect": true
+            },
+            {
+                "value": "textbox value 2",
+                "isCorrect": false
+            },
+            {
+                "value": "textbox value 3",
+                "isCorrect": false
+            }
+        ],
+        "correctAnswer": [
+            {
+                "value": "textbox value 3"
+            }
+        ]
+    }
+}

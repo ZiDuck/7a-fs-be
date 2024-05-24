@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import { Repository } from 'typeorm';
 
+import { GetFormQuestion } from '../form-questions/dto/get-form-question.dto';
 import {
     AttributeType,
     GROUP_QUESTION_TYPES,
@@ -15,7 +16,14 @@ import { GetFormAllFormQuestionsDto } from '../forms/dto/get-form-all-form-quest
 import { Form } from '../forms/entities/form.entity';
 import { FormStatus } from '../forms/enums/form-status.enum';
 import { CreateFormSubmitDto, CreateGroupQuestionSubmitTemp, CreateSingleQuestionSubmitTemp } from './dto/create-form-submit.dto';
-import { FormSubmitDto, GroupQuestionSubmitTemp, SingleQuestionSubmitTemp } from './dto/form-submit.dto';
+import {
+    FormSubmitDto,
+    GroupQuestionSubmitTemp,
+    GuestGroupSummary,
+    GuestSelectSummary,
+    GuestTextSummary,
+    SingleQuestionSubmitTemp,
+} from './dto/form-submit.dto';
 import { FormSubmit } from './entities/form-submit.entity';
 
 @Injectable()
@@ -43,7 +51,10 @@ export class FormSubmitsService {
                     singleQuestion: {
                         ...question.singleQuestion,
                         singleQuestionValues: existedQuestion.singleQuestion.singleQuestionValues,
-                        guestAnswer: question.singleQuestion.guestAnswer,
+                        guestAnswer: {
+                            ...question.singleQuestion.guestAnswer,
+                            summaries: this.summarizeSingleQuestion(existedQuestion, question),
+                        },
                     },
                 };
             } else if (question instanceof CreateGroupQuestionSubmitTemp) {
@@ -52,6 +63,10 @@ export class FormSubmitsService {
                     groupQuestion: {
                         ...question.groupQuestion,
                         answers: existedQuestion.groupQuestion.answers,
+                        guestAnswer: {
+                            ...question.groupQuestion.guestAnswer,
+                            summaries: this.summarizeGroupQuestion(existedQuestion, question),
+                        },
                     },
                 };
             }
@@ -175,6 +190,123 @@ export class FormSubmitsService {
                     });
                 }
             });
+        }
+    }
+
+    summarizeSingleQuestion(stQuestion: GetFormQuestion, guestQuestion: CreateSingleQuestionSubmitTemp): GuestSelectSummary[] | GuestTextSummary {
+        if (ONE_SELECTION_QUESTION_TYPES.includes(stQuestion.attributeType)) {
+            const correctChoiceIds = stQuestion.singleQuestion.singleQuestionValues.filter((value) => value.isCorrect).map((value) => value.id);
+
+            const guestChoiceId = guestQuestion.singleQuestion.guestAnswer.choiceIds[0].id;
+
+            if (correctChoiceIds.includes(guestChoiceId)) {
+                return [
+                    {
+                        id: guestChoiceId,
+                        isCorrect: true,
+                    },
+                ];
+            } else {
+                return [
+                    {
+                        id: guestChoiceId,
+                        isCorrect: false,
+                    },
+                ];
+            }
+        } else if (AttributeType.CHECKBOX_BUTTON === stQuestion.attributeType) {
+            const correctChoiceIds = stQuestion.singleQuestion.singleQuestionValues.filter((value) => value.isCorrect).map((value) => value.id);
+
+            const guestChoiceIds = guestQuestion.singleQuestion.guestAnswer.choiceIds.map((choice) => choice.id);
+
+            return guestChoiceIds.map((guestChoiceId) => {
+                if (correctChoiceIds.includes(guestChoiceId)) {
+                    return {
+                        id: guestChoiceId,
+                        isCorrect: true,
+                    };
+                } else {
+                    return {
+                        id: guestChoiceId,
+                        isCorrect: false,
+                    };
+                }
+            });
+        } else if (TEXT_QUESTION_TYPES.includes(stQuestion.attributeType)) {
+            const correctAnswer = stQuestion.singleQuestion.singleQuestionValues.filter(
+                (value) => value.value === guestQuestion.singleQuestion.guestAnswer.textValue,
+            );
+
+            return correctAnswer.length > 0
+                ? {
+                      isCorrect: true,
+                  }
+                : {
+                      isCorrect: false,
+                  };
+        }
+    }
+
+    summarizeGroupQuestion(stQuestion: GetFormQuestion, guestQuestion: CreateGroupQuestionSubmitTemp): GuestGroupSummary[] {
+        if (guestQuestion.attributeType === AttributeType.RADIO_GRID) {
+            const correctAnswers = stQuestion.groupQuestion.answers.filter((ans) => ans.isCorrect);
+            const rows = stQuestion.groupQuestion.rows;
+            const guestChoices = guestQuestion.groupQuestion.guestAnswer.gridIds;
+
+            const summaries = rows.map((row) => {
+                const correctRowAnswers = correctAnswers.filter((ans) => ans.rowId === row.id);
+                const guestRowChoice = guestChoices.find((choice) => choice.rowId === row.id);
+                let score = 0;
+
+                if (guestRowChoice && correctRowAnswers.some((ans) => ans.id === guestRowChoice.id)) {
+                    score += row.score;
+
+                    return {
+                        rowId: row.id,
+                        score,
+                        isCorrect: true,
+                    };
+                } else {
+                    return {
+                        rowId: row.id,
+                        score,
+                        isCorrect: false,
+                    };
+                }
+            });
+
+            return summaries;
+        } else if (guestQuestion.attributeType === AttributeType.CHECKBOX_GRID) {
+            const correctAnswers = stQuestion.groupQuestion.answers.filter((ans) => ans.isCorrect);
+            const rows = stQuestion.groupQuestion.rows;
+            const guestChoices = guestQuestion.groupQuestion.guestAnswer.gridIds;
+
+            const summaries = rows.map((row) => {
+                const correctRowAnswers = correctAnswers.filter((ans) => ans.rowId === row.id);
+                const guestRowChoices = guestChoices.filter((choice) => choice.rowId === row.id);
+                let score = 0;
+
+                if (
+                    correctRowAnswers.length === guestRowChoices.length &&
+                    correctRowAnswers.every((ans) => guestRowChoices.some((choice) => choice.id === ans.id))
+                ) {
+                    score += row.score;
+
+                    return {
+                        rowId: row.id,
+                        score,
+                        isCorrect: true,
+                    };
+                } else {
+                    return {
+                        rowId: row.id,
+                        score,
+                        isCorrect: false,
+                    };
+                }
+            });
+
+            return summaries;
         }
     }
 

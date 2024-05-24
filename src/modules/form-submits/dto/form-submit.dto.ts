@@ -68,6 +68,30 @@ export class GuestFileValue {
     resourceType: string;
 }
 
+export class GuestTextSummary {
+    @ApiProperty()
+    isCorrect: boolean;
+}
+
+export class GuestSelectSummary {
+    @ApiProperty()
+    id: string;
+
+    @ApiProperty()
+    isCorrect: boolean;
+}
+
+export class GuestGroupSummary {
+    @ApiProperty()
+    rowId: string;
+
+    @ApiProperty()
+    score: number;
+
+    @ApiProperty()
+    isCorrect: boolean;
+}
+
 export class GuestAnswerFormSingle {
     @ApiPropertyOptional()
     choiceIds?: GuestAnswerId[];
@@ -77,6 +101,9 @@ export class GuestAnswerFormSingle {
 
     @ApiPropertyOptional()
     fileValues?: GuestFileValue[];
+
+    @ApiPropertyOptional()
+    summaries?: GuestSelectSummary[] | GuestTextSummary;
 }
 
 export class SingleQuestionSubmit {
@@ -112,6 +139,9 @@ export class SingleQuestionSubmit {
 
 export class GridId {
     gridIds: GuestAnswerFormGroup[];
+
+    @ApiPropertyOptional()
+    summaries?: GuestGroupSummary[];
 }
 
 export class GroupQuestionSubmit {
