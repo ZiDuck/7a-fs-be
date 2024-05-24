@@ -12,6 +12,9 @@ import { initializeTransactionalContext, StorageDriver } from 'typeorm-transacti
 import { AppModule } from './app.module';
 import { BusinessExceptionFilter, HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { UnauthorizedExceptionFilter } from './common/filters/unauthorized-exception.filter';
+import { AnswerResponseCheckbox } from './modules/form-summary/dto/answer-response-checkbox.dto';
+import { AnswerResponseFileUpload } from './modules/form-summary/dto/answer-response-file-upload.dto';
+import { RowResponse } from './modules/form-summary/dto/row-response.dto';
 
 async function bootstrap() {
     initializeTransactionalContext({
@@ -52,7 +55,9 @@ async function bootstrap() {
         }),
     );
 
-    const document = SwaggerModule.createDocument(app, config);
+    const document = SwaggerModule.createDocument(app, config, {
+        extraModels: [AnswerResponseCheckbox, AnswerResponseFileUpload, RowResponse],
+    });
     SwaggerModule.setup('docs', app, document);
 
     await app.listen(process.env.PORT || 3000);

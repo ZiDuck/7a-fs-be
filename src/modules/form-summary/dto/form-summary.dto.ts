@@ -1,13 +1,34 @@
+import { ApiProperty } from '@nestjs/swagger';
+
 import { FormQuestionSummary } from './form-question-summary.dto';
 import { Insights } from './insights.dto';
 import { MissedQuestion } from './miss-question.dto';
 
 export class FormSummaryDto {
+    @ApiProperty()
     id: string;
+
+    @ApiProperty()
     title: string;
-    description: string | null;
+
+    @ApiProperty()
+    description: string;
+
+    @ApiProperty({
+        type: Insights,
+    })
     insights: Insights;
+
+    @ApiProperty({
+        type: MissedQuestion,
+        isArray: true,
+    })
     missedQuestions: MissedQuestion[];
+
+    @ApiProperty({
+        type: FormQuestionSummary,
+        isArray: true,
+    })
     questionSummaries: FormQuestionSummary[];
 
     constructor(data: Partial<FormSummaryDto>) {
