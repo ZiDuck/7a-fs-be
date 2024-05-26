@@ -1,7 +1,9 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
-export class FormSubmitQuery {
+import { PageQueryDto } from '../../../common/dtos/page-query.dto';
+
+export class FormSubmitQuery extends PageQueryDto {
     @ApiPropertyOptional()
     @IsOptional()
     @IsString()

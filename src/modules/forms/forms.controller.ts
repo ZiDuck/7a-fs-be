@@ -144,7 +144,7 @@ export class FormsController {
 
     @UseRoleGuard()
     @AdminUserRole()
-    @ApiOkResponseDto(GetFormSubmit)
+    @ApiPaginatedResponse(GetFormSubmit)
     @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
     @Get(':id/submit-forms')
     async findSubmitForm(@Param('id', ParseUUIDPipe) id: string, @Query() query: FormSubmitQuery) {

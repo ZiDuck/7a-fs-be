@@ -119,6 +119,7 @@ export class FormsService {
         return result ? true : false;
     }
 
+    @Transactional()
     async submitForm(data: CreateFormSubmitDto): Promise<FormSubmit> {
         const existedForm = await this.findFormQuestions(data.id);
 
@@ -249,11 +250,9 @@ export class FormsService {
     async findSubmitForm(id: string, query: FormSubmitQuery) {
         const existedForm = await this.findOne(id);
 
-        const version = query?.version ? query.version : existedForm.version;
+        const results = await this.formSubmitService.findAllByForm(existedForm, query);
 
-        const formSubmits = await this.formSubmitService.findAllByForm(existedForm, version);
-
-        return formSubmits;
+        return results;
     }
 
     async findFormQuestionsForViewFormPage(id: string) {

@@ -4,18 +4,12 @@ import { Exclude } from 'class-transformer';
 import { FormSubmit } from '../entities/form-submit.entity';
 import { FormSubmitDto } from './form-submit.dto';
 
-export class GetFormSubmit extends FormSubmit {
-    @ApiProperty({
-        type: FormSubmitDto,
-    })
-    @Exclude()
-    metadata: FormSubmitDto;
+export class GetFormSubmit extends FormSubmitDto {
+    @ApiProperty()
+    formSubmitId: string;
 
-    @Exclude()
-    createdDate: Date;
-
-    @Exclude()
-    updatedDate: Date;
+    @ApiProperty()
+    correctPoint: number;
 }
 
 export class GetFormSubmitDetail extends FormSubmit {

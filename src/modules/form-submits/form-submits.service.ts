@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { plainToInstance } from 'class-transformer';
 import { Repository } from 'typeorm';
 
+import { PageDto } from '../../common/dtos/page.dto';
+import { paginate } from '../../cores/utils/paginate.util';
 import { GetFormQuestion } from '../form-questions/dto/get-form-question.dto';
 import {
     AttributeType,
@@ -12,6 +14,7 @@ import {
     SINGLE_QUESTION_TYPES,
     TEXT_QUESTION_TYPES,
 } from '../form-questions/enums/attribute-type.enum';
+import { FormSubmitQuery } from '../forms/dto/form-submit-query.dto';
 import { GetFormAllFormQuestionsDto } from '../forms/dto/get-form-all-form-questions.dto';
 import { Form } from '../forms/entities/form.entity';
 import { FormStatus } from '../forms/enums/form-status.enum';
@@ -24,6 +27,7 @@ import {
     GuestTextSummary,
     SingleQuestionSubmitTemp,
 } from './dto/form-submit.dto';
+import { GetFormSubmit } from './dto/get-form-submit.dto';
 import { FormSubmit } from './entities/form-submit.entity';
 
 @Injectable()
@@ -310,11 +314,28 @@ export class FormSubmitsService {
         }
     }
 
-    async findAllByForm(form: Form, version: number) {
-        return this.formSubmitRepository
+    async findAllByForm(form: Form, query: FormSubmitQuery) {
+        const version = query?.version ? query.version : form.version;
+
+        const builder = this.formSubmitRepository
             .createQueryBuilder('formSubmit')
-            .where(`formSubmit.metadata ::jsonb @> \'{"id":"${form.id}", "version":${version}}\'`)
-            .getMany();
+            .where(`formSubmit.metadata ::jsonb @> \'{"id":"${form.id}", "version":${version}}\'`);
+
+        const result = await paginate(builder, query);
+
+        const formSubmits = result.items;
+
+        const formSubmitsResult = formSubmits.map((formSubmit) => {
+            return {
+                ...formSubmit.metadata,
+                formSubmitId: formSubmit.id,
+                correctPoint: this.calcCorrectAnswer(formSubmit.metadata),
+            };
+        });
+
+        const newResult: PageDto<GetFormSubmit> = new PageDto<GetFormSubmit>(formSubmitsResult, result.itemCount, result.pageCount, result.take);
+
+        return newResult;
     }
 
     async findOne(id: string) {
