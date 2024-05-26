@@ -250,7 +250,7 @@ export class FormsService {
     async findSubmitForm(id: string, query: FormSubmitQuery) {
         const existedForm = await this.findOne(id);
 
-        const results = await this.formSubmitService.findAllByForm(existedForm, query);
+        const results = await this.formSubmitService.findAllPaginateByForm(existedForm, query);
 
         return results;
     }

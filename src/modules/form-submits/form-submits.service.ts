@@ -314,16 +314,23 @@ export class FormSubmitsService {
         }
     }
 
-    async findAllByForm(form: Form, query: FormSubmitQuery) {
+    async findAllByForm(form: Form, version: number) {
+        return this.formSubmitRepository
+            .createQueryBuilder('formSubmit')
+            .where(`formSubmit.metadata ::jsonb @> \'{"id":"${form.id}", "version":${version}}\'`)
+            .getMany();
+    }
+
+    async findAllPaginateByForm(form: Form, query: FormSubmitQuery) {
         const version = query?.version ? query.version : form.version;
 
         const builder = this.formSubmitRepository
             .createQueryBuilder('formSubmit')
             .where(`formSubmit.metadata ::jsonb @> \'{"id":"${form.id}", "version":${version}}\'`);
 
-        const result = await paginate(builder, query);
+        const formSubmitPaginate = await paginate(builder, query);
 
-        const formSubmits = result.items;
+        const formSubmits = formSubmitPaginate.items;
 
         const formSubmitsResult = formSubmits.map((formSubmit) => {
             return {
@@ -333,9 +340,14 @@ export class FormSubmitsService {
             };
         });
 
-        const newResult: PageDto<GetFormSubmit> = new PageDto<GetFormSubmit>(formSubmitsResult, result.itemCount, result.pageCount, result.take);
+        const result: PageDto<GetFormSubmit> = new PageDto<GetFormSubmit>(
+            formSubmitsResult,
+            formSubmitPaginate.itemCount,
+            formSubmitPaginate.pageCount,
+            formSubmitPaginate.take,
+        );
 
-        return newResult;
+        return result;
     }
 
     async findOne(id: string) {
