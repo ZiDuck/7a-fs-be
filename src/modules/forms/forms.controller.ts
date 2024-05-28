@@ -180,8 +180,7 @@ export class FormsController {
     @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
     @Get(':id/versions')
     async findAllVersions(@Param('id', ParseUUIDPipe) id: string) {
-        // return plainToInstance(GetVersion, await this.formsService.findAllVersions(id));
-        return await this.formsService.findAllVersions(id);
+        return plainToInstance(GetVersion, await this.formsService.findAllVersions(id));
     }
 
     @UseRoleGuard()

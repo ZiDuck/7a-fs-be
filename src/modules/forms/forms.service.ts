@@ -283,6 +283,10 @@ export class FormsService {
     }
 
     async findAllVersions(id: string) {
+        const currentVersion = await this.findCurrentVersion(id);
+
+        if (currentVersion.version === 0) return [{ version: 0 }];
+
         const result = await this.formAuditRepository
             .createQueryBuilder('formAudit')
             .select("formAudit.form ->> 'version'", 'version')
@@ -293,7 +297,7 @@ export class FormsService {
 
         if (!result) throw Errors.FormNotFoundErrorBusiness(id);
 
-        return result;
+        return [...result, { version: currentVersion.version }];
     }
 
     async findSummaryOfForm(id: string, query: FormSummaryQuery) {
