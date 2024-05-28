@@ -200,6 +200,9 @@ export class FormSubmitsService {
     summarizeSingleQuestion(stQuestion: GetFormQuestion, guestQuestion: CreateSingleQuestionSubmitTemp): GuestSelectSummary[] | GuestTextSummary {
         if (ONE_SELECTION_QUESTION_TYPES.includes(stQuestion.attributeType)) {
             const correctChoiceIds = stQuestion.singleQuestion.singleQuestionValues.filter((value) => value.isCorrect).map((value) => value.id);
+            const guestChoiceIds = guestQuestion.singleQuestion.guestAnswer.choiceIds.map((choice) => choice.id);
+
+            if (guestChoiceIds.length === 0) return [];
 
             const guestChoiceId = guestQuestion.singleQuestion.guestAnswer.choiceIds[0].id;
 
@@ -257,6 +260,8 @@ export class FormSubmitsService {
             const rows = stQuestion.groupQuestion.rows;
             const guestChoices = guestQuestion.groupQuestion.guestAnswer.gridIds;
 
+            if (guestChoices.length === 0) return [];
+
             const summaries = rows.map((row) => {
                 const correctRowAnswers = correctAnswers.filter((ans) => ans.rowId === row.id);
                 const guestRowChoice = guestChoices.find((choice) => choice.rowId === row.id);
@@ -284,6 +289,8 @@ export class FormSubmitsService {
             const correctAnswers = stQuestion.groupQuestion.answers.filter((ans) => ans.isCorrect);
             const rows = stQuestion.groupQuestion.rows;
             const guestChoices = guestQuestion.groupQuestion.guestAnswer.gridIds;
+
+            if (guestChoices.length === 0) return [];
 
             const summaries = rows.map((row) => {
                 const correctRowAnswers = correctAnswers.filter((ans) => ans.rowId === row.id);
