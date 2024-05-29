@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Type } from 'class-transformer';
+import { plainToInstance, Transform, Type } from 'class-transformer';
 import { IsEnum, IsInt, IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator';
 
 import { IdExists } from '../../../common/validator/uuid.validator';
@@ -8,6 +8,12 @@ import { Form } from '../../forms/entities/form.entity';
 import { FormCategory } from '../../forms/enums/form-category.enum';
 import { FormStatus } from '../../forms/enums/form-status.enum';
 import { ImageOutput } from '../../images/dto/image.output';
+
+function TransformSummaries() {
+    return Transform(({ value }) => {
+        return plainToInstance(GuestTextSummary, value);
+    });
+}
 
 export class SingleQuestionFileConfigSubmit {
     @ApiProperty()
@@ -103,6 +109,7 @@ export class GuestAnswerFormSingle {
     fileValues?: GuestFileValue[];
 
     @ApiPropertyOptional()
+    @TransformSummaries()
     summaries?: GuestSelectSummary[] | GuestTextSummary;
 }
 

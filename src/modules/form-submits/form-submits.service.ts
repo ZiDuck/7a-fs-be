@@ -328,6 +328,22 @@ export class FormSubmitsService {
             .getMany();
     }
 
+    async findAllByFormAndQuestionId(form: Form, version: number, questionId: string): Promise<GetFormSubmit[]> {
+        const formSubmits = await this.formSubmitRepository
+            .createQueryBuilder('formSubmit')
+            .where(`formSubmit.metadata ::jsonb @> \'{"id":"${form.id}", "version":${version}}\'`)
+            .andWhere(`formSubmit.metadata ::jsonb @> \'{"formQuestions": [{"id": "${questionId}"}]}\'`)
+            .orderBy('formSubmit.createdDate', 'ASC')
+            .getMany();
+
+        return formSubmits.map((formSubmit) => {
+            return new GetFormSubmit({
+                ...formSubmit.metadata,
+                formSubmitId: formSubmit.id,
+            });
+        });
+    }
+
     async findAllPaginateByForm(form: Form, query: FormSubmitQuery) {
         const version = query?.version ? query.version : form.version;
 

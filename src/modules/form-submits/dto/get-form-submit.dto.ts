@@ -1,8 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { Exclude } from 'class-transformer';
+import { ApiProperty, OmitType } from '@nestjs/swagger';
 
-import { FormSubmit } from '../entities/form-submit.entity';
-import { FormSubmitDto } from './form-submit.dto';
+import { FormSubmitDto, GroupQuestionSubmitTemp, SingleQuestionSubmitTemp } from './form-submit.dto';
 
 export class GetFormSubmit extends FormSubmitDto {
     @ApiProperty()
@@ -10,17 +8,31 @@ export class GetFormSubmit extends FormSubmitDto {
 
     @ApiProperty()
     correctPoint: number;
+
+    constructor(partial: Partial<GetFormSubmit>) {
+        super();
+        Object.assign(this, partial);
+    }
 }
 
-export class GetFormSubmitDetail extends FormSubmit {
-    @ApiProperty({
-        type: FormSubmitDto,
-    })
-    metadata: FormSubmitDto;
+export class GetFormSubmitWithIndexSingle extends OmitType(GetFormSubmit, ['formQuestions', 'correctPoint']) {
+    @ApiProperty()
+    index: number;
 
-    @Exclude()
-    createdDate: Date;
+    formQuestions: SingleQuestionSubmitTemp;
+}
+export class GetFormSubmitWithIndexGroup extends OmitType(GetFormSubmit, ['formQuestions', 'correctPoint']) {
+    @ApiProperty()
+    index: number;
 
-    @Exclude()
-    updatedDate: Date;
+    formQuestions: GroupQuestionSubmitTemp;
+}
+
+export class GetFormSubmitMap {
+    @ApiProperty({ example: 'uuid' })
+    id: string;
+
+    title: string;
+
+    index: number;
 }

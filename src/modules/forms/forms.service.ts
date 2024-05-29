@@ -13,9 +13,27 @@ import { paginate } from '../../cores/utils/paginate.util';
 import { FormTemplateDto } from '../form_templates/dto/form-template.dto';
 import { FormTemplatesService } from '../form_templates/form_templates.service';
 import { GetFormQuestion } from '../form-questions/dto/get-form-question.dto';
-import { GROUP_QUESTION_TYPES, SINGLE_QUESTION_TYPES } from '../form-questions/enums/attribute-type.enum';
+import {
+    AttributeType,
+    GROUP_QUESTION_TYPES,
+    SELECTION_QUESTION_TYPES,
+    SINGLE_QUESTION_TYPES,
+    TEXT_QUESTION_TYPES,
+} from '../form-questions/enums/attribute-type.enum';
 import { FormQuestionsService } from '../form-questions/form-questions.service';
 import { CreateFormSubmitDto } from '../form-submits/dto/create-form-submit.dto';
+import { GroupQuestionSubmitTemp, GuestSelectSummary, GuestTextSummary, SingleQuestionSubmitTemp } from '../form-submits/dto/form-submit.dto';
+import { GetFormSubmitWithIndexGroup, GetFormSubmitWithIndexSingle } from '../form-submits/dto/get-form-submit.dto';
+import {
+    AnswerSummaryCheckbox,
+    AnswerSummaryColumn,
+    AnswerSummaryFileUpload,
+    AnswerSummaryFormGroup,
+    AnswerSummaryFormSubmit,
+    AnswerSummaryGuestChoice,
+    AnswerSummaryText,
+    GuestColumnChoice,
+} from '../form-submits/dto/question-response.dto';
 import { FormSubmit } from '../form-submits/entities/form-submit.entity';
 import { FormSubmitsService } from '../form-submits/form-submits.service';
 import { FormSummaryService } from '../form-summary/form-summary.service';
@@ -255,6 +273,292 @@ export class FormsService {
         return results;
     }
 
+    async findQuestionSummary(id: string, query: FormSummaryQuery) {
+        const existedForm = await this.findOne(id);
+
+        const version = query?.version ?? existedForm.version;
+
+        // Lấy thông tin question của form
+        const existedQuestion$ = this.getQuestionOfForm(existedForm, version, query, id);
+
+        // Lấy tất cả form submit của form
+        const formSubmits$ = this.formSubmitService.findAllByFormAndQuestionId(existedForm, version, query.questionId);
+
+        const [existedQuestion, formSubmits] = await Promise.all([existedQuestion$, formSubmits$]);
+
+        if (SINGLE_QUESTION_TYPES.includes(existedQuestion.attributeType)) {
+            const formSubmitsWithIndex: GetFormSubmitWithIndexSingle[] = formSubmits.map((formSubmit, index) => {
+                const formQuestion = formSubmit.formQuestions.find((question) => question.id === query.questionId);
+
+                const sgQuestion = plainToInstance(SingleQuestionSubmitTemp, formQuestion);
+
+                return plainToInstance(GetFormSubmitWithIndexSingle, { ...formSubmit, index, formQuestions: sgQuestion });
+            });
+
+            return this.summaryQuestionSingleType(existedQuestion, formSubmitsWithIndex);
+        } else if (GROUP_QUESTION_TYPES.includes(existedQuestion.attributeType)) {
+            const formSubmitsWithIndex: GetFormSubmitWithIndexGroup[] = formSubmits.map((formSubmit, index) => {
+                const formQuestion = formSubmit.formQuestions.find((question) => question.id === query.questionId);
+
+                const grQuestion = plainToInstance(GroupQuestionSubmitTemp, formQuestion);
+
+                return { ...formSubmit, index, formQuestions: grQuestion } as GetFormSubmitWithIndexGroup;
+            });
+
+            return this.summaryQuestionGroupType(existedQuestion, formSubmitsWithIndex);
+        }
+    }
+
+    summaryQuestionSingleType(stQuestion: GetFormQuestion, formSubmits: GetFormSubmitWithIndexSingle[]) {
+        if (TEXT_QUESTION_TYPES.includes(stQuestion.attributeType) || AttributeType.STAR === stQuestion.attributeType) {
+            return this.summaryQuestionTextType(stQuestion, formSubmits);
+        } else if (SELECTION_QUESTION_TYPES.includes(stQuestion.attributeType)) {
+            return this.summaryQuestionSelectionType(stQuestion, formSubmits);
+        } else if (AttributeType.FILE_UPLOAD === stQuestion.attributeType) {
+            return this.summaryQuestionFileUploadType(stQuestion, formSubmits);
+        }
+    }
+
+    summaryQuestionGroupType(existedQuestion: GetFormQuestion, formSubmitsWithIndex: GetFormSubmitWithIndexGroup[]) {
+        const existedRows = existedQuestion.groupQuestion.rows;
+
+        return existedRows.map((exRow) => {
+            const guestColChoicesMap: Map<string, GuestColumnChoice[]> = new Map();
+            const formSubmitsMap: Map<string, AnswerSummaryFormSubmit[]> = new Map();
+            const scoresMap: Map<string, number> = new Map();
+
+            formSubmitsWithIndex.forEach((frmSubmit) => {
+                const guestAnswerPerRow = frmSubmit.formQuestions.groupQuestion.guestAnswer.gridIds.filter((grid) => grid.rowId === exRow.id);
+
+                const guestColChoiceKey = guestAnswerPerRow.map((ans) => `${ans.id}`).join('|');
+
+                const correctAns = existedQuestion.groupQuestion.answers.filter((ans) => ans.rowId === exRow.id).filter((ans) => ans.isCorrect);
+                const correctAnsIds = correctAns.map((ans) => ans.id);
+
+                const guestColChoices = guestAnswerPerRow.map((ans) => {
+                    const isCorrect = correctAnsIds.includes(ans.id);
+                    const stColumn = existedQuestion.groupQuestion.columns.find((col) => col.id === ans.columnId);
+
+                    return {
+                        columnId: ans.columnId,
+                        value: stColumn.value,
+                        isCorrect: isCorrect,
+                        columnOrder: stColumn.order,
+                    };
+                });
+
+                if (!guestColChoicesMap.has(guestColChoiceKey)) {
+                    guestColChoicesMap.set(guestColChoiceKey, guestColChoices);
+                }
+
+                if (!scoresMap.has(guestColChoiceKey)) {
+                    let score: number;
+
+                    if (guestColChoices.length === 0) score = 0;
+                    else score = correctAns.every((ans) => guestAnswerPerRow.some((choice) => ans.id === choice.id)) ? exRow.score : 0;
+
+                    scoresMap.set(guestColChoiceKey, score);
+                }
+
+                if (!formSubmitsMap.has(guestColChoiceKey)) {
+                    formSubmitsMap.set(guestColChoiceKey, []);
+                }
+
+                formSubmitsMap.get(guestColChoiceKey)!.push({
+                    id: frmSubmit.id,
+                    index: frmSubmit.index,
+                });
+            });
+
+            const colSummaries: AnswerSummaryColumn[] = [];
+
+            guestColChoicesMap.forEach((guestColChoices, key) => {
+                colSummaries.push({
+                    guestColChoices: guestColChoices,
+                    score: scoresMap.get(key) || 0,
+                    formSubmits: formSubmitsMap.get(key) || [],
+                });
+            });
+
+            const result: AnswerSummaryFormGroup = {
+                rowId: exRow.id,
+                colSummaries: colSummaries,
+            };
+
+            return result;
+        });
+    }
+
+    summaryQuestionTextType(stQuestion: GetFormQuestion, formSubmits: GetFormSubmitWithIndexSingle[]) {
+        const guestAnswerMap: Map<string, GuestTextSummary> = new Map();
+        const formSubmitsMap: Map<string, AnswerSummaryFormSubmit[]> = new Map();
+        const scoresMap: Map<string, number> = new Map();
+
+        formSubmits.forEach((formSubmit) => {
+            const singleQuestion = formSubmit.formQuestions.singleQuestion;
+            const guestAnswer = singleQuestion.guestAnswer;
+            let guestAnswerSummaries: GuestTextSummary;
+
+            if (guestAnswer.summaries instanceof GuestTextSummary) {
+                guestAnswerSummaries = guestAnswer.summaries;
+            }
+
+            const guestAnswerKey = guestAnswer.textValue;
+            if (!guestAnswerMap.has(guestAnswerKey)) {
+                guestAnswerMap.set(guestAnswerKey, guestAnswerSummaries);
+            }
+
+            if (!formSubmitsMap.has(guestAnswerKey)) {
+                formSubmitsMap.set(guestAnswerKey, []);
+            }
+
+            if (!scoresMap.has(guestAnswerKey)) {
+                scoresMap.set(guestAnswerKey, guestAnswerSummaries?.isCorrect ? stQuestion.singleQuestion.score : 0);
+            }
+
+            formSubmitsMap.get(guestAnswerKey)!.push({
+                id: formSubmit.id,
+                index: formSubmit.index,
+            });
+        });
+
+        const results: AnswerSummaryText[] = [];
+
+        formSubmitsMap.forEach((guestAnswer, key) => {
+            results.push({
+                value: key,
+                isCorrect: guestAnswerMap.get(key)?.isCorrect || false,
+                score: scoresMap.get(key) || 0,
+                formSubmits: guestAnswer || [],
+            });
+        });
+
+        return results;
+    }
+
+    summaryQuestionSelectionType(stQuestion: GetFormQuestion, formSubmits: GetFormSubmitWithIndexSingle[]) {
+        const guestChoicesMap: Map<string, AnswerSummaryGuestChoice[]> = new Map();
+        const formSubmitsMap: Map<string, AnswerSummaryFormSubmit[]> = new Map();
+        const scoresMap: Map<string, number> = new Map();
+        const stCorrectChoices = stQuestion.singleQuestion.singleQuestionValues.filter((value) => value.isCorrect);
+
+        formSubmits.forEach((formSubmit) => {
+            const singleQuestion = formSubmit.formQuestions.singleQuestion;
+            const choiceIds = singleQuestion.guestAnswer.choiceIds;
+            let guestAnswerSummaries = [] as GuestSelectSummary[];
+
+            if (Array.isArray(singleQuestion.guestAnswer.summaries)) {
+                guestAnswerSummaries = singleQuestion.guestAnswer.summaries;
+            }
+
+            const guestChoiceKey = choiceIds.map((choice) => `${choice.id}-${choice.value}`).join('|');
+            if (!guestChoicesMap.has(guestChoiceKey)) {
+                const guestChoices = guestAnswerSummaries.map((summary) => {
+                    return {
+                        id: summary.id,
+                        value: stQuestion.singleQuestion.singleQuestionValues.find((value) => value.id === summary.id).value,
+                        isCorrect: summary.isCorrect,
+                    };
+                });
+                guestChoicesMap.set(guestChoiceKey, guestChoices);
+            }
+
+            if (!scoresMap.has(guestChoiceKey)) {
+                let score: number;
+                if (guestAnswerSummaries.length === 0) score = 0;
+                else
+                    score = stCorrectChoices.every((choice) => guestAnswerSummaries.some((ans) => ans.id === choice.id))
+                        ? stQuestion.singleQuestion.score
+                        : 0;
+
+                scoresMap.set(guestChoiceKey, score);
+            }
+
+            if (!formSubmitsMap.has(guestChoiceKey)) {
+                formSubmitsMap.set(guestChoiceKey, []);
+            }
+
+            formSubmitsMap.get(guestChoiceKey)!.push({
+                id: formSubmit.id,
+                index: formSubmit.index,
+            });
+        });
+
+        const results: AnswerSummaryCheckbox[] = [];
+
+        guestChoicesMap.forEach((guestChoices, key) => {
+            results.push({
+                guestChoices: guestChoices,
+                formSubmits: formSubmitsMap.get(key) || [],
+                score: scoresMap.get(key) || 0,
+            });
+        });
+
+        return results;
+    }
+
+    summaryQuestionFileUploadType(stQuestion: GetFormQuestion, formSubmits: GetFormSubmitWithIndexSingle[]) {
+        const guestAnswerMap: Map<string, any[]> = new Map();
+        const formSubmitsMap: Map<string, AnswerSummaryFormSubmit[]> = new Map();
+
+        formSubmits.forEach((formSubmit) => {
+            const singleQuestion = formSubmit.formQuestions.singleQuestion;
+            const guestAnswer = singleQuestion.guestAnswer;
+            const guestAnswerKey = guestAnswer.fileValues.map((file) => file.id).join('|');
+
+            if (!guestAnswerMap.has(guestAnswerKey)) {
+                guestAnswerMap.set(guestAnswerKey, guestAnswer.fileValues);
+            }
+
+            if (!formSubmitsMap.has(guestAnswerKey)) {
+                formSubmitsMap.set(guestAnswerKey, []);
+            }
+
+            formSubmitsMap.get(guestAnswerKey)!.push({
+                id: formSubmit.id,
+                index: formSubmit.index,
+            });
+        });
+
+        const results: AnswerSummaryFileUpload[] = [];
+
+        guestAnswerMap.forEach((fileIds, key) => {
+            results.push({
+                fileInfo: fileIds,
+                formSubmits: formSubmitsMap.get(key) || [],
+            });
+        });
+
+        return results;
+    }
+
+    private async getQuestionOfForm(existedForm: Form, version: number, query: FormSummaryQuery, id: string) {
+        if (existedForm.version === version) {
+            return await this.formQuestionService.findOne(query.questionId);
+        } else if (existedForm.version !== version) {
+            let formAudit = {} as FormAudit;
+
+            if (version === 0) {
+                formAudit = await this.formAuditRepository
+                    .createQueryBuilder('formAudit')
+                    .where('formAudit.isMaster = true')
+                    .andWhere(`formAudit.form ::jsonb @> \'{"id":"${id}"}\'`)
+                    .andWhere(`formAudit.form ::jsonb @> \'{"formQuestions": [{"id": "${query.questionId}"}]}\'`)
+                    .getOne();
+            } else if (version > 0 && version < existedForm.version) {
+                formAudit = await this.formAuditRepository
+                    .createQueryBuilder('formAudit')
+                    .where(`formAudit.form ::jsonb @> \'{"id":"${id}", "version":${query.version}}\'`)
+                    .andWhere(`formAudit.form ::jsonb @> \'{"formQuestions": [{"id": "${query.questionId}"}]}\'`)
+                    .getOne();
+            } else throw new BadRequestException(`Phiên bản form không hợp lệ!`);
+
+            const oldQuestion = formAudit.form.formQuestions.find((question) => question.id === query.questionId);
+
+            return await this.formQuestionService.customizeResult(oldQuestion);
+        }
+    }
+
     async findFormQuestionsForViewFormPage(id: string) {
         const existedForm = await this.findOne(id);
 
@@ -373,22 +677,6 @@ export class FormsService {
         await this.formRepository.update({ id: data.id }, omit(data, ['formQuestions']));
 
         this.cls.set(FORM_AUDIT, data.id);
-        // TODO: Check this update logic again
-        // const currentFormQuestions = await this.formQuestionService.findAllByFormId(data.id);
-
-        // // Check each current form question
-        // for (const currentFormQuestion of currentFormQuestions) {
-        //     // If the current form question does not exist in data.questions, delete it
-        //     if (!data.formQuestions.some((question) => question?.id === currentFormQuestion.id)) {
-        //         await this.formQuestionService.delete(currentFormQuestion.id);
-        //     }
-        // }
-
-        // // Update or create new form questions
-        // for (const question of data.formQuestions) {
-        //     const formQuestion = this.formQuestionService.create(question);
-        //     // await this.formQuestionRepository.save(formQuestion);
-        // }
 
         await this.formQuestionService.deleteAllByFormId(data.id);
 

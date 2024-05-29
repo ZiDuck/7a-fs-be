@@ -73,7 +73,7 @@
         "description": "Description of the CHECKBOX BUTTON",
         "order": 0,
         "image": null,
-        "attributeType": "DROPDOWN",
+        "attributeType": "CHECKBOX_BUTTON",
         "formId": "3f1977d7-c4d0-4397-a3ab-c5ab0852617f",
         "singleQuestion": {
             "id": "ad5debf2-4110-45e2-b596-81fff85379cd",
@@ -103,27 +103,18 @@
         },
         "answerSummary": [
             {
-                "value": "checkbox value 1",
-                "isCorrect": true,
-                "formSubmits": [
+                "guestChoices": [
                     {
-                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
-                        "value": "Phản hồi 1"
+                        "id": "bd75e12d-04b7-4d88-9923-3c1298f99aa3",
+                        "value": "checkbox value 1",
+                        "isCorrect": true
                     },
                     {
-                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
-                        "value": "Phản hồi 2"
-                    },
-                    {
-                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
-                        "value": "Phản hồi 3"
+                        "id": "76dc114a-bc20-4654-91bd-12295563d4da",
+                        "value": "checkbox value 2",
+                        "isCorrect": false
                     }
                 ],
-                "score": 1
-            },
-            {
-                "value": "checkbox value 2",
-                "isCorrect": false,
                 "formSubmits": [
                     {
                         "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
@@ -306,9 +297,18 @@
                 "rowId": "b7bd1d4a-3620-4469-81c8-d3abc285d1d6",
                 "colSummaries": [
                     {
-                        "columnId": "ccac4843-18cb-4e79-b2d3-e76c1c41376e",
-                        "value": "Column 1",
-                        "isCorrect": false,
+                        "guestColChoices": [
+                            {
+                                "columnId": "bd75e12d-04b7-4d88-9923-3c1298f99aa3",
+                                "value": "Column 1",
+                                "isCorrect": true
+                            },
+                            {
+                                "id": "76dc114a-bc20-4654-91bd-12295563d4da",
+                                "value": "Column 2",
+                                "isCorrect": false
+                            }
+                        ],
                         "score": 0,
                         "formSubmits": [
                             {
@@ -326,9 +326,18 @@
                         ]
                     },
                     {
-                        "columnId": "e75eaa76-2d55-47ad-a5c5-a686a856d2ae",
-                        "value": "Column 2",
-                        "isCorrect": true,
+                        "guestChoices": [
+                            {
+                                "columnId": "bd75e12d-04b7-4d88-9923-3c1298f99aa3",
+                                "value": "Column 1",
+                                "isCorrect": true
+                            },
+                            {
+                                "id": "76dc114a-bc20-4654-91bd-12295563d4da",
+                                "value": "Column 2",
+                                "isCorrect": false
+                            }
+                        ],
                         "score": 1,
                         "formSubmits": [
                             {
@@ -346,9 +355,19 @@
                         ]
                     },
                     {
-                        "columnId": "8457b715-afee-4693-902d-4703c1623179",
-                        "value": "Column 3",
-                        "isCorrect": false,
+                        "guestChoices": [
+                            {
+                                "columnId": "bd75e12d-04b7-4d88-9923-3c1298f99aa3",
+                                "value": "Column 1",
+                                "isCorrect": true,
+                                "columnOrder": 0
+                            },
+                            {
+                                "id": "76dc114a-bc20-4654-91bd-12295563d4da",
+                                "value": "Column 2",
+                                "isCorrect": false
+                            }
+                        ],
                         "score": 0,
                         "formSubmits": [
                             {
@@ -366,9 +385,18 @@
                         ]
                     },
                     {
-                        "columnId": "780fee1a-9cff-437a-a4c6-f0cf80fafc49",
-                        "value": "Column 4",
-                        "isCorrect": false,
+                        "guestChoices": [
+                            {
+                                "columnId": "bd75e12d-04b7-4d88-9923-3c1298f99aa3",
+                                "value": "Column 1",
+                                "isCorrect": true
+                            },
+                            {
+                                "id": "76dc114a-bc20-4654-91bd-12295563d4da",
+                                "value": "Column 2",
+                                "isCorrect": false
+                            }
+                        ],
                         "score": 0,
                         "formSubmits": [
                             {
@@ -386,9 +414,7 @@
                         ]
                     },
                     {
-                        "columnId": null,
-                        "value": "",
-                        "isCorrect": false,
+                        "guestChoices": [],
                         "score": 0,
                         "formSubmits": [
                             {
@@ -443,7 +469,6 @@
                     "secureUrl": "asdasdasd",               
                     "resourceType": "images"
                 },
-                "isCorrect": false,
                 "formSubmits": [
                     {
                         "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",

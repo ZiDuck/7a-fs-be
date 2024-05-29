@@ -175,6 +175,18 @@ export class FormsController {
     @UseRoleGuard()
     @AdminUserRole()
     @ApiOkResponse({
+        type: FormSummaryDto,
+    })
+    @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
+    @UsePipes(new ValidationPipe({ transform: true }))
+    @Get(':id/form-summaries/questions')
+    async findQuestionSummary(@Param('id', ParseUUIDPipe) id: string, @Query() query: FormSummaryQuery) {
+        return await this.formsService.findQuestionSummary(id, query);
+    }
+
+    @UseRoleGuard()
+    @AdminUserRole()
+    @ApiOkResponse({
         type: [GetVersion],
     })
     @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
