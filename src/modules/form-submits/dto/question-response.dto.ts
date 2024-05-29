@@ -1,6 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
 
 import { GetFormQuestion } from '../../form-questions/dto/get-form-question.dto';
+import { GuestFileValue } from './form-submit.dto';
 
 export class AnswerSummaryFormSubmit {
     @ApiProperty()
@@ -69,7 +70,7 @@ export class AnswerSummaryCheckbox {
 }
 
 export class AnswerSummaryFileUpload {
-    fileInfo: any;
+    fileInfo: GuestFileValue[];
 
     @ApiProperty({
         type: [AnswerSummaryFormSubmit],
@@ -121,6 +122,16 @@ export class AnswerSummaryFormGroup {
 }
 
 export class QuestionResponse extends GetFormQuestion {
-    @ApiProperty()
+    @ApiProperty({
+        type: 'array',
+        items: {
+            oneOf: [
+                { $ref: getSchemaPath(AnswerSummaryText) },
+                { $ref: getSchemaPath(AnswerSummaryCheckbox) },
+                { $ref: getSchemaPath(AnswerSummaryFileUpload) },
+                { $ref: getSchemaPath(AnswerSummaryFormGroup) },
+            ],
+        },
+    })
     answerSummary: (AnswerSummaryText | AnswerSummaryCheckbox | AnswerSummaryFileUpload | AnswerSummaryFormGroup)[];
 }

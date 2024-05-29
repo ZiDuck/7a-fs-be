@@ -22,7 +22,13 @@ import {
 } from '../form-questions/enums/attribute-type.enum';
 import { FormQuestionsService } from '../form-questions/form-questions.service';
 import { CreateFormSubmitDto } from '../form-submits/dto/create-form-submit.dto';
-import { GroupQuestionSubmitTemp, GuestSelectSummary, GuestTextSummary, SingleQuestionSubmitTemp } from '../form-submits/dto/form-submit.dto';
+import {
+    GroupQuestionSubmitTemp,
+    GuestFileValue,
+    GuestSelectSummary,
+    GuestTextSummary,
+    SingleQuestionSubmitTemp,
+} from '../form-submits/dto/form-submit.dto';
 import { GetFormSubmitWithIndexGroup, GetFormSubmitWithIndexSingle } from '../form-submits/dto/get-form-submit.dto';
 import {
     AnswerSummaryCheckbox,
@@ -33,6 +39,7 @@ import {
     AnswerSummaryGuestChoice,
     AnswerSummaryText,
     GuestColumnChoice,
+    QuestionResponse,
 } from '../form-submits/dto/question-response.dto';
 import { FormSubmit } from '../form-submits/entities/form-submit.entity';
 import { FormSubmitsService } from '../form-submits/form-submits.service';
@@ -275,7 +282,7 @@ export class FormsService {
 
     async findQuestionSummary(id: string, query: FormSummaryQuery) {
         const existedForm = await this.findOne(id);
-
+        let answerSummary: (AnswerSummaryText | AnswerSummaryCheckbox | AnswerSummaryFileUpload | AnswerSummaryFormGroup)[] = [];
         const version = query?.version ?? existedForm.version;
 
         // Lấy thông tin question của form
@@ -295,7 +302,7 @@ export class FormsService {
                 return plainToInstance(GetFormSubmitWithIndexSingle, { ...formSubmit, index, formQuestions: sgQuestion });
             });
 
-            return this.summaryQuestionSingleType(existedQuestion, formSubmitsWithIndex);
+            answerSummary = this.summaryQuestionSingleType(existedQuestion, formSubmitsWithIndex);
         } else if (GROUP_QUESTION_TYPES.includes(existedQuestion.attributeType)) {
             const formSubmitsWithIndex: GetFormSubmitWithIndexGroup[] = formSubmits.map((formSubmit, index) => {
                 const formQuestion = formSubmit.formQuestions.find((question) => question.id === query.questionId);
@@ -305,8 +312,15 @@ export class FormsService {
                 return { ...formSubmit, index, formQuestions: grQuestion } as GetFormSubmitWithIndexGroup;
             });
 
-            return this.summaryQuestionGroupType(existedQuestion, formSubmitsWithIndex);
+            answerSummary = this.summaryQuestionGroupType(existedQuestion, formSubmitsWithIndex);
         }
+
+        const result: QuestionResponse = {
+            ...existedQuestion,
+            answerSummary,
+        };
+
+        return result;
     }
 
     summaryQuestionSingleType(stQuestion: GetFormQuestion, formSubmits: GetFormSubmitWithIndexSingle[]) {
@@ -498,7 +512,7 @@ export class FormsService {
     }
 
     summaryQuestionFileUploadType(stQuestion: GetFormQuestion, formSubmits: GetFormSubmitWithIndexSingle[]) {
-        const guestAnswerMap: Map<string, any[]> = new Map();
+        const guestAnswerMap: Map<string, GuestFileValue[]> = new Map();
         const formSubmitsMap: Map<string, AnswerSummaryFormSubmit[]> = new Map();
 
         formSubmits.forEach((formSubmit) => {

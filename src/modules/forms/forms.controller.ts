@@ -28,6 +28,7 @@ import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
 import { FormLoggingInterceptor } from '../../cores/interceptors/form-logging.interceptor';
 import { CreateFormSubmitDto } from '../form-submits/dto/create-form-submit.dto';
 import { GetFormSubmit } from '../form-submits/dto/get-form-submit.dto';
+import { QuestionResponse } from '../form-submits/dto/question-response.dto';
 import { FormSummaryDto } from '../form-summary/dto/form-summary.dto';
 import { CreateFormInput } from './dto/create-form.input';
 import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-form.input';
@@ -175,7 +176,7 @@ export class FormsController {
     @UseRoleGuard()
     @AdminUserRole()
     @ApiOkResponse({
-        type: FormSummaryDto,
+        type: QuestionResponse,
     })
     @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
     @UsePipes(new ValidationPipe({ transform: true }))
