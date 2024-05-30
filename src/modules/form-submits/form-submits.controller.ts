@@ -11,16 +11,6 @@ import { FormSubmitsService } from './form-submits.service';
 export class FormSubmitsController {
     constructor(private readonly formSubmitsService: FormSubmitsService) {}
 
-    // @Post()
-    // async create(@Body() data: CreateFormSubmitDto) {
-    //     return this.formSubmitsService.create(data);
-    // }
-
-    // @Get()
-    // findAll() {
-    //     return this.formSubmitsService.findAll();
-    // }
-
     @Get(':id')
     findOne(@Param('id') id: string) {
         return plainToInstance(GetFormSubmitInfo, this.formSubmitsService.findOne(id));
@@ -39,8 +29,8 @@ export class FormSubmitsController {
     }
 
     // @Patch(':id')
-    // update(@Param('id') id: string, @Body() updateFormSubmitDto: UpdateFormSubmitDto) {
-    //     return this.formSubmitsService.update(+id, updateFormSubmitDto);
+    // updateQuestionScore(@Param('id') id: string, @Body() data: UpdateFormSubmitDto) {
+    //     return this.formSubmitsService.updateQuestionScore(id, data);
     // }
 
     // @Delete(':id')

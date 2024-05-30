@@ -28,6 +28,7 @@ import {
     SingleQuestionSubmitTemp,
 } from './dto/form-submit.dto';
 import { GetFormSubmit } from './dto/get-form-submit.dto';
+import { UpdateFormSubmitDto, UpdateGroupQuestionSubmitTemp, UpdateSingleQuestionSubmitTemp } from './dto/update-form-submit.dto';
 import { FormSubmit } from './entities/form-submit.entity';
 
 @Injectable()
@@ -35,6 +36,20 @@ export class FormSubmitsService {
     constructor(@InjectRepository(FormSubmit) private formSubmitRepository: Repository<FormSubmit>) {}
 
     async create(data: CreateFormSubmitDto, form: GetFormAllFormQuestionsDto) {
+        const customizeData = this.customizeFormSubmitInput(data, form);
+
+        data.formQuestions = customizeData;
+
+        const formSubmit = this.formSubmitRepository.create({
+            metadata: data,
+        });
+
+        const result = await this.formSubmitRepository.save(formSubmit);
+
+        return result;
+    }
+
+    private customizeFormSubmitInput(data: CreateFormSubmitDto, form: GetFormAllFormQuestionsDto) {
         this.validateFormSubmit(data);
 
         const customizeData = data.formQuestions.map((question) => {
@@ -58,6 +73,7 @@ export class FormSubmitsService {
                         guestAnswer: {
                             ...question.singleQuestion.guestAnswer,
                             summaries: this.summarizeSingleQuestion(existedQuestion, question),
+                            guestScore: this.calculateScoreForSingleQuestion(existedQuestion, question),
                         },
                     },
                 };
@@ -75,24 +91,15 @@ export class FormSubmitsService {
                 };
             }
         });
-
-        data.formQuestions = customizeData;
-
-        const formSubmit = this.formSubmitRepository.create({
-            metadata: data,
-        });
-
-        const result = await this.formSubmitRepository.save(formSubmit);
-
-        return result;
+        return customizeData;
     }
 
-    validateFormSubmit(data: CreateFormSubmitDto) {
+    validateFormSubmit(data: CreateFormSubmitDto | UpdateFormSubmitDto) {
         if (data.status !== FormStatus.ACCEPTED) throw new BadRequestException(`Chỉ được submit form có trạng thái là ${FormStatus.ACCEPTED}`);
 
         if (data.formQuestions && data.formQuestions.length > 0) {
             data.formQuestions.forEach((formQuestion) => {
-                if (formQuestion instanceof CreateSingleQuestionSubmitTemp) {
+                if (formQuestion instanceof CreateSingleQuestionSubmitTemp || formQuestion instanceof UpdateSingleQuestionSubmitTemp) {
                     const guestAnswer = formQuestion.singleQuestion.guestAnswer;
 
                     if (!guestAnswer) throw new BadRequestException(`Câu hỏi ${formQuestion.id} không gửi đúng đinh dạng câu trả lời`);
@@ -151,7 +158,7 @@ export class FormSubmitsService {
                             );
                         }
                     }
-                } else if (formQuestion instanceof CreateGroupQuestionSubmitTemp) {
+                } else if (formQuestion instanceof CreateGroupQuestionSubmitTemp || formQuestion instanceof UpdateGroupQuestionSubmitTemp) {
                     if (!formQuestion.groupQuestion?.guestAnswer) throw new BadRequestException(`Câu hỏi ${formQuestion.id} không được để trống`);
 
                     // Get all unique rowIds from the guestAnswer
@@ -401,9 +408,11 @@ export class FormSubmitsService {
         };
     }
 
-    calculateScoreForSingleQuestion(question: SingleQuestionSubmitTemp) {
+    calculateScoreForSingleQuestion(stQuestion: GetFormQuestion, question: CreateSingleQuestionSubmitTemp) {
+        const stQuestionValues = stQuestion.singleQuestion.singleQuestionValues;
+
         if (ONE_SELECTION_QUESTION_TYPES.includes(question.attributeType)) {
-            const correctChoiceIds = question.singleQuestion.singleQuestionValues.filter((value) => value.isCorrect).map((value) => value.id);
+            const correctChoiceIds = stQuestionValues.filter((value) => value.isCorrect).map((value) => value.id);
 
             const guestChoiceId = question.singleQuestion.guestAnswer.choiceIds[0].id;
 
@@ -411,7 +420,7 @@ export class FormSubmitsService {
                 return question.singleQuestion.score;
             }
         } else if (AttributeType.CHECKBOX_BUTTON === question.attributeType) {
-            const correctChoiceIds = question.singleQuestion.singleQuestionValues.filter((value) => value.isCorrect).map((value) => value.id);
+            const correctChoiceIds = stQuestionValues.filter((value) => value.isCorrect).map((value) => value.id);
 
             const guestChoiceIds = question.singleQuestion.guestAnswer.choiceIds.map((choice) => choice.id);
 
@@ -419,9 +428,7 @@ export class FormSubmitsService {
                 return question.singleQuestion.score;
             }
         } else if (TEXT_QUESTION_TYPES.includes(question.attributeType)) {
-            const correctAnswer = question.singleQuestion.singleQuestionValues.filter(
-                (value) => value.value === question.singleQuestion.guestAnswer.textValue,
-            );
+            const correctAnswer = stQuestionValues.filter((value) => value.value === question.singleQuestion.guestAnswer.textValue);
 
             if (correctAnswer.length > 0) {
                 return question.singleQuestion.score;
@@ -433,57 +440,61 @@ export class FormSubmitsService {
         return 0;
     }
 
-    calculateScoreForGroupQuestion(question: GroupQuestionSubmitTemp) {
-        if (question.attributeType === AttributeType.RADIO_GRID) {
-            const correctAnswers = question.groupQuestion.answers.filter((ans) => ans.isCorrect);
-            const rows = question.groupQuestion.rows;
-            const guestChoices = question.groupQuestion.guestAnswer.gridIds;
-            let totalScore = 0;
+    // calculateScoreForGroupQuestion(question: GroupQuestionSubmitTemp) {
+    //     if (question.attributeType === AttributeType.RADIO_GRID) {
+    //         const correctAnswers = question.groupQuestion.answers.filter((ans) => ans.isCorrect);
+    //         const rows = question.groupQuestion.rows;
+    //         const guestChoices = question.groupQuestion.guestAnswer.gridIds;
+    //         let totalScore = 0;
 
-            rows.forEach((row) => {
-                const correctRowAnswers = correctAnswers.filter((ans) => ans.rowId === row.id);
-                const guestRowChoice = guestChoices.find((choice) => choice.rowId === row.id);
+    //         rows.forEach((row) => {
+    //             const correctRowAnswers = correctAnswers.filter((ans) => ans.rowId === row.id);
+    //             const guestRowChoice = guestChoices.find((choice) => choice.rowId === row.id);
 
-                if (guestRowChoice && correctRowAnswers.some((ans) => ans.id === guestRowChoice.id)) {
-                    totalScore += row.score;
-                }
-            });
+    //             if (guestRowChoice && correctRowAnswers.some((ans) => ans.id === guestRowChoice.id)) {
+    //                 totalScore += row.score;
+    //             }
+    //         });
 
-            return totalScore;
-        } else if (question.attributeType === AttributeType.CHECKBOX_GRID) {
-            const correctAnswers = question.groupQuestion.answers.filter((ans) => ans.isCorrect);
-            const rows = question.groupQuestion.rows;
-            const guestChoices = question.groupQuestion.guestAnswer.gridIds;
-            let totalScore = 0;
+    //         return totalScore;
+    //     } else if (question.attributeType === AttributeType.CHECKBOX_GRID) {
+    //         const correctAnswers = question.groupQuestion.answers.filter((ans) => ans.isCorrect);
+    //         const rows = question.groupQuestion.rows;
+    //         const guestChoices = question.groupQuestion.guestAnswer.gridIds;
+    //         let totalScore = 0;
 
-            rows.forEach((row) => {
-                const correctRowAnswers = correctAnswers.filter((ans) => ans.rowId === row.id);
-                const guestRowChoices = guestChoices.filter((choice) => choice.rowId === row.id);
+    //         rows.forEach((row) => {
+    //             const correctRowAnswers = correctAnswers.filter((ans) => ans.rowId === row.id);
+    //             const guestRowChoices = guestChoices.filter((choice) => choice.rowId === row.id);
 
-                if (
-                    correctRowAnswers.length === guestRowChoices.length &&
-                    correctRowAnswers.every((ans) => guestRowChoices.some((choice) => choice.id === ans.id))
-                ) {
-                    totalScore += row.score;
-                }
-            });
+    //             if (
+    //                 correctRowAnswers.length === guestRowChoices.length &&
+    //                 correctRowAnswers.every((ans) => guestRowChoices.some((choice) => choice.id === ans.id))
+    //             ) {
+    //                 totalScore += row.score;
+    //             }
+    //         });
 
-            return totalScore;
-        }
+    //         return totalScore;
+    //     }
 
-        return 0;
-    }
+    //     return 0;
+    // }
 
     calcCorrectAnswer(formSubmit: FormSubmitDto) {
         const questions = formSubmit.formQuestions;
 
         return questions.reduce((acc, question) => {
             if (SINGLE_QUESTION_TYPES.includes(question.attributeType)) {
-                question = plainToInstance(SingleQuestionSubmitTemp, question);
-                return acc + this.calculateScoreForSingleQuestion(question);
+                const questionTrans = plainToInstance(SingleQuestionSubmitTemp, question);
+
+                return acc + questionTrans.singleQuestion.guestAnswer.guestScore;
             } else if (GROUP_QUESTION_TYPES.includes(question.attributeType)) {
-                question = plainToInstance(GroupQuestionSubmitTemp, question);
-                return acc + this.calculateScoreForGroupQuestion(question);
+                const questionTrans = plainToInstance(GroupQuestionSubmitTemp, question);
+
+                const score = questionTrans.groupQuestion.guestAnswer.summaries.reduce((acc, summary) => acc + summary.score, 0);
+
+                return acc + score;
             }
 
             return acc;
@@ -494,5 +505,18 @@ export class FormSubmitsService {
         const formSubmits = await this.findAllByForm(form, version);
 
         return formSubmits.length;
+    }
+
+    async update(data: UpdateFormSubmitDto) {
+        this.validateFormSubmit(data);
+
+        const formSubmitData = this.formSubmitRepository.create({
+            id: data.submitId,
+            metadata: data,
+        });
+
+        const result = await this.formSubmitRepository.save(formSubmitData);
+
+        return result;
     }
 }

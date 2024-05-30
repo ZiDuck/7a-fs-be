@@ -29,6 +29,7 @@ import { FormLoggingInterceptor } from '../../cores/interceptors/form-logging.in
 import { CreateFormSubmitDto } from '../form-submits/dto/create-form-submit.dto';
 import { GetFormSubmit } from '../form-submits/dto/get-form-submit.dto';
 import { QuestionResponse } from '../form-submits/dto/question-response.dto';
+import { UpdateFormSubmitDto } from '../form-submits/dto/update-form-submit.dto';
 import { FormSummaryDto } from '../form-summary/dto/form-summary.dto';
 import { CreateFormInput } from './dto/create-form.input';
 import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-form.input';
@@ -223,6 +224,19 @@ export class FormsController {
     async updateQuestions(@Body() data: UpdateFormQuestionOfFormInput) {
         try {
             return await this.formsService.updateQuestions(data);
+        } catch (error) {
+            if (error instanceof HttpException) throw error;
+            throw new InternalServerErrorException(error.message);
+        }
+    }
+
+    @UseRoleGuard()
+    @AdminUserRole()
+    @UsePipes(new ValidationPipe({ transform: true }))
+    @Patch(':id/form-submits')
+    async updateFormSubmit(@Param('id') id: string, @Body() data: UpdateFormSubmitDto) {
+        try {
+            return await this.formsService.updateFormSubmit(id, data);
         } catch (error) {
             if (error instanceof HttpException) throw error;
             throw new InternalServerErrorException(error.message);

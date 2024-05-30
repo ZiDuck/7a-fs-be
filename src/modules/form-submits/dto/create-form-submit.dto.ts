@@ -418,7 +418,6 @@ export class CreateFormSubmitDto {
     image: ImageOutput | null;
 
     @ApiProperty({
-        // type: [CreateFormQuestionSubmit],
         type: 'array',
         items: {
             oneOf: [

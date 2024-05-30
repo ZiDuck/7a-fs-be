@@ -41,6 +41,7 @@ import {
     GuestColumnChoice,
     QuestionResponse,
 } from '../form-submits/dto/question-response.dto';
+import { UpdateFormSubmitDto } from '../form-submits/dto/update-form-submit.dto';
 import { FormSubmit } from '../form-submits/entities/form-submit.entity';
 import { FormSubmitsService } from '../form-submits/form-submits.service';
 import { FormSummaryService } from '../form-summary/form-summary.service';
@@ -390,7 +391,7 @@ export class FormsService {
                 }
 
                 formSubmitsMap.get(guestColChoiceKey)!.push({
-                    id: frmSubmit.id,
+                    id: frmSubmit.formSubmitId,
                     index: frmSubmit.index,
                 });
             });
@@ -706,6 +707,17 @@ export class FormsService {
         await this.formQuestionService.deleteAllByFormId(data.id);
 
         return await this.formQuestionService.createMany(data.formQuestions, data.id);
+    }
+
+    @Transactional()
+    async updateFormSubmit(id: string, data: UpdateFormSubmitDto) {
+        const existedForm = await this.findFormQuestions(id);
+
+        if (data.version !== existedForm.version) throw new BadRequestException(`Phiên bản form không hợp lệ. Vui lòng load lại trang!`);
+
+        const formSubmit = await this.formSubmitService.update(data);
+
+        return formSubmit;
     }
 
     async updateStatus(id: string, data: UpdateFormStatusDto) {
