@@ -12,15 +12,7 @@ import { initializeTransactionalContext, StorageDriver } from 'typeorm-transacti
 import { AppModule } from './app.module';
 import { BusinessExceptionFilter, HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { UnauthorizedExceptionFilter } from './common/filters/unauthorized-exception.filter';
-import {
-    AnswerSummaryCheckbox,
-    AnswerSummaryFileUpload,
-    AnswerSummaryFormGroup,
-    AnswerSummaryText,
-} from './modules/form-submits/dto/question-response.dto';
-import { AnswerResponseCheckbox } from './modules/form-summary/dto/answer-response-checkbox.dto';
-import { AnswerResponseFileUpload } from './modules/form-summary/dto/answer-response-file-upload.dto';
-import { RowResponse } from './modules/form-summary/dto/row-response.dto';
+import extraModels from './cores/swaggers/extra-model';
 
 async function bootstrap() {
     initializeTransactionalContext({
@@ -62,15 +54,7 @@ async function bootstrap() {
     );
 
     const document = SwaggerModule.createDocument(app, config, {
-        extraModels: [
-            AnswerResponseCheckbox,
-            AnswerResponseFileUpload,
-            RowResponse,
-            AnswerSummaryText,
-            AnswerSummaryCheckbox,
-            AnswerSummaryFileUpload,
-            AnswerSummaryFormGroup,
-        ],
+        extraModels: extraModels,
     });
     SwaggerModule.setup('docs', app, document);
 

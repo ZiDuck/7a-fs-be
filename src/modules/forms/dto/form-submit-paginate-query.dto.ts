@@ -2,7 +2,9 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNumber, IsOptional } from 'class-validator';
 
-export class FormSubmitQuery {
+import { PageQueryDto } from '../../../common/dtos/page-query.dto';
+
+export class FormSubmitPaginateQuery extends PageQueryDto {
     @ApiPropertyOptional()
     @IsOptional()
     @IsNumber()

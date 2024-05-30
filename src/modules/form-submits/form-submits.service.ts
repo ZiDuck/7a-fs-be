@@ -14,7 +14,7 @@ import {
     SINGLE_QUESTION_TYPES,
     TEXT_QUESTION_TYPES,
 } from '../form-questions/enums/attribute-type.enum';
-import { FormSubmitQuery } from '../forms/dto/form-submit-query.dto';
+import { FormSubmitPaginateQuery } from '../forms/dto/form-submit-paginate-query.dto';
 import { GetFormAllFormQuestionsDto } from '../forms/dto/get-form-all-form-questions.dto';
 import { Form } from '../forms/entities/form.entity';
 import { FormStatus } from '../forms/enums/form-status.enum';
@@ -344,7 +344,7 @@ export class FormSubmitsService {
         });
     }
 
-    async findAllPaginateByForm(form: Form, query: FormSubmitQuery) {
+    async findAllPaginateByForm(form: Form, query: FormSubmitPaginateQuery) {
         const version = query?.version ? query.version : form.version;
 
         const builder = this.formSubmitRepository
@@ -488,5 +488,11 @@ export class FormSubmitsService {
 
             return acc;
         }, 0);
+    }
+
+    async countByForm(form: Form, version: number) {
+        const formSubmits = await this.findAllByForm(form, version);
+
+        return formSubmits.length;
     }
 }

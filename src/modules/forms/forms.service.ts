@@ -49,6 +49,7 @@ import { UsersService } from '../users/users.service';
 import { CreateFormInput } from './dto/create-form.input';
 import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-form.input';
 import { FormFilterQuery } from './dto/form-filter-query.dto';
+import { FormSubmitPaginateQuery } from './dto/form-submit-paginate-query.dto';
 import { FormSubmitQuery } from './dto/form-submit-query.dto';
 import { FormSummaryQuery } from './dto/form-summary-query.input';
 import { GetFormDto } from './dto/get-form.dto';
@@ -272,12 +273,22 @@ export class FormsService {
         }, 0);
     }
 
-    async findSubmitForm(id: string, query: FormSubmitQuery) {
+    async findSubmitForm(id: string, query: FormSubmitPaginateQuery) {
         const existedForm = await this.findOne(id);
 
         const results = await this.formSubmitService.findAllPaginateByForm(existedForm, query);
 
         return results;
+    }
+
+    async countFormSubmit(id: string, query: FormSubmitQuery) {
+        const existedForm = await this.findOne(id);
+
+        const version = query?.version ? query.version : existedForm.version;
+
+        const result = await this.formSubmitService.countByForm(existedForm, version);
+
+        return result;
     }
 
     async findQuestionSummary(id: string, query: FormSummaryQuery) {

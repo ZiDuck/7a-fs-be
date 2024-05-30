@@ -33,6 +33,7 @@ import { FormSummaryDto } from '../form-summary/dto/form-summary.dto';
 import { CreateFormInput } from './dto/create-form.input';
 import { CreateFormQuestionOfFormInput } from './dto/create-form-questions-of-form.input';
 import { FormFilterQuery } from './dto/form-filter-query.dto';
+import { FormSubmitPaginateQuery } from './dto/form-submit-paginate-query.dto';
 import { FormSubmitQuery } from './dto/form-submit-query.dto';
 import { FormSummaryQuery } from './dto/form-summary-query.input';
 import { GetFormDto } from './dto/get-form.dto';
@@ -147,9 +148,17 @@ export class FormsController {
     @AdminUserRole()
     @ApiPaginatedResponse(GetFormSubmit)
     @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
-    @Get(':id/submit-forms')
-    async findSubmitForm(@Param('id', ParseUUIDPipe) id: string, @Query() query: FormSubmitQuery) {
+    @Get(':id/form-submits')
+    async findSubmitForm(@Param('id', ParseUUIDPipe) id: string, @Query() query: FormSubmitPaginateQuery) {
         return await this.formsService.findSubmitForm(id, query);
+    }
+
+    @UseRoleGuard()
+    @AdminUserRole()
+    @ApiException(() => BadRequestException, { description: 'The ${id} is not exists!' })
+    @Get(':id/form-submits/count')
+    async countFormSubmit(@Param('id', ParseUUIDPipe) id: string, @Query() query: FormSubmitQuery) {
+        return await this.formsService.countFormSubmit(id, query);
     }
 
     @ApiOkResponse({
