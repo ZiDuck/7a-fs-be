@@ -7,6 +7,7 @@ import formEntities from '../../modules/forms/entities';
 import groupQuestionEntities from '../../modules/group-questions/entities';
 import imageHistories from '../../modules/image-history/entities';
 import imageEntities from '../../modules/images/entites';
+import minioFileEntities from '../../modules/minio-client/entities';
 import notificationEntities from '../../modules/notifications/entities';
 import rawFileEntities from '../../modules/raw-files/enitites';
 import roleEntities from '../../modules/roles/entities';
@@ -30,5 +31,6 @@ const entities = [
     ...rawFileEntities,
     ...imageHistories,
     ...fileHistories,
+    ...minioFileEntities,
 ];
 export default entities;
