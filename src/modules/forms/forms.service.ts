@@ -443,7 +443,7 @@ export class FormsService {
             }
 
             formSubmitsMap.get(guestAnswerKey)!.push({
-                id: formSubmit.id,
+                id: formSubmit.formSubmitId,
                 index: formSubmit.index,
             });
         });
@@ -505,7 +505,7 @@ export class FormsService {
             }
 
             formSubmitsMap.get(guestChoiceKey)!.push({
-                id: formSubmit.id,
+                id: formSubmit.formSubmitId,
                 index: formSubmit.index,
             });
         });
@@ -541,7 +541,7 @@ export class FormsService {
             }
 
             formSubmitsMap.get(guestAnswerKey)!.push({
-                id: formSubmit.id,
+                id: formSubmit.formSubmitId,
                 index: formSubmit.index,
             });
         });
