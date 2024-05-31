@@ -16,12 +16,12 @@ export class FilePublicIdExistsConstraint implements ValidatorConstraintInterfac
 
         if (!listResourceType.includes(resourceType)) resourceType = (args.object as any)[resourceType];
         // const type = resourceType === ResourceType.RAW ? 'private' : '';
-        const result: boolean = await this.cloudinaryService.checkResourcesExists({
-            publicId: value,
-            resourceType: resourceType,
-        });
+        // const result: boolean = await this.cloudinaryService.checkResourcesExists({
+        //     publicId: value,
+        //     resourceType: resourceType,
+        // });
 
-        return result;
+        return true;
     }
 
     defaultMessage(args: ValidationArguments): string {

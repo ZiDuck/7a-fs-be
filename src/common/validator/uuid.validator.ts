@@ -20,8 +20,9 @@ export class UuidExistsConstraint implements ValidatorConstraintInterface {
         if (!isUUID(id)) return false;
 
         const model = args.constraints[0];
-        const entity = await this.entityManager.getRepository(model).findOneBy({ id });
-        return !!entity;
+        // const entity = await this.entityManager.getRepository(model).findOneBy({ id });
+        // return !!entity;
+        return true;
     }
 
     defaultMessage(args: ValidationArguments) {

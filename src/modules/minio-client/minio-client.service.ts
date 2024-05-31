@@ -105,11 +105,9 @@ export class MinioClientService {
         }
     }
 
-    findOneByPathFile(file: string, bucketName: string = this.bucketName) {
+    findById(id: string) {
         return this.minioFileRepository.findOne({
-            where: {
-                pathFile: file,
-            },
+            where: { id },
         });
     }
 

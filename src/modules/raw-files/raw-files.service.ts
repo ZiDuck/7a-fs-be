@@ -2,12 +2,17 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
+import { env } from '../../cores/utils/env.util';
+import { MinioClientService } from '../minio-client/minio-client.service';
 import { CreateRawFileInput } from './dto/create-raw-file.input';
 import { RawFile } from './enitites/raw-file.entity';
 
 @Injectable()
 export class RawFilesService {
-    constructor(@InjectRepository(RawFile) private rawFileRepository: Repository<RawFile>) {}
+    constructor(
+        @InjectRepository(RawFile) private rawFileRepository: Repository<RawFile>,
+        private readonly minioClientService: MinioClientService,
+    ) {}
 
     async create(data: CreateRawFileInput) {
         const result = this.rawFileRepository.create(data);
@@ -26,15 +31,14 @@ export class RawFilesService {
     }
 
     async checkFileHook(id: string) {
-        const rawFile = await this.rawFileRepository.findOneBy({ id });
+        const file = await this.minioClientService.findById(id);
 
-        if (!rawFile) return null;
+        if (!file) return null;
 
         return {
-            id: rawFile.id,
-            publicId: rawFile.publicId,
-            url: rawFile.url,
-            secureUrl: rawFile.secureUrl,
+            id: file.id,
+            pathFile: file.pathFile,
+            secureUrl: `http://${env.String('MINIO_ENDPOINT')}:${env.Int('MINIO_PORT', 9000)}/${env.String('MINIO_BUCKET')}/${file.pathFile}`,
         };
     }
 
