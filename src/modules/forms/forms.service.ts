@@ -16,6 +16,7 @@ import { GetFormQuestion } from '../form-questions/dto/get-form-question.dto';
 import {
     AttributeType,
     GROUP_QUESTION_TYPES,
+    ONE_SELECTION_QUESTION_TYPES,
     SELECTION_QUESTION_TYPES,
     SINGLE_QUESTION_TYPES,
     TEXT_QUESTION_TYPES,
@@ -381,7 +382,13 @@ export class FormsService {
                     let score: number;
 
                     if (guestColChoices.length === 0) score = 0;
-                    else score = correctAns.every((ans) => guestAnswerPerRow.some((choice) => ans.id === choice.id)) ? exRow.score : 0;
+                    else {
+                        if (AttributeType.RADIO_GRID === existedQuestion.attributeType) {
+                            score = correctAns.some((ans) => guestAnswerPerRow.some((choice) => ans.id === choice.id)) ? exRow.score : 0;
+                        } else {
+                            score = correctAns.every((ans) => guestAnswerPerRow.some((choice) => ans.id === choice.id)) ? exRow.score : 0;
+                        }
+                    }
 
                     scoresMap.set(guestColChoiceKey, score);
                 }
@@ -492,10 +499,17 @@ export class FormsService {
             if (!scoresMap.has(guestChoiceKey)) {
                 let score: number;
                 if (guestAnswerSummaries.length === 0) score = 0;
-                else
-                    score = stCorrectChoices.every((choice) => guestAnswerSummaries.some((ans) => ans.id === choice.id))
-                        ? stQuestion.singleQuestion.score
-                        : 0;
+                else {
+                    if (ONE_SELECTION_QUESTION_TYPES.includes(stQuestion.attributeType)) {
+                        score = stCorrectChoices.some((choice) => guestAnswerSummaries.some((ans) => ans.id === choice.id))
+                            ? stQuestion.singleQuestion.score
+                            : 0;
+                    } else {
+                        score = stCorrectChoices.every((choice) => guestAnswerSummaries.some((ans) => ans.id === choice.id))
+                            ? stQuestion.singleQuestion.score
+                            : 0;
+                    }
+                }
 
                 scoresMap.set(guestChoiceKey, score);
             }
