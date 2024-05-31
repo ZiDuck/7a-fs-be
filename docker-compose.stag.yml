@@ -46,6 +46,17 @@ services:
             - CLOUDINARY_CLOUD_PUBLICDIR=public/feedback-system
             - CLOUDINARY_CLOUD_PRIVATEDIR=private/feedback-system
 
+            #minio client
+            - MINIO_ENDPOINT={MINIO_ENDPOINT}
+            - MINIO_PORT={MINIO_PORT}
+            - MINIO_ACCESSKEY={MINIO_ACCESSKEY}
+            - MINIO_SECRETKEY={MINIO_SECRETKEY}
+            - MINIO_BUCKET={MINIO_BUCKET}
+            - MINIO_PATH_IMAGE={MINIO_PATH_IMAGE}
+            - MINIO_PATH_DOCUMENT={MINIO_PATH_DOCUMENT}
+            - MINIO_PATH_VIDEO={MINIO_PATH_VIDEO}
+            - MINIO_PATH_BACKUP={MINIO_PATH_BACKUP}
+
             - MINUTE_WAIT_FORGOT_PASSWORD=1
         labels:
             - traefik.enable=true
@@ -59,7 +70,7 @@ services:
             - traefik.http.routers.fs-api-stag-https.entrypoints=websecure
             #- traefik.http.routers.fs-api-stag-https.service=7a-fs-api-stag
             - traefik.http.services.fs-api-stag.loadbalancer.server.port=${PORT}
-            - traefik.http.routers.fs-api-stag-https.middlewares=api-stripping@file  
+            - traefik.http.routers.fs-api-stag-https.middlewares=api-stripping@file
             #- traefik.http.routers.qet-api-https.priority=5
 
     postgres-fs-stag:
