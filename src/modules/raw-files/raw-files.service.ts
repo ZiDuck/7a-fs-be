@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { env } from '../../cores/utils/env.util';
+import { ImageOutput } from '../images/dto/image.output';
 import { MinioClientService } from '../minio-client/minio-client.service';
 import { CreateRawFileInput } from './dto/create-raw-file.input';
 import { RawFile } from './enitites/raw-file.entity';
@@ -39,7 +40,7 @@ export class RawFilesService {
             id: file.id,
             pathFile: file.pathFile,
             secureUrl: `http://${env.String('MINIO_ENDPOINT')}:${env.Int('MINIO_PORT', 9000)}/${env.String('MINIO_BUCKET')}/${file.pathFile}`,
-        };
+        } as ImageOutput;
     }
 
     async remove(id: string) {

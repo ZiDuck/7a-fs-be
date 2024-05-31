@@ -5,11 +5,8 @@ export class ImageOutput {
     id: string;
 
     // @Exclude()
-    url: string;
+    pathFile: string;
 
     // @Exclude()
     secureUrl: string;
-
-    // @Exclude()
-    publicId: string;
 }
