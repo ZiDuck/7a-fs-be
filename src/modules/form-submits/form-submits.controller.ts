@@ -1,7 +1,9 @@
-import { Controller, Get, Param, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Delete, Get, Param, UsePipes, ValidationPipe } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { plainToInstance } from 'class-transformer';
 
+import { AdminUserRole } from '../../cores/decorators/role.decorator';
+import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
 import { FormViewDto } from '../forms/dto/view-form.dto';
 import { GetFormSubmitInfo } from './dto/get-form-submit-info.dto';
 import { FormSubmitsService } from './form-submits.service';
@@ -33,8 +35,10 @@ export class FormSubmitsController {
     //     return this.formSubmitsService.updateQuestionScore(id, data);
     // }
 
-    // @Delete(':id')
-    // remove(@Param('id') id: string) {
-    //     return this.formSubmitsService.remove(+id);
-    // }
+    @UseRoleGuard()
+    @AdminUserRole()
+    @Delete(':id')
+    remove(@Param('id') id: string) {
+        return this.formSubmitsService.remove(id);
+    }
 }

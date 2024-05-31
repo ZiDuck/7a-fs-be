@@ -226,13 +226,38 @@ export class UpdateSingleQuestionSubmit {
     guestAnswer: UpdateGuestAnswerFormSingle;
 }
 
-export class UpdateGridId {
+export class UpdateGuestAnswerFormGroup {
     @ApiProperty()
+    @IsUUID()
+    id: string;
+
+    @ApiProperty({
+        example: 1,
+    })
+    @IsUUID()
+    rowId: string;
+
+    @ApiProperty({
+        example: 1,
+    })
+    @IsUUID()
+    columnId: string;
+}
+
+export class UpdateGridId {
+    @ApiProperty({
+        type: [UpdateGuestAnswerFormGroup],
+    })
     @ValidateNested({
         each: true,
     })
     @IsArray()
     gridIds: UpdateGuestAnswerFormGroup[];
+
+    @ApiProperty({
+        type: [UpdateGuestGroupSummary],
+    })
+    summaries: UpdateGuestGroupSummary[];
 }
 
 export class UpdateGroupQuestionAnswerSubmit {
@@ -284,24 +309,6 @@ export class UpdateGroupQuestionColumnSubmit {
     order: number;
 }
 
-export class UpdateGuestAnswerFormGroup {
-    @ApiProperty()
-    @IsUUID()
-    id: string;
-
-    @ApiProperty({
-        example: 1,
-    })
-    @IsUUID()
-    rowId: string;
-
-    @ApiProperty({
-        example: 1,
-    })
-    @IsUUID()
-    columnId: string;
-}
-
 export class UpdateGroupQuestionSubmit {
     @ApiProperty({
         type: [UpdateGroupQuestionRowSubmit],
@@ -322,7 +329,7 @@ export class UpdateGroupQuestionSubmit {
     answers: UpdateGroupQuestionAnswerSubmit[];
 
     @ApiProperty({
-        type: UpdateGuestAnswerFormGroup,
+        type: UpdateGridId,
     })
     @IsNotEmptyObject()
     @IsObject()

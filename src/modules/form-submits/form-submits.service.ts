@@ -519,4 +519,12 @@ export class FormSubmitsService {
 
         return result;
     }
+
+    async remove(id: string) {
+        const formSubmit = await this.formSubmitRepository.findOneBy({ id });
+
+        if (!formSubmit) throw new BadRequestException(`Không tồn tại form submit có id ${id}`);
+
+        return this.formSubmitRepository.remove(formSubmit);
+    }
 }
