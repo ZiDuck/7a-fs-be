@@ -1,10 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 
-import { MinioFile } from '../entities/minio-file.entity';
-
 @Expose()
-export class MinioFileOutput extends MinioFile {
+export class MinioFileOutput {
     @ApiProperty()
     id: string;
 
@@ -19,6 +17,9 @@ export class MinioFileOutput extends MinioFile {
 
     @ApiPropertyOptional()
     lastMod?: string;
+
+    @ApiPropertyOptional()
+    secureUrl?: string;
 
     @Exclude()
     createdDate: Date;

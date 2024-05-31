@@ -29,10 +29,10 @@ export class BackupController {
     }
 
     //TODO: remove
-    @Get('upload')
-    backup() {
-        return this.backupService.dataBackupService();
-    }
+    // @Get('upload')
+    // backup() {
+    //     return this.backupService.dataBackupService();
+    // }
 
     // @Get(':id/download')
     // download(@Param('id') id: string) {

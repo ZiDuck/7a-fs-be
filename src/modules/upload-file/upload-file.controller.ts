@@ -5,8 +5,8 @@ import { Transactional } from 'typeorm-transactional';
 
 import { ApiException } from '../../cores/decorators/api-exception.decorator';
 import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
+import { MinioFileOutput } from '../minio-client/dto/minio-file.output';
 import { MinioClientService } from '../minio-client/minio-client.service';
-import { GetRawFile } from '../raw-files/dto/get-raw-file.dto';
 import { FileUploadDto } from './enums/file-upload.dto';
 import { UploadFileService } from './upload-file.service';
 
@@ -28,7 +28,7 @@ export class UploadFileController {
     })
     @ApiOkResponse({
         description: 'The image has been uploaded to cloudinary',
-        type: GetRawFile,
+        type: MinioFileOutput,
     })
     @ApiException(() => InternalServerErrorException, {
         description: 'Error when uploading image to cloudinary',
@@ -37,7 +37,7 @@ export class UploadFileController {
     async uploadImage(@UploadedFile() file: Express.Multer.File) {
         try {
             // return plainToClass(GetRawFile, await this.minioClientService.upload(file));
-            return await this.minioClientService.upload(file);
+            return await this.uploadFileService.uploadStreamFile(file);
         } catch (error) {
             throw new InternalServerErrorException(error.message);
         }

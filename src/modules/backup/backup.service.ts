@@ -112,22 +112,24 @@ export class BackupService {
 
             await promise$;
 
-            const fileUpload = await this.uploadFileService.uploadRawFile(localFile, 'backup');
+            const backupDirectory = env.String('MINIO_PATH_BACKUP');
 
-            if (fileUpload) {
-            }
+            await this.uploadFileService.uploadPathFile(localFile, backupDirectory);
 
-            const createBackupHistory: CreateBackupDto = {
-                filename: fileUpload.original_filename,
-                publicId: fileUpload.public_id,
-                secureUrl: fileUpload.secure_url,
-                url: fileUpload.url,
-                resourceType: fileUpload.resource_type,
-                bytes: fileUpload.bytes,
-                lastMod: fileUpload.created_at,
-            };
+            // if (fileUpload) {
+            // }
 
-            await this.create(createBackupHistory);
+            // const createBackupHistory: CreateBackupDto = {
+            //     filename: fileUpload.original_filename,
+            //     publicId: fileUpload.public_id,
+            //     secureUrl: fileUpload.secure_url,
+            //     url: fileUpload.url,
+            //     resourceType: fileUpload.resource_type,
+            //     bytes: fileUpload.bytes,
+            //     lastMod: fileUpload.created_at,
+            // };
+
+            // await this.create(createBackupHistory);
 
             const users = await this.userService.findAllUser();
 

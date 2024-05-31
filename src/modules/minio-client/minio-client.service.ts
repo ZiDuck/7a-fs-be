@@ -8,6 +8,7 @@ import { Repository } from 'typeorm';
 import { env } from '../../cores/utils/env.util';
 import { DeleteFileInput } from './dto/delete-file.input';
 import { MinioFileInput } from './dto/minio-file.input';
+import { MinioFileOutput } from './dto/minio-file.output';
 import { MinioFile } from './entities/minio-file.entity';
 
 @Injectable()
@@ -22,10 +23,10 @@ export class MinioClientService {
         return this.minioService.client;
     }
 
-    async upload(file: Express.Multer.File, bucketName: string = this.bucketName) {
-        if (!(file.mimetype.includes('jpeg') || file.mimetype.includes('png'))) {
-            throw new HttpException('Error uploading file', HttpStatus.BAD_REQUEST);
-        }
+    async uploadStreamFile(file: Express.Multer.File, directory: string) {
+        // if (!(file.mimetype.includes('jpeg') || file.mimetype.includes('png'))) {
+        //     throw new HttpException('Error uploading file', HttpStatus.BAD_REQUEST);
+        // }
 
         const id = randomUUID();
 
@@ -33,7 +34,7 @@ export class MinioClientService {
 
         const remoteFileName = [id, fileExtension].join('');
 
-        const fullRemoteFileName = [env.String('MINIO_PATH_IMAGE'), remoteFileName].join('');
+        const fullRemoteFileName = [directory, remoteFileName].join('');
 
         const metaData = {
             'Content-Type': file.mimetype,
@@ -41,7 +42,7 @@ export class MinioClientService {
         };
 
         try {
-            await this.client.putObject(bucketName, fullRemoteFileName, file.buffer, 10, metaData);
+            await this.client.putObject(this.bucketName, fullRemoteFileName, file.buffer, 10, metaData);
 
             const minioFile: MinioFileInput = {
                 id: id,
@@ -50,9 +51,54 @@ export class MinioClientService {
                 mimetype: file.mimetype,
             };
 
-            await this.createMinioFile(minioFile);
+            const minFile = await this.createMinioFile(minioFile);
 
-            return `${env.String('MINIO_ENDPOINT')}:${env.Int('MINIO_PORT', 9000)}/${bucketName}${fullRemoteFileName}`;
+            const result: MinioFileOutput = {
+                ...minFile,
+                secureUrl: `http://${env.String('MINIO_ENDPOINT')}:${env.Int('MINIO_PORT', 9000)}/${this.bucketName}/${fullRemoteFileName}`,
+            };
+
+            return result;
+        } catch (error) {
+            console.error('Error uploading file to MinIO:', error);
+            throw new HttpException('Error uploading file', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    async uploadPathFile(file: string, remoteDirectory: string) {
+        // if (!(file.mimetype.includes('jpeg') || file.mimetype.includes('png'))) {
+        //     throw new HttpException('Error uploading file', HttpStatus.BAD_REQUEST);
+        // }
+
+        const id = randomUUID();
+
+        const fileExtension = extname(file);
+
+        const remoteFileName = [id, fileExtension].join('');
+
+        const fullRemoteFileName = [remoteDirectory, remoteFileName].join('');
+
+        // const metaData = {
+        //     'Content-Type': file.mimetype,
+        //     'X-Amz-Meta-Testing': 1234,
+        // };
+
+        try {
+            await this.client.fPutObject(this.bucketName, fullRemoteFileName, file);
+
+            const minioFile: MinioFileInput = {
+                id: id,
+                pathFile: fullRemoteFileName,
+            };
+
+            const minFile = await this.createMinioFile(minioFile);
+
+            const result: MinioFileOutput = {
+                ...minFile,
+                secureUrl: `http://${env.String('MINIO_ENDPOINT')}:${env.Int('MINIO_PORT', 9000)}/${this.bucketName}/${fullRemoteFileName}`,
+            };
+
+            return result;
         } catch (error) {
             console.error('Error uploading file to MinIO:', error);
             throw new HttpException('Error uploading file', HttpStatus.INTERNAL_SERVER_ERROR);
@@ -82,6 +128,6 @@ export class MinioClientService {
 
         const result = await this.minioFileRepository.save(minioFile);
 
-        return result ? true : false;
+        return result;
     }
 }
