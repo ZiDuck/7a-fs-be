@@ -22,6 +22,7 @@ import { FormsModule } from './modules/forms/forms.module';
 import { GroupQuestionsModule } from './modules/group-questions/group-questions.module';
 import { ImageHistoryModule } from './modules/image-history/image-history.module';
 import { ImagesModule } from './modules/images/images.module';
+import { MinioClientModule } from './modules/minio-client/minio-client.module';
 import { NotificationsModule } from './modules/notifications/notifications.module';
 import { RawFilesModule } from './modules/raw-files/raw-files.module';
 import { RolesModule } from './modules/roles/roles.module';
@@ -66,6 +67,7 @@ import { UsersModule } from './modules/users/users.module';
         FileHistoryModule,
         TasksModule,
         FormSummaryModule,
+        MinioClientModule,
     ],
     controllers: [AppController],
     providers: [

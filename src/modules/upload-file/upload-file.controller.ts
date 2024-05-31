@@ -1,20 +1,22 @@
 import { Controller, Get, InternalServerErrorException, Post, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBody, ApiConsumes, ApiOkResponse, ApiTags } from '@nestjs/swagger';
-import { plainToClass } from 'class-transformer';
 import { Transactional } from 'typeorm-transactional';
 
 import { ApiException } from '../../cores/decorators/api-exception.decorator';
 import { UseRoleGuard } from '../../cores/decorators/use-role.decorator';
+import { MinioClientService } from '../minio-client/minio-client.service';
 import { GetRawFile } from '../raw-files/dto/get-raw-file.dto';
-import { ArchiveFolder } from './enums/archive-folder.enum';
 import { FileUploadDto } from './enums/file-upload.dto';
 import { UploadFileService } from './upload-file.service';
 
 @ApiTags('upload-file')
 @Controller('upload-file')
 export class UploadFileController {
-    constructor(private readonly uploadFileService: UploadFileService) {}
+    constructor(
+        private readonly uploadFileService: UploadFileService,
+        private readonly minioClientService: MinioClientService,
+    ) {}
 
     @UseRoleGuard()
     @Post('image')
@@ -32,10 +34,10 @@ export class UploadFileController {
         description: 'Error when uploading image to cloudinary',
     })
     @Transactional()
-    async uploadImage(@UploadedFile() file: Express.Multer.File): Promise<GetRawFile> {
+    async uploadImage(@UploadedFile() file: Express.Multer.File) {
         try {
-            return plainToClass(GetRawFile, await this.uploadFileService.uploadImage(file, ArchiveFolder.images));
-            // return await this.uploadFileService.uploadImage(file, ArchiveFolder.images);
+            // return plainToClass(GetRawFile, await this.minioClientService.upload(file));
+            return await this.minioClientService.upload(file);
         } catch (error) {
             throw new InternalServerErrorException(error.message);
         }
