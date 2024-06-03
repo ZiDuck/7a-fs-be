@@ -50,7 +50,6 @@ export class UploadFileController {
     // }
 
     @Transactional()
-    @Post('image')
     @UseInterceptors(FileInterceptor('file'))
     @ApiConsumes('multipart/form-data')
     @ApiBody({

@@ -6,6 +6,7 @@ import { extname, parse } from 'path';
 import { Repository } from 'typeorm';
 
 import { env } from '../../cores/utils/env.util';
+import { getFileSize } from '../../cores/utils/get-file-size.util';
 import { MinioFileInput } from './dto/minio-file.input';
 import { MinioFileOutput } from './dto/minio-file.output';
 import { MinioFile } from './entities/minio-file.entity';
