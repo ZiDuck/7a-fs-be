@@ -1,17 +1,17 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
 export class AnswerResponseFileUpload {
     @ApiProperty()
-    filename: string;
+    bytes: number;
 
     @ApiProperty()
-    publicId: string;
+    filename?: string;
 
     @ApiProperty()
     secureUrl: string;
 
-    @ApiProperty()
-    resourceType: string;
+    @ApiPropertyOptional()
+    mimetype?: string;
 
     constructor(data: Partial<AnswerResponseFileUpload>) {
         Object.assign(this, data);

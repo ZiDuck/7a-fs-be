@@ -440,47 +440,6 @@ export class FormSubmitsService {
         return 0;
     }
 
-    // calculateScoreForGroupQuestion(question: GroupQuestionSubmitTemp) {
-    //     if (question.attributeType === AttributeType.RADIO_GRID) {
-    //         const correctAnswers = question.groupQuestion.answers.filter((ans) => ans.isCorrect);
-    //         const rows = question.groupQuestion.rows;
-    //         const guestChoices = question.groupQuestion.guestAnswer.gridIds;
-    //         let totalScore = 0;
-
-    //         rows.forEach((row) => {
-    //             const correctRowAnswers = correctAnswers.filter((ans) => ans.rowId === row.id);
-    //             const guestRowChoice = guestChoices.find((choice) => choice.rowId === row.id);
-
-    //             if (guestRowChoice && correctRowAnswers.some((ans) => ans.id === guestRowChoice.id)) {
-    //                 totalScore += row.score;
-    //             }
-    //         });
-
-    //         return totalScore;
-    //     } else if (question.attributeType === AttributeType.CHECKBOX_GRID) {
-    //         const correctAnswers = question.groupQuestion.answers.filter((ans) => ans.isCorrect);
-    //         const rows = question.groupQuestion.rows;
-    //         const guestChoices = question.groupQuestion.guestAnswer.gridIds;
-    //         let totalScore = 0;
-
-    //         rows.forEach((row) => {
-    //             const correctRowAnswers = correctAnswers.filter((ans) => ans.rowId === row.id);
-    //             const guestRowChoices = guestChoices.filter((choice) => choice.rowId === row.id);
-
-    //             if (
-    //                 correctRowAnswers.length === guestRowChoices.length &&
-    //                 correctRowAnswers.every((ans) => guestRowChoices.some((choice) => choice.id === ans.id))
-    //             ) {
-    //                 totalScore += row.score;
-    //             }
-    //         });
-
-    //         return totalScore;
-    //     }
-
-    //     return 0;
-    // }
-
     calcCorrectAnswer(formSubmit: FormSubmitDto) {
         const questions = formSubmit.formQuestions;
 

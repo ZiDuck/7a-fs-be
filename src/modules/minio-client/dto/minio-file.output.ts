@@ -21,6 +21,9 @@ export class MinioFileOutput {
     @ApiPropertyOptional()
     secureUrl?: string;
 
+    @ApiPropertyOptional()
+    filename?: string;
+
     @Exclude()
     createdDate: Date;
 

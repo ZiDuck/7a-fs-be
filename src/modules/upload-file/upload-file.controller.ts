@@ -50,7 +50,20 @@ export class UploadFileController {
     // }
 
     @Transactional()
+    @Post('image')
     @UseInterceptors(FileInterceptor('file'))
+    @ApiConsumes('multipart/form-data')
+    @ApiBody({
+        description: 'Image file to upload to cloudinary',
+        type: FileUploadDto,
+    })
+    @ApiOkResponse({
+        description: 'The image has been uploaded to cloudinary',
+        type: MinioFileOutput,
+    })
+    @ApiException(() => InternalServerErrorException, {
+        description: 'Error when uploading image to cloudinary',
+    })
     @Post('raw')
     async uploadFiles(@UploadedFile() file: Express.Multer.File) {
         return await this.uploadFileService.uploadFileSubmit(file);

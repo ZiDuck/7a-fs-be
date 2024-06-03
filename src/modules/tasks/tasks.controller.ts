@@ -1,4 +1,4 @@
-import { Controller, Post } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 
 import { TasksService } from './tasks.service';
 
@@ -6,8 +6,8 @@ import { TasksService } from './tasks.service';
 export class TasksController {
     constructor(private readonly tasksService: TasksService) {}
 
-    @Post()
-    async removeImageOnCloudinary() {
-        return await this.tasksService.performMonthlyTasks();
-    }
+    // @Post()
+    // async removeImageOnCloudinary() {
+    //     return await this.tasksService.performMonthlyTasks();
+    // }
 }

@@ -39,7 +39,8 @@ export class RawFilesService {
         return {
             id: file.id,
             pathFile: file.pathFile,
-            secureUrl: `http://${env.String('MINIO_ENDPOINT')}:${env.Int('MINIO_PORT', 9000)}/${env.String('MINIO_BUCKET')}/${file.pathFile}`,
+            secureUrl: `${env.String('MINIO_URL')}/${env.String('MINIO_BUCKET')}/${file.pathFile}`,
+            filename: file.filename,
         } as ImageOutput;
     }
 

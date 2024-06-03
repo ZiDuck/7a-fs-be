@@ -335,9 +335,9 @@ export class FormSummaryService {
                 const fileValues = ques.singleQuestion.guestAnswer.fileValues.map((file) => {
                     return {
                         filename: file.filename,
-                        publicId: file.publicId,
                         secureUrl: file.secureUrl,
-                        resourceType: file.resourceType,
+                        bytes: file.bytes,
+                        mimetype: file.mimetype,
                     };
                 });
                 return fileValues;

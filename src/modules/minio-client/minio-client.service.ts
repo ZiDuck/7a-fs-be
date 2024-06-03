@@ -57,7 +57,7 @@ export class MinioClientService {
 
             const result: MinioFileOutput = {
                 ...minFile,
-                secureUrl: `http://${env.String('MINIO_ENDPOINT')}:${env.Int('MINIO_PORT', 9000)}/${this.bucketName}/${fullRemoteFileName}`,
+                secureUrl: `${env.String('MINIO_URL')}/${this.bucketName}/${fullRemoteFileName}`,
             };
 
             return result;
@@ -97,7 +97,7 @@ export class MinioClientService {
 
             const result: MinioFileOutput = {
                 ...minFile,
-                secureUrl: `http://${env.String('MINIO_ENDPOINT')}:${env.Int('MINIO_PORT', 9000)}/${this.bucketName}/${fullRemoteFileName}`,
+                secureUrl: `${env.String('MINIO_URL')}/${this.bucketName}/${fullRemoteFileName}`,
             };
 
             return result;

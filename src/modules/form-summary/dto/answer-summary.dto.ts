@@ -31,7 +31,7 @@ export class AnswerSummary {
             } else if ('filename' in a) {
                 return new AnswerResponseFileUpload(a);
             } else {
-                return new RowResponse(a);
+                // return new RowResponse(a);
             }
         });
     }

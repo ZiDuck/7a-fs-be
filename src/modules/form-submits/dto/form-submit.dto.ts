@@ -62,16 +62,13 @@ export class GuestFileValue {
     bytes: number;
 
     @ApiProperty()
-    filename: string;
-
-    @ApiProperty()
-    publicId: string;
+    filename?: string;
 
     @ApiProperty()
     secureUrl: string;
 
-    @ApiProperty()
-    resourceType: string;
+    @ApiPropertyOptional()
+    mimetype?: string;
 }
 
 export class GuestTextSummary {
