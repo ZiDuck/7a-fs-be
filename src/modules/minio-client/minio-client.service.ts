@@ -6,8 +6,6 @@ import { extname, parse } from 'path';
 import { Repository } from 'typeorm';
 
 import { env } from '../../cores/utils/env.util';
-import { getFileSize } from '../../cores/utils/get-file-size.util';
-import { DeleteFileInput } from './dto/delete-file.input';
 import { MinioFileInput } from './dto/minio-file.input';
 import { MinioFileOutput } from './dto/minio-file.output';
 import { MinioFile } from './entities/minio-file.entity';
@@ -155,14 +153,14 @@ export class MinioClientService {
         });
     }
 
-    async delete(data: DeleteFileInput) {
-        await this.client.removeObject(this.bucketName, data.objectName);
-        const result = await this.minioFileRepository.delete(data.id);
+    async delete(id: string) {
+        const file = await this.findById(id);
+        if (!file) {
+            throw new HttpException('File không tồn tại', HttpStatus.BAD_REQUEST);
+        }
+        await this.client.removeObject(this.bucketName, file.pathFile);
+        const result = await this.minioFileRepository.delete(file.id);
         return result.affected ? true : false;
-    }
-
-    async listAllBuckets() {
-        return this.client.listBuckets();
     }
 
     async createMinioFile(data: MinioFileInput) {
