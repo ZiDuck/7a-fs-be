@@ -206,10 +206,10 @@ export class NotificationsService {
 
         if (notification.userId) {
             const user = await this.usersService.findOneDeletedNotThrowError(notification.userId);
-            params = { userId: user.id, fullName: user ? user.getName() : '' };
+            params = { userId: user?.id ?? '', fullName: user ? user.getName() : '' };
         } else if (notification.formId) {
             const form = await this.formsService.findOneDeletedNotThrowError(notification.formId);
-            params = { formId: form.id, title: form ? form.title : '' };
+            params = { formId: form?.id ?? '', title: form ? form.title : '' };
         }
 
         const notificationInfo = notification.getNotificationInfo(params);
