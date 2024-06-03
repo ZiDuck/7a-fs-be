@@ -1,36 +1,28 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsNumber, IsString, MaxLength, MinLength } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateBackupDto {
-    @ApiProperty()
-    @IsEmail()
-    @IsNotEmpty()
-    filename: string;
+    @ApiPropertyOptional()
+    @IsOptional()
+    filename?: string;
 
     @ApiProperty()
     @IsString()
     @IsNotEmpty()
-    @MinLength(6)
-    @MaxLength(255)
-    publicId: string;
+    pathFile: string;
 
-    @ApiProperty()
+    @ApiPropertyOptional()
+    @IsOptional()
     @IsString()
-    secureUrl: string;
+    mimetype?: string;
 
-    @ApiProperty()
-    @IsString()
-    url: string;
-
-    @ApiProperty()
-    @IsString()
-    resourceType: string;
-
-    @ApiProperty()
+    @ApiPropertyOptional()
+    @IsOptional()
     @IsNumber()
-    bytes: number;
+    bytes?: number;
 
     @ApiProperty()
     @IsString()
-    lastMod: string;
+    @IsOptional()
+    lastMod?: string;
 }

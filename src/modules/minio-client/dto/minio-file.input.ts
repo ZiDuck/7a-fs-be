@@ -26,4 +26,9 @@ export class MinioFileInput {
     @IsOptional()
     @IsString()
     lastMod?: string;
+
+    @ApiPropertyOptional()
+    @IsOptional()
+    @IsString()
+    filename?: string;
 }

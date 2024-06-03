@@ -776,7 +776,7 @@ export class FormsService {
         return result.affected ? true : false;
     }
 
-    async remove(id: string) {
+    async softRemove(id: string) {
         const deleteForm = await this.findOne(id);
 
         const result = await this.formRepository.softRemove(deleteForm);
@@ -794,5 +794,21 @@ export class FormsService {
         if (!result) throw new InternalServerErrorException();
 
         return;
+    }
+
+    removeOlderThan(date: string) {
+        return this.formRepository.createQueryBuilder().delete().where('deletedDate < :date', { date }).execute();
+    }
+
+    async remove(id: string) {
+        const existedForm = await this.findOneDeleted(id);
+
+        if (!existedForm) {
+            throw Errors.FormNotFoundErrorBusiness(id);
+        }
+
+        const result = await this.formRepository.remove(existedForm);
+
+        return result ? true : false;
     }
 }

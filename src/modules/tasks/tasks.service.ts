@@ -6,7 +6,9 @@ import { Transactional } from 'typeorm-transactional';
 import { BackupService } from '../backup/backup.service';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { FileHistoryService } from '../file-history/file-history.service';
+import { FormsService } from '../forms/forms.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class TasksService {
@@ -15,18 +17,18 @@ export class TasksService {
         private fileHistoryService: FileHistoryService,
         private backupService: BackupService,
         private notificationService: NotificationsService,
+        private userService: UsersService,
+        private formService: FormsService,
     ) {}
 
     @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
-    @Transactional()
     async performDailyTasks() {
-        await Promise.all([this.removeFilesOnCloudinary(), this.removeOldNotifications()]);
+        await Promise.all([this.removeOldNotifications(), this.removeOldForms(), this.removeOldUsers()]);
     }
 
     @Cron(CronExpression.EVERY_1ST_DAY_OF_MONTH_AT_MIDNIGHT)
-    @Transactional()
     async performMonthlyTasks() {
-        await Promise.all([this.removeOldFileHistories(), this.backupData()]);
+        await Promise.all([this.backupData()]);
     }
 
     private async removeFilesOnCloudinary() {
@@ -50,9 +52,22 @@ export class TasksService {
         await this.backupService.dataBackupService();
     }
 
+    @Transactional()
     private async removeOldNotifications() {
         const thirtyDaysAgo = dayjs().subtract(30, 'day').toISOString();
-        await this.notificationService.removeNotificationsOlderThan(thirtyDaysAgo);
+        await this.notificationService.removeOlderThan(thirtyDaysAgo);
+    }
+
+    @Transactional()
+    async removeOldUsers() {
+        const thirtyDaysAgo = dayjs().subtract(30, 'day').toISOString();
+        await this.userService.removeOlderThan(thirtyDaysAgo);
+    }
+
+    @Transactional()
+    async removeOldForms() {
+        const thirtyDaysAgo = dayjs().subtract(30, 'day').toISOString();
+        await this.formService.removeOlderThan(thirtyDaysAgo);
     }
 
     private getOneDayInterval() {

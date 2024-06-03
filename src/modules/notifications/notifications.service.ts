@@ -154,15 +154,8 @@ export class NotificationsService {
         return results ? true : false;
     }
 
-    async removeNotificationsOlderThan(date: string) {
-        const notifications = await this.notificationRepository
-            .createQueryBuilder('notification')
-            .where('notification.createdDate < :date', { date })
-            .getMany();
-
-        if (notifications.length > 0) {
-            await this.notificationRepository.remove(notifications);
-        }
+    async removeOlderThan(date: string) {
+        return this.notificationRepository.createQueryBuilder().delete().where('createdDate < :date', { date }).execute();
     }
 
     async removeNotificationByFormId(formId: RemoveFormEvent) {

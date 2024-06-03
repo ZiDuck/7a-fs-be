@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ClsModule } from 'nestjs-cls';
 
 import { AppController } from './app.controller';
@@ -68,6 +69,7 @@ import { UsersModule } from './modules/users/users.module';
         TasksModule,
         FormSummaryModule,
         MinioClientModule,
+        ScheduleModule.forRoot(),
     ],
     controllers: [AppController],
     providers: [

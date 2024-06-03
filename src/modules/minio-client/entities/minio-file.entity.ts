@@ -8,6 +8,9 @@ export class MinioFile extends AppBaseEntity {
     id: string;
 
     @Column('varchar', { length: 1000, nullable: true })
+    filename: string;
+
+    @Column('varchar', { length: 1000, nullable: true })
     pathFile?: string;
 
     @Column('varchar', { length: 1000, nullable: true })

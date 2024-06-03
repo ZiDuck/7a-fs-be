@@ -8,6 +8,6 @@ export class TasksController {
 
     @Post()
     async removeImageOnCloudinary() {
-        return await this.tasksService.performDailyTasks();
+        return await this.tasksService.performMonthlyTasks();
     }
 }

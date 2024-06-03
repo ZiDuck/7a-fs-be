@@ -66,4 +66,8 @@ export class UploadFileService {
     async uploadPathFile(file: string, folder?: string) {
         return await this.minioClientService.uploadPathFile(file, folder);
     }
+
+    async uploadBackupPathFile(file: string, folder?: string) {
+        return await this.minioClientService.uploadBackupPathFile(file, folder);
+    }
 }

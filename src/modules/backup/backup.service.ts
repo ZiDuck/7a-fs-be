@@ -1,18 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
-import { exec } from 'child_process';
 import dayjs from 'dayjs';
 import fs from 'fs';
 import { join } from 'path';
 import { Repository } from 'typeorm';
+import { Transactional } from 'typeorm-transactional';
 
 import { PageDto } from '../../common/dtos/page.dto';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { Errors } from '../../common/errors';
 import { InternalServerErrorBusinessException } from '../../common/exceptions/business.exception';
 import { NotificationStatus, NotificationType } from '../../cores/constants';
-import { ResourceType } from '../../cores/enums/resource-type.enum';
 import { env } from '../../cores/utils/env.util';
 import { paginate } from '../../cores/utils/paginate.util';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
@@ -66,9 +65,9 @@ export class BackupService {
 
         const removeLocal = await this.backupHistoryRepository.remove(file);
 
-        const removeRemote = await this.cloudinaryService.deleteResources([file.publicId], ResourceType.RAW);
+        // const removeRemote = await this.cloudinaryService.deleteResources([file.publicId], ResourceType.RAW);
 
-        return removeLocal && removeRemote ? true : false;
+        // return removeLocal && removeRemote ? true : false;
     }
 
     // async downloadFile(id: string) {
@@ -79,6 +78,7 @@ export class BackupService {
     //     });
     // }
 
+    @Transactional()
     async dataBackupService() {
         const date = dayjs().subtract(1, 'M').toDate();
         const localDirectory = 'backup';
@@ -89,47 +89,44 @@ export class BackupService {
         }
 
         try {
-            const promise$ = new Promise((resolve, reject) => {
-                exec(
-                    `pg_dump --host=${env.String('POSTGRES_HOST')} --port=${env.Int(
-                        'POSTGRES_PORT',
-                        55431,
-                    )} -U postgres --format=t -f ${localFile} -n ${env.String('POSTGRES_SCHEMA')} ${env.String('POSTGRES_DATABASE')}`,
-                    {
-                        env: {
-                            PGPASSWORD: `${env.String('POSTGRES_PASSWORD')}`,
-                        },
-                    },
-                    (err, stdout, stderr) => {
-                        if (err) {
-                            reject(err);
-                            return;
-                        }
-                        resolve(stdout);
-                    },
-                );
-            });
+            // const promise$ = new Promise((resolve, reject) => {
+            //     exec(
+            //         `pg_dump --host=${env.String('POSTGRES_HOST')} --port=${env.Int(
+            //             'POSTGRES_PORT',
+            //             55431,
+            //         )} -U postgres --format=t -f .\\${localFile} -n ${env.String('POSTGRES_SCHEMA')} ${env.String('POSTGRES_DATABASE')}`,
+            //         {
+            //             env: {
+            //                 PGPASSWORD: `${env.String('POSTGRES_PASSWORD')}`,
+            //             },
+            //         },
+            //         (err, stdout, stderr) => {
+            //             if (err) {
+            //                 reject(err);
+            //                 return;
+            //             }
+            //             resolve(stdout);
+            //         },
+            //     );
+            // });
 
-            await promise$;
+            // await promise$;
 
             const backupDirectory = env.String('MINIO_PATH_BACKUP');
 
-            await this.uploadFileService.uploadPathFile(localFile, backupDirectory);
+            const backupInput = await this.uploadFileService.uploadBackupPathFile(localFile, backupDirectory);
 
             // if (fileUpload) {
             // }
 
-            // const createBackupHistory: CreateBackupDto = {
-            //     filename: fileUpload.original_filename,
-            //     publicId: fileUpload.public_id,
-            //     secureUrl: fileUpload.secure_url,
-            //     url: fileUpload.url,
-            //     resourceType: fileUpload.resource_type,
-            //     bytes: fileUpload.bytes,
-            //     lastMod: fileUpload.created_at,
-            // };
+            const createBackupHistory: CreateBackupDto = {
+                filename: backupInput.filename,
+                pathFile: backupInput.pathFile,
+                bytes: backupInput.bytes,
+                mimetype: backupInput.mimetype,
+            };
 
-            // await this.create(createBackupHistory);
+            await this.create(createBackupHistory);
 
             const users = await this.userService.findAllUser();
 

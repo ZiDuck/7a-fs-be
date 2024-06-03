@@ -191,7 +191,7 @@ export class UsersService {
         return result;
     }
 
-    async delete(id: string): Promise<void> {
+    async softRemove(id: string): Promise<void> {
         const deleteUser = await this.findOne(id);
 
         const result = await this.usersRepository.softRemove(deleteUser);
@@ -231,5 +231,19 @@ export class UsersService {
         await this.usersRepository.save(user);
 
         return true;
+    }
+
+    async removeOlderThan(date: string) {
+        return this.usersRepository.createQueryBuilder().delete().where('deletedDate < :date', { date }).execute();
+    }
+
+    async remove(id: string): Promise<void> {
+        const user = await this.findOneDeleted(id);
+
+        const result = await this.usersRepository.remove(user);
+
+        if (!result) throw new InternalServerErrorException();
+
+        return;
     }
 }

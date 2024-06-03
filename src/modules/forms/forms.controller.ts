@@ -270,10 +270,10 @@ export class FormsController {
     @AdminUserRole()
     @UseInterceptors(FormLoggingInterceptor)
     @FormLogging(ActionType.DELETE_FORM)
-    @Delete(':id')
-    async remove(@Param('id', ParseUUIDPipe) id: string) {
+    @Patch(':id')
+    async softRemove(@Param('id', ParseUUIDPipe) id: string) {
         try {
-            return await this.formsService.remove(id);
+            return await this.formsService.softRemove(id);
         } catch (error) {
             if (error instanceof HttpException) throw error;
             throw new InternalServerErrorException(error.message);
@@ -288,6 +288,20 @@ export class FormsController {
     async restoreDeleted(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
         try {
             await this.formsService.restore(id);
+        } catch (error) {
+            if (error instanceof HttpException) throw error;
+            throw new InternalServerErrorException(error.message);
+        }
+    }
+
+    @UseRoleGuard()
+    @AdminUserRole()
+    // @UseInterceptors(FormLoggingInterceptor)
+    // @FormLogging(ActionType.DELETE_FORM)
+    @Delete(':id')
+    async remove(@Param('id', ParseUUIDPipe) id: string) {
+        try {
+            return await this.formsService.remove(id);
         } catch (error) {
             if (error instanceof HttpException) throw error;
             throw new InternalServerErrorException(error.message);

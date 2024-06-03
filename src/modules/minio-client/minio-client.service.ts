@@ -2,10 +2,11 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomUUID } from 'crypto';
 import { MinioService } from 'nestjs-minio-client';
-import { extname } from 'path';
+import { extname, parse } from 'path';
 import { Repository } from 'typeorm';
 
 import { env } from '../../cores/utils/env.util';
+import { getFileSize } from '../../cores/utils/get-file-size.util';
 import { DeleteFileInput } from './dto/delete-file.input';
 import { MinioFileInput } from './dto/minio-file.input';
 import { MinioFileOutput } from './dto/minio-file.output';
@@ -49,6 +50,7 @@ export class MinioClientService {
                 bytes: file.size,
                 pathFile: fullRemoteFileName,
                 mimetype: file.mimetype,
+                filename: file.originalname,
             };
 
             const minFile = await this.createMinioFile(minioFile);
@@ -105,6 +107,48 @@ export class MinioClientService {
         }
     }
 
+    async uploadBackupPathFile(file: string, remoteDirectory: string) {
+        // if (!(file.mimetype.includes('jpeg') || file.mimetype.includes('png'))) {
+        //     throw new HttpException('Error uploading file', HttpStatus.BAD_REQUEST);
+        // }
+
+        const id = randomUUID();
+
+        const fileName = parse(file).name;
+
+        const fileExtension = extname(file);
+
+        const mimeType = 'application/x-tar';
+
+        const fileSize = await getFileSize(file);
+
+        const remoteFileName = [id, fileExtension].join('');
+
+        const fullRemoteFileName = [remoteDirectory, remoteFileName].join('');
+
+        // const metaData = {
+        //     'Content-Type': file.mimetype,
+        //     'X-Amz-Meta-Testing': 1234,
+        // };
+
+        try {
+            await this.client.fPutObject(this.bucketName, fullRemoteFileName, file);
+
+            const minioFile: MinioFileInput = {
+                id: id,
+                pathFile: fullRemoteFileName,
+                filename: fileName,
+                mimetype: mimeType,
+                bytes: fileSize,
+            };
+
+            return minioFile;
+        } catch (error) {
+            console.error('Error uploading file to MinIO:', error);
+            throw new HttpException('Error uploading file', HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     findById(id: string) {
         return this.minioFileRepository.findOne({
             where: { id },
@@ -122,7 +166,7 @@ export class MinioClientService {
     }
 
     async createMinioFile(data: MinioFileInput) {
-        const minioFile = await this.minioFileRepository.create(data);
+        const minioFile = this.minioFileRepository.create(data);
 
         const result = await this.minioFileRepository.save(minioFile);
 

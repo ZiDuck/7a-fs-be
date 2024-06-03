@@ -124,10 +124,10 @@ export class UsersController {
     @Transactional()
     @UseInterceptors(AuthLoggingInterceptor)
     @AuthLogging(ActionType.DElETE_USER)
-    @Delete(':id')
-    async delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+    @Patch(':id')
+    async softRemove(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
         try {
-            await this.userService.delete(id);
+            await this.userService.softRemove(id);
         } catch (error) {
             if (error instanceof HttpException) throw error;
             throw new InternalServerErrorException(error.message);
@@ -170,6 +170,20 @@ export class UsersController {
         try {
             const result = await this.userService.create(data);
             return plainToInstance(GetUserDto, result);
+        } catch (error) {
+            if (error instanceof HttpException) throw error;
+            throw new InternalServerErrorException(error.message);
+        }
+    }
+
+    @AdminRole()
+    @Transactional()
+    // @UseInterceptors(AuthLoggingInterceptor)
+    // @AuthLogging(ActionType.DElETE_USER)
+    @Delete(':id')
+    async delete(@Param('id', ParseUUIDPipe) id: string): Promise<void> {
+        try {
+            await this.userService.remove(id);
         } catch (error) {
             if (error instanceof HttpException) throw error;
             throw new InternalServerErrorException(error.message);
