@@ -258,6 +258,10 @@ export class FormSubmitsService {
                 : {
                       isCorrect: false,
                   };
+        } else if (AttributeType.FILE_UPLOAD === stQuestion.attributeType) {
+            return {
+                isCorrect: false,
+            };
         }
     }
 
@@ -433,6 +437,8 @@ export class FormSubmitsService {
             if (correctAnswer.length > 0) {
                 return question.singleQuestion.score;
             }
+        } else if (AttributeType.FILE_UPLOAD === question.attributeType) {
+            return 0;
         } else {
             return question.singleQuestion.score;
         }
