@@ -498,7 +498,7 @@ export class FormsService {
 
             if (!scoresMap.has(guestChoiceKey)) {
                 let score: number;
-                if (guestAnswerSummaries.length === 0) score = 0;
+                if (guestAnswerSummaries.length === 0 || stCorrectChoices.length === 0) score = 0;
                 else {
                     if (ONE_SELECTION_QUESTION_TYPES.includes(stQuestion.attributeType)) {
                         score = stCorrectChoices.some((choice) => guestAnswerSummaries.some((ans) => ans.id === choice.id))
