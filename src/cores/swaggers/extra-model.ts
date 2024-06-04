@@ -1,3 +1,4 @@
+import { CreateGroupQuestionFormInput, CreateSingleQuestionFormInput } from '../../modules/form-questions/dto/create-form-question.input';
 import { CreateGroupQuestionSubmitTemp, CreateSingleQuestionSubmitTemp } from '../../modules/form-submits/dto/create-form-submit.dto';
 import { GroupQuestionSubmitTemp, SingleQuestionSubmitTemp } from '../../modules/form-submits/dto/form-submit.dto';
 import {
@@ -32,6 +33,8 @@ const extraModels = [
     UpdateGroupQuestionSubmitTemp,
     UpdateGuestSelectSummary,
     UpdateGuestTextSummary,
+    CreateSingleQuestionFormInput,
+    CreateGroupQuestionFormInput,
 ];
 
 export default extraModels;

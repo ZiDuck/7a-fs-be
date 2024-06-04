@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsEnum, IsNotEmpty, IsUUID, ValidateNested } from 'class-validator';
 import { UUID } from 'typeorm/driver/mongodb/bson.typings';
@@ -32,9 +32,18 @@ export class CreateFormQuestionOfFormInput extends CreateFormInput {
     status: FormStatus;
 
     @ApiProperty({
-        type: [CreateFormQuestionInput],
+        type: 'array',
+        items: {
+            oneOf: [
+                {
+                    $ref: getSchemaPath(CreateSingleQuestionFormInput),
+                },
+                {
+                    $ref: getSchemaPath(CreateGroupQuestionFormInput),
+                },
+            ],
+        },
     })
-    // @Type(() => CreateFormQuestionInput)
     @Type(() => CreateFormQuestionInput, {
         keepDiscriminatorProperty: true,
         discriminator: {

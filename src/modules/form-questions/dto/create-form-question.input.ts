@@ -61,22 +61,6 @@ export class CreateFormQuestionInput {
     @IsNotEmpty()
     @IdExists(Form)
     formId: string;
-
-    // @ApiPropertyOptional({
-    //     type: CreateSingleQuestionAttributeInput,
-    // })
-    // @Type(() => CreateSingleQuestionAttributeInput)
-    // @IsOptional()
-    // @ValidateNested()
-    // singleQuestion?: CreateSingleQuestionAttributeInput;
-
-    // @ApiPropertyOptional({
-    //     type: CreateGroupQuestionAttributeInput,
-    // })
-    // @Type(() => CreateGroupQuestionAttributeInput)
-    // @IsOptional()
-    // @ValidateNested()
-    // groupQuestion?: CreateGroupQuestionAttributeInput;
 }
 
 export class CreateSingleQuestionFormInput extends CreateFormQuestionInput {
