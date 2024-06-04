@@ -470,7 +470,7 @@ export class UpdateFormSubmitDto {
     })
     @IsUUID()
     @IdExists(FormSubmit)
-    submitId: string;
+    formSubmitId: string;
 
     @ApiProperty({
         type: 'array',

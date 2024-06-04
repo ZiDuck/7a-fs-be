@@ -470,7 +470,7 @@ export class FormSubmitsService {
         this.validateFormSubmit(data);
 
         const formSubmitData = this.formSubmitRepository.create({
-            id: data.submitId,
+            id: data.formSubmitId,
             metadata: data,
         });
 
