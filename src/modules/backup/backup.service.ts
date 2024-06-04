@@ -102,7 +102,7 @@ export class BackupService {
                     `pg_dump --host=${env.String('POSTGRES_HOST')} --port=${env.Int(
                         'POSTGRES_PORT',
                         55431,
-                    )} -U postgres --format=t -f .\\${localFile} -n ${env.String('POSTGRES_SCHEMA')} ${env.String('POSTGRES_DATABASE')}`,
+                    )} -U postgres --format=t -f ${localFile} -n ${env.String('POSTGRES_SCHEMA')} ${env.String('POSTGRES_DATABASE')}`,
                     {
                         env: {
                             PGPASSWORD: `${env.String('POSTGRES_PASSWORD')}`,
