@@ -141,6 +141,8 @@ export class MinioClientService {
                 bytes: fileSize,
             };
 
+            await this.createMinioFile(minioFile);
+
             return minioFile;
         } catch (error) {
             console.error('Error uploading file to MinIO:', error);

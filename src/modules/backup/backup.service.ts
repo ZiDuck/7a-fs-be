@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
+import { exec } from 'child_process';
 import dayjs from 'dayjs';
 import fs from 'fs';
 import { join } from 'path';
 import { Repository } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 
-import { PageDto } from '../../common/dtos/page.dto';
 import { PageQueryDto } from '../../common/dtos/page-query.dto';
 import { Errors } from '../../common/errors';
 import { InternalServerErrorBusinessException } from '../../common/exceptions/business.exception';
@@ -38,12 +38,20 @@ export class BackupService {
         return result ? true : false;
     }
 
-    async findAll(query: PageQueryDto): Promise<PageDto<BackupHistory>> {
-        const builder = await this.backupHistoryRepository.createQueryBuilder();
+    async findAll(query: PageQueryDto) {
+        const builder = this.backupHistoryRepository.createQueryBuilder();
 
         const result = await paginate(builder, query);
 
-        return result;
+        return {
+            ...result,
+            items: result.items.map((item) => {
+                return {
+                    ...item,
+                    secureUrl: `${env.String('MINIO_URL')}/${env.String('MINIO_BUCKET')}/${item.pathFile}`,
+                };
+            }),
+        };
     }
 
     async findOne(id: string): Promise<BackupHistory> {
@@ -89,28 +97,28 @@ export class BackupService {
         }
 
         try {
-            // const promise$ = new Promise((resolve, reject) => {
-            //     exec(
-            //         `pg_dump --host=${env.String('POSTGRES_HOST')} --port=${env.Int(
-            //             'POSTGRES_PORT',
-            //             55431,
-            //         )} -U postgres --format=t -f .\\${localFile} -n ${env.String('POSTGRES_SCHEMA')} ${env.String('POSTGRES_DATABASE')}`,
-            //         {
-            //             env: {
-            //                 PGPASSWORD: `${env.String('POSTGRES_PASSWORD')}`,
-            //             },
-            //         },
-            //         (err, stdout, stderr) => {
-            //             if (err) {
-            //                 reject(err);
-            //                 return;
-            //             }
-            //             resolve(stdout);
-            //         },
-            //     );
-            // });
+            const promise$ = new Promise((resolve, reject) => {
+                exec(
+                    `pg_dump --host=${env.String('POSTGRES_HOST')} --port=${env.Int(
+                        'POSTGRES_PORT',
+                        55431,
+                    )} -U postgres --format=t -f .\\${localFile} -n ${env.String('POSTGRES_SCHEMA')} ${env.String('POSTGRES_DATABASE')}`,
+                    {
+                        env: {
+                            PGPASSWORD: `${env.String('POSTGRES_PASSWORD')}`,
+                        },
+                    },
+                    (err, stdout, stderr) => {
+                        if (err) {
+                            reject(err);
+                            return;
+                        }
+                        resolve(stdout);
+                    },
+                );
+            });
 
-            // await promise$;
+            await promise$;
 
             const backupDirectory = env.String('MINIO_PATH_BACKUP');
 

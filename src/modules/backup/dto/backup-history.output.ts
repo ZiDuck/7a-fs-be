@@ -12,16 +12,13 @@ export class GetBackupOutput extends BackupHistory {
     filename: string;
 
     @ApiProperty()
-    publicId: string;
+    pathFile: string;
 
     @ApiProperty()
     secureUrl: string;
 
     @ApiProperty()
-    url: string;
-
-    @ApiProperty()
-    resourceType: string;
+    mimetype: string;
 
     @ApiProperty()
     bytes: number;
