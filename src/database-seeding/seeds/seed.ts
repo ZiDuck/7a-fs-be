@@ -1,8 +1,9 @@
 import { Connection } from 'typeorm';
-import { User } from '../../modules/users/entities/user.entity';
-import { Role } from '../../modules/roles/entities/role.entity';
 import { Factory, Seeder } from 'typeorm-seeding';
+
 import { RoleType } from '../../cores/constants';
+import { Role } from '../../modules/roles/entities/role.entity';
+import { User } from '../../modules/users/entities/user.entity';
 
 export default class InitialDatabaseSeed implements Seeder {
     public async run(factory: Factory, connection: Connection): Promise<void> {
@@ -15,7 +16,6 @@ export default class InitialDatabaseSeed implements Seeder {
             const roleData = [
                 { value: RoleType.ADMIN, description: RoleType.ADMIN },
                 { value: RoleType.USER, description: RoleType.USER },
-                { value: RoleType.GUEST, description: RoleType.GUEST },
             ];
             await roleRepository.save(roleData);
             console.log('Roles have been seeded');

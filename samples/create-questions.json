@@ -1,0 +1,196 @@
+{
+    "id": "4d5afa48-b7f3-4b68-a59e-f61eb5b4e7ae",
+    "title": "Standard Form",
+    "description": "null",
+    "startSurvey": "2024-04-03T17:00:00.000Z",
+    "status": "PENDING",
+    "hasAnswer": true,
+    "category": "PATIENT_CATEGORY",
+    "imageId": null,
+    "formQuestions": [
+        {
+            "label": "Title of the CHECKBOX BUTTON",
+            "description": "Description of the CHECKBOX BUTTON",
+            "require": true,
+            "order": 0,
+            "imageId": null,
+            "attributeType": "CHECKBOX_BUTTON",
+            "formId": "4d5afa48-b7f3-4b68-a59e-f61eb5b4e7ae",
+            "singleQuestion": {
+                "score": 1,
+                "singleQuestionValues": [
+                    {
+                        "value": "checkbox value 1",
+                        "imageId": null,
+                        "isCorrect": true,
+                        "isOther": false,
+                        "order": 0
+                    },
+                    {
+                        "value": "checkbox value 2",
+                        "imageId": null,
+                        "isCorrect": false,
+                        "isOther": false,
+                        "order": 1
+                    },
+                    {
+                        "value": "checkbox value 3",
+                        "imageId": null,
+                        "isCorrect": false,
+                        "isOther": false,
+                        "order": 2
+                    }
+                ]
+            }
+        },
+        {
+            "label": "Title of the text box",
+            "description": "Description of the text box",
+            "require": true,
+            "order": 1,
+            "imageId": null,
+            "attributeType": "TEXT_BOX",
+            "formId": "4d5afa48-b7f3-4b68-a59e-f61eb5b4e7ae",
+            "singleQuestion": {
+                "score": 5,
+                "isOther": false,
+                "singleQuestionValues": [
+                    {
+                        "value": "true value",
+                        "imageId": null,
+                        "isCorrect": true,
+                        "order": 0
+                    }
+                ]
+            }
+        },
+        {
+            "label": "Title of the paragraph",
+            "description": "Description of the paragraph",
+            "require": true,
+            "order": 2,
+            "imageId": null,
+            "attributeType": "PARAGRAPH",
+            "formId": "4d5afa48-b7f3-4b68-a59e-f61eb5b4e7ae",
+            "singleQuestion": {
+                "score": 5,
+                "isOther": false,
+                "singleQuestionValues": [
+                    {
+                        "value": "Cau tra loi dung 1",
+                        "imageId": null,
+                        "isCorrect": true,
+                        "order": 0
+                    },
+                    {
+                        "value": "Cau tra loi dung 2",
+                        "imageId": null,
+                        "isCorrect": true,
+                        "order": 1
+                    }
+                ]
+            }
+        },
+        {
+            "label": "Title of the multi choice",
+            "description": "Description of multi choice",
+            "require": true,
+            "order": 3,
+            "imageId": null,
+            "attributeType": "RADIO_GRID",
+            "formId": "4d5afa48-b7f3-4b68-a59e-f61eb5b4e7ae",
+            "groupQuestion": {
+                "rows": [
+                    {
+                        "order": 0,
+                        "score": 5,
+                        "value": "Row 1"
+                    },
+                    {
+                        "order": 1,
+                        "score": 5,
+                        "value": "Row 2"
+                    }
+                ],
+                "columns": [
+                    {
+                        "order": 0,
+                        "value": "Column 1"
+                    },
+                    {
+                        "order": 1,
+                        "value": "Column 2"
+                    },
+                    {
+                        "order": 2,
+                        "value": "Column 3"
+                    }
+                ],
+                "answers": [
+                    {
+                        "rowOrder": 0,
+                        "columnOrder": 0,
+                        "isCorrect": true
+                    },
+                    {
+                        "rowOrder": 0,
+                        "columnOrder": 1,
+                        "isCorrect": false
+                    },
+                    {
+                        "rowOrder": 0,
+                        "columnOrder": 2,
+                        "isCorrect": false
+                    },
+                    {
+                        "rowOrder": 1,
+                        "columnOrder": 0,
+                        "isCorrect": false
+                    },
+                    {
+                        "rowOrder": 1,
+                        "columnOrder": 1,
+                        "isCorrect": true
+                    },
+                    {
+                        "rowOrder": 1,
+                        "columnOrder": 2,
+                        "isCorrect": false
+                    }
+                ]
+            }
+        },
+        {
+            "label": "Title of the file upload",
+            "description": null,
+            "require": true,
+            "order": 4,
+            "imageId": null,
+            "attributeType": "FILE_UPLOAD",
+            "formId": "4d5afa48-b7f3-4b68-a59e-f61eb5b4e7ae",
+            "singleQuestion": {
+                "score": 5,
+                "isOther": false,
+                "singleQuestionValues": [],
+                "fileConfig": {
+                    "maxNumOfFiles": 2,
+                    "maxFileSize": 10485760
+                }
+            }
+        },
+        {
+            "label": "Title of the star",
+            "description": null,
+            "require": true,
+            "order": 5,
+            "imageId": null,
+            "attributeType": "STAR",
+            "formId": "4d5afa48-b7f3-4b68-a59e-f61eb5b4e7ae",
+            "singleQuestion": {
+                "score": 5,
+                "isOther": false,
+                "singleQuestionValues": []
+            }
+        }
+    ]
+}

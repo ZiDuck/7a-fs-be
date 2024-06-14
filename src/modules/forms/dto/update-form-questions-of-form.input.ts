@@ -1,0 +1,50 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsInt, IsNotEmpty, IsOptional, IsUUID, ValidateNested } from 'class-validator';
+import { UUID } from 'typeorm/driver/mongodb/bson.typings';
+
+import { IdExists } from '../../../common/validator/uuid.validator';
+import { CreateGroupQuestionFormInput, CreateSingleQuestionFormInput } from '../../form-questions/dto/create-form-question.input';
+import { UpdateFormQuestionDto } from '../../form-questions/dto/update-form-question.dto';
+import { GROUP_QUESTION_TYPES, SINGLE_QUESTION_TYPES } from '../../form-questions/enums/attribute-type.enum';
+import { Form } from '../entities/form.entity';
+import { FormStatus } from '../enums/form-status.enum';
+import { CreateFormInput } from './create-form.input';
+
+export class UpdateFormQuestionOfFormInput extends CreateFormInput {
+    @ApiProperty({
+        type: UUID,
+    })
+    @IsNotEmpty()
+    @IsUUID()
+    @IdExists(Form)
+    id: string;
+
+    @ApiProperty({
+        type: Number,
+    })
+    @IsOptional()
+    @IsInt()
+    version?: number;
+
+    @ApiProperty({
+        enum: FormStatus,
+    })
+    status: FormStatus;
+
+    @ApiProperty({
+        type: [UpdateFormQuestionDto],
+    })
+    @Type(() => UpdateFormQuestionDto, {
+        keepDiscriminatorProperty: true,
+        discriminator: {
+            property: 'attributeType',
+            subTypes: [
+                ...SINGLE_QUESTION_TYPES.map((value) => ({ value: CreateSingleQuestionFormInput, name: value })),
+                ...GROUP_QUESTION_TYPES.map((value) => ({ value: CreateGroupQuestionFormInput, name: value })),
+            ],
+        },
+    })
+    @ValidateNested()
+    formQuestions: UpdateFormQuestionDto[];
+}

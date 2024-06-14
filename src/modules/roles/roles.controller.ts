@@ -1,9 +1,10 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { RolesService } from './roles.service';
-import { GetRoleDto } from './dto/get-role.dto';
 import { plainToInstance } from 'class-transformer';
+
 import { AdminRole } from '../../cores/decorators/role.decorator';
+import { GetRoleDto } from './dto/get-role.dto';
+import { RolesService } from './roles.service';
 
 @ApiTags('roles')
 @AdminRole()

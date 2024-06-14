@@ -1,6 +1,7 @@
-import { Entity, Column, OneToMany, Relation } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
+import { Column, Entity, OneToMany, Relation } from 'typeorm';
+
 import { AppBaseEntity } from '../../../common/entities/base.entity';
+import { User } from '../../users/entities/user.entity';
 
 @Entity()
 export class Role extends AppBaseEntity {

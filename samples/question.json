@@ -1,0 +1,566 @@
+[
+    {
+        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+        "label": "Textbox",
+        "description": null,
+        "order": 0,
+        "attributeType": "TEXT_BOX",
+        "formId": "bdf749ac-2ffc-49a8-a930-c3c91c5b15e0",
+        "singleQuestion": {
+            "id": "9d4adae2-bddd-45f4-881a-20f9f44c850c",
+            "score": 0,
+            "isOther": false,
+            "singleQuestionValues": [
+                {
+                    "id": "49ee7d69-ff58-41a3-9e96-c96483073200",
+                    "value": "Cau tra loi dung 2",
+                    "image": null,
+                    "isCorrect": true
+                },
+                {
+                    "id": "9ebe7556-f1d1-4de5-851c-1fbe1f64086e",
+                    "value": "Cau tra loi dung 1",
+                    "image": null,
+                    "isCorrect": true
+                }
+            ],
+            "fileConfig": null
+        },
+        "answerSummary": [
+            {
+                "value": "abc",
+                "isCorrect": true,
+                "score": 1,
+                "formSubmits": [
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 1"
+                    },
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 2"
+                    },
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 3"
+                    }
+                ]
+            },
+            {
+                "value": "",
+                "isCorrect": false,
+                "score": 1,
+                "formSubmits": [
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 1"
+                    },
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 2"
+                    },
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 3"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "59f6fd06-064c-422d-9d6c-d1163765fd94",
+        "label": "Title of the CHECKBOX BUTTON",
+        "description": "Description of the CHECKBOX BUTTON",
+        "order": 0,
+        "image": null,
+        "attributeType": "CHECKBOX_BUTTON",
+        "formId": "3f1977d7-c4d0-4397-a3ab-c5ab0852617f",
+        "singleQuestion": {
+            "id": "ad5debf2-4110-45e2-b596-81fff85379cd",
+            "score": 1,
+            "isOther": false,
+            "singleQuestionValues": [
+                {
+                    "id": "a7cef153-275e-4edd-b04e-6e618b0f7898",
+                    "value": "checkbox value 3",
+                    "image": null,
+                    "isCorrect": false
+                },
+                {
+                    "id": "76dc114a-bc20-4654-91bd-12295563d4da",
+                    "value": "checkbox value 2",
+                    "image": null,
+                    "isCorrect": false
+                },
+                {
+                    "id": "bd75e12d-04b7-4d88-9923-3c1298f99aa3",
+                    "value": "checkbox value 1",
+                    "image": null,
+                    "isCorrect": true
+                }
+            ],
+            "fileConfig": null
+        },
+        "answerSummary": [
+            {
+                "guestChoices": [
+                    {
+                        "id": "bd75e12d-04b7-4d88-9923-3c1298f99aa3",
+                        "value": "checkbox value 1",
+                        "isCorrect": true
+                    },
+                    {
+                        "id": "76dc114a-bc20-4654-91bd-12295563d4da",
+                        "value": "checkbox value 2",
+                        "isCorrect": false
+                    }
+                ],
+                "formSubmits": [
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 1"
+                    },
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 2"
+                    },
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 3"
+                    }
+                ],
+                "score": 1
+            }
+        ]
+    },
+    {
+        "id": "1208864f-1b71-4d4f-ae57-75b0691f109b",
+        "label": "Radio",
+        "description": null,
+        "attributeType": "RADIO_BUTTON",
+        "formId": "bdf749ac-2ffc-49a8-a930-c3c91c5b15e0",
+        "groupQuestion": {
+            "rows": [
+                {
+                    "id": "fd18bcda-fba2-4887-ba9b-92fb87370013",
+                    "score": 0,
+                    "value": "Row 1",
+                    "order": 0
+                },
+                {
+                    "id": "b7bd1d4a-3620-4469-81c8-d3abc285d1d6",
+                    "score": 0,
+                    "value": "Row 2",
+                    "order": 1
+                }
+            ],
+            "columns": [
+                {
+                    "id": "780fee1a-9cff-437a-a4c6-f0cf80fafc49",
+                    "value": "Column 4",
+                    "order": 3
+                },
+                {
+                    "id": "8457b715-afee-4693-902d-4703c1623179",
+                    "value": "Column 3",
+                    "order": 2
+                },
+                {
+                    "id": "e75eaa76-2d55-47ad-a5c5-a686a856d2ae",
+                    "value": "Column 2",
+                    "order": 1
+                },
+                {
+                    "id": "ccac4843-18cb-4e79-b2d3-e76c1c41376e",
+                    "value": "Column 1",
+                    "order": 0
+                }
+            ],
+            "answers": [
+                {
+                    "id": "681dee94-bc60-4957-972d-936982729985",
+                    "isCorrect": true,
+                    "rowId": "fd18bcda-fba2-4887-ba9b-92fb87370013",
+                    "columnId": "ccac4843-18cb-4e79-b2d3-e76c1c41376e",
+                    "rowOrder": 0,
+                    "columnOrder": 0
+                },
+                {
+                    "id": "2572d937-2d48-4640-ab8f-cffada86de64",
+                    "isCorrect": true,
+                    "rowId": "b7bd1d4a-3620-4469-81c8-d3abc285d1d6",
+                    "columnId": "e75eaa76-2d55-47ad-a5c5-a686a856d2ae",
+                    "rowOrder": 1,
+                    "columnOrder": 1
+                }
+            ]
+        },
+        "answerSummary": [
+            {
+                "rowId": "fd18bcda-fba2-4887-ba9b-92fb87370013",
+                "colSummaries": [
+                    {
+                        "columnId": "ccac4843-18cb-4e79-b2d3-e76c1c41376e",
+                        "value": "Column 1",
+                        "isCorrect": true,
+                        "score": 1,
+                        "formSubmits": [
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 1"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 2"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 3"
+                            }
+                        ]
+                    },
+                    {
+                        "columnId": "e75eaa76-2d55-47ad-a5c5-a686a856d2ae",
+                        "value": "Column 2",
+                        "isCorrect": false,
+                        "score": 0,
+                        "formSubmits": [
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 1"
+                            }
+                        ]
+                    },
+                    {
+                        "columnId": "8457b715-afee-4693-902d-4703c1623179",
+                        "value": "Column 3",
+                        "isCorrect": false,
+                        "score": 0,
+                        "formSubmits": [
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 1"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 2"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 3"
+                            }
+                        ]
+                    },
+                    {
+                        "columnId": "780fee1a-9cff-437a-a4c6-f0cf80fafc49",
+                        "value": "Column 4",
+                        "isCorrect": false,
+                        "score": 0,
+                        "formSubmits": [
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 1"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 2"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 3"
+                            }
+                        ]
+                    },
+                    {
+                        "columnId": null,
+                        "value": "",
+                        "isCorrect": false,
+                        "score": 0,
+                        "formSubmits": [
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 1"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 2"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 3"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "rowId": "b7bd1d4a-3620-4469-81c8-d3abc285d1d6",
+                "colSummaries": [
+                    {
+                        "guestColChoices": [
+                            {
+                                "columnId": "bd75e12d-04b7-4d88-9923-3c1298f99aa3",
+                                "value": "Column 1",
+                                "isCorrect": true
+                            },
+                            {
+                                "id": "76dc114a-bc20-4654-91bd-12295563d4da",
+                                "value": "Column 2",
+                                "isCorrect": false
+                            }
+                        ],
+                        "score": 0,
+                        "formSubmits": [
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 1"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 2"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 3"
+                            }
+                        ]
+                    },
+                    {
+                        "guestChoices": [
+                            {
+                                "columnId": "bd75e12d-04b7-4d88-9923-3c1298f99aa3",
+                                "value": "Column 1",
+                                "isCorrect": true
+                            },
+                            {
+                                "id": "76dc114a-bc20-4654-91bd-12295563d4da",
+                                "value": "Column 2",
+                                "isCorrect": false
+                            }
+                        ],
+                        "score": 1,
+                        "formSubmits": [
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 1"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 2"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 3"
+                            }
+                        ]
+                    },
+                    {
+                        "guestChoices": [
+                            {
+                                "columnId": "bd75e12d-04b7-4d88-9923-3c1298f99aa3",
+                                "value": "Column 1",
+                                "isCorrect": true,
+                                "columnOrder": 0
+                            },
+                            {
+                                "id": "76dc114a-bc20-4654-91bd-12295563d4da",
+                                "value": "Column 2",
+                                "isCorrect": false
+                            }
+                        ],
+                        "score": 0,
+                        "formSubmits": [
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 1"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 2"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 3"
+                            }
+                        ]
+                    },
+                    {
+                        "guestChoices": [
+                            {
+                                "columnId": "bd75e12d-04b7-4d88-9923-3c1298f99aa3",
+                                "value": "Column 1",
+                                "isCorrect": true
+                            },
+                            {
+                                "id": "76dc114a-bc20-4654-91bd-12295563d4da",
+                                "value": "Column 2",
+                                "isCorrect": false
+                            }
+                        ],
+                        "score": 0,
+                        "formSubmits": [
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 1"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 2"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 3"
+                            }
+                        ]
+                    },
+                    {
+                        "guestChoices": [],
+                        "score": 0,
+                        "formSubmits": [
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 1"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 2"
+                            },
+                            {
+                                "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                                "value": "Phản hồi 3"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "80229f30-32a5-4906-bc5a-7798e1ae55f4",
+        "label": "Title of the file upload",
+        "description": null,
+        "require": true,
+        "order": 4,
+        "image": null,
+        "attributeType": "FILE_UPLOAD",
+        "formId": "3f1977d7-c4d0-4397-a3ab-c5ab0852617f",
+        "singleQuestion": {
+            "id": "f7b8a8b3-f7f5-4990-a40b-713264b7c6aa",
+            "score": 0,
+            "isOther": false,
+            "singleQuestionValues": [],
+            "fileConfig": {
+                "id": "d3cd9ae4-9430-4922-9379-874981fe309c",
+                "createdDate": "2024-04-11T21:48:59.643Z",
+                "updatedDate": "2024-04-11T21:48:59.643Z",
+                "maxNumOfFiles": 1,
+                "maxFileSize": 10,
+                "attributeId": "f7b8a8b3-f7f5-4990-a40b-713264b7c6aa",
+                "deletedDate": null
+            }
+        },
+        "answerSummary": [
+            {
+                "fileInfo": {
+                    "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                    "bytes": 21312312,    
+                    "filename": "name",
+                    "publicId": "asdasds",               
+                    "secureUrl": "asdasdasd",               
+                    "resourceType": "images"
+                },
+                "formSubmits": [
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 1"
+                    },
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 2"
+                    },
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 3"
+                    }
+                ]
+            },
+            {
+                "fileInfo": null,
+                "isCorrect": false,
+                "formSubmits": [
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 1"
+                    },
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 2"
+                    },
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 3"
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "bec3a1fe-acfb-434f-904b-82081abe9480",
+        "label": "Title of the star",
+        "description": null,
+        "require": true,
+        "order": 5,
+        "image": null,
+        "attributeType": "STAR",
+        "formId": "4d5afa48-b7f3-4b68-a59e-f61eb5b4e7ae",
+        "singleQuestion": {
+            "id": "39922bb2-3a39-4c10-ab56-3af34a2f7ba8",
+            "score": 5,
+            "singleQuestionValues": [],
+            "fileConfig": null,
+            "guestAnswer": {
+                "textValue": "3.5"
+            }
+        },        
+        "answerSummary": [
+            {
+                "value": "",
+                "isCorrect": false,
+                "score": 1,
+                "formSubmits": [
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 1"
+                    },
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 2"
+                    },
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 3"
+                    }
+                ]
+            },
+            {
+                "value": "4",
+                "isCorrect": false,
+                "score": 1,
+                "formSubmits": [
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 1"
+                    },
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 2"
+                    },
+                    {
+                        "id": "0de50d73-7394-43d6-9f1e-90db8de45cb2",
+                        "value": "Phản hồi 3"
+                    }
+                ]
+            }
+        ]
+    }
+]

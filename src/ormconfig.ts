@@ -4,8 +4,9 @@ import * as dotenvExpand from 'dotenv-expand';
 // Load environment variables from .env file
 dotenvExpand.expand(dotenv.config());
 import { join } from 'path';
-import { getTypeOrmConfig } from './cores/database/database.module';
 import { ConnectionOptions } from 'typeorm-seeding';
+
+import { getTypeOrmConfig } from './cores/database/database.module';
 
 const typeOrmConfig: ConnectionOptions[] = [
     {

@@ -1,24 +1,21 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InjectRepository } from '@nestjs/typeorm';
 import dayjs from 'dayjs';
+import { Repository } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
-import { PasswordService } from './password.service';
-import { LoginInput } from './dto/login.input';
-import { Token } from './dto/auth.output';
-import { Repository } from 'typeorm';
-import { env } from '../../cores/utils/env.util';
-import { CreateUserInput } from '../users/dto/create-user.input';
-import { User } from '../users/entities/user.entity';
-import { UsersService } from '../users/users.service';
-import { ForgotPasswordInput } from './dto/forgot-password.input';
-import { ForgottenPassword } from '../users/entities/forgotten-password.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { EmailService } from '../email/email.service';
-import { ResetPasswordInput } from './dto/reset-password.input';
 import { Errors } from '../../common/errors';
-import { ClsService } from 'nestjs-cls';
 import { PassWordIncorrectException } from '../../common/exceptions/business.exception';
+import { env } from '../../cores/utils/env.util';
+import { EmailService } from '../email/email.service';
+import { ForgottenPassword } from '../users/entities/forgotten-password.entity';
+import { UsersService } from '../users/users.service';
+import { Token } from './dto/auth.output';
+import { ForgotPasswordInput } from './dto/forgot-password.input';
+import { LoginInput } from './dto/login.input';
+import { ResetPasswordInput } from './dto/reset-password.input';
+import { PasswordService } from './password.service';
 
 @Injectable()
 export class AuthService {
@@ -28,18 +25,10 @@ export class AuthService {
         private passwordService: PasswordService,
         private jwtService: JwtService,
         private emailService: EmailService,
-        private readonly cls: ClsService,
     ) {}
-
-    async register(data: CreateUserInput): Promise<User> {
-        const result = await this.userService.create(data);
-        return result;
-    }
 
     async validateUser(email: string, password: string) {
         const result = await this.userService.findOneByEmail(email);
-
-        // this.cls.set('userId', result.id);
 
         const validPassword = await this.passwordService.validatePassword(result.hashedPassword, password);
 
@@ -80,13 +69,14 @@ export class AuthService {
             return tokenSession.token;
         }
 
-        throw new ForbiddenException();
+        throw new ForbiddenException('Không được quyền truy cập');
     }
 
     async createForgottenPasswordToken(email: string, userId: string): Promise<ForgottenPassword> {
         const forgottenPassword = await this.forgottenPasswordRepository.findOne({ where: { email, userId } });
 
-        if (forgottenPassword && (new Date().getTime() - forgottenPassword.createdDate.getTime()) / 60000 < 15) throw Errors.TokenJustSend();
+        if (forgottenPassword && (new Date().getTime() - forgottenPassword.updatedDate.getTime()) / 60000 < env.Int('MINUTE_WAIT_FORGOT_PASSWORD', 1))
+            throw Errors.TokenJustSend(env.Int('MINUTE_WAIT_FORGOT_PASSWORD', 1));
 
         const data = {
             email,
@@ -114,12 +104,10 @@ export class AuthService {
     }
 
     async resetPassword(data: ResetPasswordInput) {
-        var isNewPasswordChanged: boolean = false;
+        let isNewPasswordChanged: boolean = false;
 
         if (data.email && data.currentPassword) {
             const user = await this.userService.findOneByEmail(data.email);
-
-            this.cls.set('UserUpdateId', user.id);
 
             const isValidPassword = await this.passwordService.validatePassword(user.hashedPassword, data.currentPassword);
 
@@ -133,9 +121,7 @@ export class AuthService {
                 where: { newPasswordToken: data.newPasswordToken },
             });
 
-            const user = await this.userService.findOneByEmail(forgottenPassword.email);
-
-            this.cls.set('UserUpdateId', user.id);
+            // const user = await this.userService.findOneByEmail(forgottenPassword.email);
 
             if (forgottenPassword && forgottenPassword.expiredDate && forgottenPassword.expiredDate > new Date()) {
                 isNewPasswordChanged = await this.userService.setPassword(forgottenPassword.email, data.newPassword);

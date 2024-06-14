@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Nest Debug",
-            "runtimeExecutable": "C:\\Users\\ADMIN\\AppData\\Roaming\\fnm\\node-versions\\v18.19.1\\installation\\npm",
+            "runtimeExecutable": "npm",
             "runtimeArgs": ["run", "start:debug", "--", "--inspect-brk"],
             "console": "integratedTerminal",
             "restart": true,
@@ -17,10 +17,10 @@
             "autoAttachChildProcesses": true
         },
         {
-            "address": "127.0.0.1",
+            "address": "27.0.15.115",
             "localRoot": "${workspaceFolder}/dist",
             "name": "Attach to Remote",
-            "port": 9221,
+            "port": 8513,
             "remoteRoot": "/app/dist",
             "request": "attach",
             "skipFiles": ["<node_internals>/**"],

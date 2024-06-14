@@ -1,8 +1,9 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose, Type } from 'class-transformer';
-import { Role } from '../entities/role.entity';
+
 import { RoleType } from '../../../cores/constants';
 import { User } from '../../users/entities/user.entity';
-import { ApiProperty } from '@nestjs/swagger';
+import { Role } from '../entities/role.entity';
 
 @Expose()
 export class GetRoleDto extends Role {

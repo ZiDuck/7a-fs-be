@@ -1,12 +1,11 @@
-import { Injectable, applyDecorators } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
-    ValidatorConstraint,
-    ValidatorConstraintInterface,
+    isUUID,
+    registerDecorator,
     ValidationArguments,
     ValidationOptions,
-    registerDecorator,
-    isUUID,
-    IsUUID,
+    ValidatorConstraint,
+    ValidatorConstraintInterface,
 } from 'class-validator';
 import { EntityManager } from 'typeorm';
 
@@ -16,26 +15,29 @@ export class UuidExistsConstraint implements ValidatorConstraintInterface {
     constructor(private readonly entityManager: EntityManager) {}
 
     async validate(id: string | null, args: ValidationArguments): Promise<boolean> {
-        if (!id) return true;
+        if (!id) return false;
+
+        if (!isUUID(id)) return false;
+
         const model = args.constraints[0];
-        const entity = await this.entityManager.getRepository(model).findOneBy({ id });
-        return entity ? true : false;
+        // const entity = await this.entityManager.getRepository(model).findOneBy({ id });
+        // return !!entity;
+        return true;
     }
 
     defaultMessage(args: ValidationArguments) {
-        // here you can provide default error message if validation failed
-        return `Id $value does not exist in ${args.constraints[0]}`;
+        if (!isUUID(args.value)) {
+            return `${args.value} is not a valid UUID`;
+        }
+        return `Id ${args.value} does not exist in table ${args.constraints[0].name}`;
     }
 }
 
-export function IdExists(resourceTypes: { new (...args: any[]): any }, validationOptions?: ValidationOptions) {
-    return applyDecorators(IsUUID(), _IdExists(validationOptions, resourceTypes));
-}
+// export function IdExists(resourceTypes: { new (...args: any[]): any }, validationOptions?: ValidationOptions) {
+//     return applyDecorators(IsUUID(), _IdExists(validationOptions, resourceTypes));
+// }
 
-function _IdExists(
-    validationOptions: ValidationOptions,
-    resourceTypes: new (...args: any[]) => any,
-): ClassDecorator | MethodDecorator | PropertyDecorator {
+export function IdExists(resourceTypes: { new (...args: any[]): any }, validationOptions?: ValidationOptions) {
     return function (object: any, propertyName: string) {
         registerDecorator({
             name: IdExists.name,

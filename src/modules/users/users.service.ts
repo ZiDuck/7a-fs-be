@@ -1,18 +1,22 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { ClsService } from 'nestjs-cls';
+import { Not, Repository } from 'typeorm';
 
+import { PageDto } from '../../common/dtos/page.dto';
+import { PageQueryDto } from '../../common/dtos/page-query.dto';
+import { QueryDto } from '../../common/dtos/query.dto';
+import { EmailExistException, EmailNotExistException, UserNotExistException } from '../../common/exceptions/business.exception';
+import { RoleType, USER_AUDIT } from '../../cores/constants';
+import { paginate } from '../../cores/utils/paginate.util';
 import { PasswordService } from '../auth/password.service';
+import { Role } from '../roles/entities/role.entity';
 import { RolesService } from '../roles/roles.service';
-import { CreateUserInput } from './dto/create-user.input';
-import { User } from './entities/user.entity';
 import { UserSession } from '../user-sessions/entities/user-session.entity';
 import { UserSessionsService } from '../user-sessions/user-sessions.service';
+import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
-import { Role } from '../roles/entities/role.entity';
-import { EmailExistException, EmailNotExistException, UserNotExistException } from '../../common/exceptions/business.exception';
-import { RoleType } from '../../cores/constants';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
@@ -21,28 +25,31 @@ export class UsersService {
         private passwordService: PasswordService,
         private rolesService: RolesService,
         private userSessionService: UserSessionsService,
+        private readonly cls: ClsService,
     ) {}
 
-    async create(data: CreateUserInput): Promise<User> {
-        let result = await this.usersRepository.findOneBy({ email: data.email });
+    async create(data: CreateUserInput): Promise<boolean> {
+        const userExists = await this.usersRepository.findOneBy({ email: data.email });
 
-        if (result) throw new EmailExistException(data.email);
+        if (userExists) throw new EmailExistException(data.email);
 
         const hashedPassword: string = await this.passwordService.hashPassword(data.password);
 
-        const role: Role = await this.rolesService.findById(data.roleId);
+        const role: Role = await this.rolesService.findUserRole();
 
-        result = this.usersRepository.create({ ...data, hashedPassword, role });
+        const user = this.usersRepository.create({ ...data, hashedPassword, role });
 
-        await this.usersRepository.save(result);
+        const result = await this.usersRepository.save(user);
 
-        return result;
+        return result ? true : false;
     }
 
-    async findAll(): Promise<User[]> {
-        const results = await this.usersRepository.find({ relations: { role: true } });
+    async findAllPagination(query: PageQueryDto): Promise<PageDto<User>> {
+        const builder = this.usersRepository.createQueryBuilder('user').leftJoinAndSelect('user.role', 'role').orderBy('user.createdDate', 'DESC');
+        const result = await paginate(builder, query);
+        // const results = await this.usersRepository.find({ relations: { role: true } });
 
-        return results;
+        return result;
     }
 
     async findAllAdmin(): Promise<User[]> {
@@ -54,17 +61,73 @@ export class UsersService {
         return results;
     }
 
-    async findAllAdminAndUserRoles(): Promise<User[]> {
+    async findAllUser(): Promise<User[]> {
+        const results = await this.usersRepository.find();
+
+        return results;
+    }
+
+    async findAllNotCurrUser(userId: string): Promise<User[]> {
         const results = await this.usersRepository.find({
-            relations: { role: true },
-            where: { role: { value: In[(RoleType.ADMIN, RoleType.USER)] } },
+            where: {
+                id: Not(userId),
+                role: {
+                    value: RoleType.ADMIN,
+                },
+            },
         });
 
         return results;
     }
 
-    async findOne(id: string): Promise<User> {
+    async findAllAdminNotCurrUser(userId: string): Promise<User[]> {
+        const results = await this.usersRepository.find({
+            where: {
+                id: Not(userId),
+                role: { value: RoleType.ADMIN },
+            },
+        });
+
+        return results;
+    }
+
+    // async findAllAdminAndUserRoles(): Promise<User[]> {
+    //     const results = await this.usersRepository.find({
+    //         relations: { role: true },
+    //         where: { role: { value: In[(RoleType.ADMIN, RoleType.USER)] } },
+    //     });
+
+    //     return results;
+    // }
+
+    async findOneDeleted(id: string): Promise<User> {
         const result = await this.usersRepository.findOne({ where: { id: id }, relations: { role: true }, withDeleted: true });
+
+        if (!result) throw new UserNotExistException(id);
+
+        return result;
+    }
+
+    async findOneDeletedNotThrowError(id: string): Promise<User> {
+        const result = await this.usersRepository.findOne({ where: { id: id }, relations: { role: true }, withDeleted: true });
+
+        return result;
+    }
+
+    async findAllDeleted(query: PageQueryDto): Promise<PageDto<User>> {
+        const builder = this.usersRepository
+            .createQueryBuilder('user')
+            .leftJoinAndSelect('user.role', 'role')
+            .withDeleted()
+            .where('user.deletedDate is not null');
+
+        const result = await paginate(builder, query);
+
+        return result;
+    }
+
+    async findOne(id: string): Promise<User> {
+        const result = await this.usersRepository.findOne({ where: { id: id }, relations: { role: true } });
 
         if (!result) throw new UserNotExistException(id);
 
@@ -75,6 +138,18 @@ export class UsersService {
         const result = await this.usersRepository.findOne({ where: { email: email }, relations: { role: true } });
 
         if (!result) throw new EmailNotExistException(email);
+
+        return result;
+    }
+
+    async findAllByEmail(query: QueryDto): Promise<PageDto<User>> {
+        const builder = this.usersRepository.createQueryBuilder('user').leftJoinAndSelect('user.role', 'role');
+
+        if (String(query.isDeleted).toLowerCase() === 'true') {
+            builder.withDeleted().andWhere('user.deletedDate is not null');
+        }
+        builder.andWhere('user.email like :email', { email: `%${query.q}%` });
+        const result = await paginate(builder, query);
 
         return result;
     }
@@ -100,12 +175,14 @@ export class UsersService {
         return result;
     }
 
-    async update(id: string, data: UpdateUserInput): Promise<User> {
-        const result = await this.findOne(id);
+    async update(id: string, data: UpdateUserInput): Promise<boolean> {
+        await this.findOne(id);
 
-        await this.usersRepository.update(result.id, data);
+        const result = await this.usersRepository.update(id, data);
 
-        return await this.findOne(result.id);
+        this.cls.set(USER_AUDIT, id);
+
+        return result.affected ? true : false;
     }
 
     async deleteRefreshToken(id: string, refreshToken: string, userSessionId: string): Promise<boolean> {
@@ -114,7 +191,7 @@ export class UsersService {
         return result;
     }
 
-    async delete(id: string): Promise<void> {
+    async softRemove(id: string): Promise<void> {
         const deleteUser = await this.findOne(id);
 
         const result = await this.usersRepository.softRemove(deleteUser);
@@ -127,7 +204,7 @@ export class UsersService {
     }
 
     async restore(id: string): Promise<void> {
-        const restoreUser = await this.findOne(id);
+        const restoreUser = await this.findOneDeleted(id);
 
         const result = await this.usersRepository.recover(restoreUser);
 
@@ -142,5 +219,31 @@ export class UsersService {
         await this.usersRepository.update({ email }, { hashedPassword });
 
         return true;
+    }
+
+    async decentralize(userId: string, roleId: string) {
+        const user = await this.findOne(userId);
+
+        const role = await this.rolesService.findById(roleId);
+
+        user.role = role;
+
+        await this.usersRepository.save(user);
+
+        return true;
+    }
+
+    async removeOlderThan(date: string) {
+        return this.usersRepository.createQueryBuilder().delete().where('deletedDate < :date', { date }).execute();
+    }
+
+    async remove(id: string): Promise<void> {
+        const user = await this.findOneDeleted(id);
+
+        const result = await this.usersRepository.remove(user);
+
+        if (!result) throw new InternalServerErrorException();
+
+        return;
     }
 }

@@ -4,13 +4,16 @@ import { IsArray } from 'class-validator';
 export abstract class PageMetaDto<T> {
     @IsArray()
     // @ApiProperty({ isArray: true, type: T as any })
-    readonly items: T[];
+    public items: T[];
 
     @ApiProperty()
     readonly page: number;
 
     @ApiProperty()
     readonly take: number;
+
+    @ApiProperty()
+    readonly itemCount: number;
 
     @ApiProperty()
     readonly pageCount: number;
@@ -21,18 +24,11 @@ export abstract class PageMetaDto<T> {
     @ApiProperty()
     readonly hasNextPage: boolean;
 
-    // constructor({ pageOptionsDto, itemCount }: PageMetaDtoParameters) {
-    //     this.page = pageOptionsDto.page;
-    //     this.take = pageOptionsDto.take;
-    //     this.itemCount = itemCount;
-    //     this.pageCount = Math.ceil(this.itemCount / this.take);
-    //     this.hasPreviousPage = this.page > 1;
-    //     this.hasNextPage = this.page < this.pageCount;
-    // }
     constructor(items: T[], count: number, page: number, take: number) {
         this.page = page;
         this.take = take;
         this.items = items;
+        this.itemCount = count;
         this.pageCount = Math.ceil(count / this.take);
         this.hasPreviousPage = this.page > 1;
         this.hasNextPage = this.page < this.pageCount;

@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+    ftp-server:
+        build:
+            context: .
+            dockerfile: ftp.Dockerfile
+        container_name: medlux_library_ftp
+        restart: always
+        environment:
+            FTP_USER: admin
+            FTP_PASS: Tocntt7@
+            # PASV_ADDRESS: ftp-server
+            # PASV_MIN_PORT: 21100
+            # PASV_MAX_PORT: 21110
+        ports:
+            - "21:21"
+            - "20:20"
+            - "40000-40009:40000-40009"
+            # - "21100-21110:21100-21110"
+        volumes:
+            - ~/Workspace/ftp-server/ftp-data:/home/admin/files

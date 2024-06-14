@@ -1,10 +1,11 @@
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { PayloadDto } from '../dto/payload.dto';
+import { PassportStrategy } from '@nestjs/passport';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+
 import { env } from '../../../cores/utils/env.util';
 import { User } from '../../users/entities/user.entity';
 import { UsersService } from '../../users/users.service';
+import { PayloadDto } from '../dto/payload.dto';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -19,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         const email: string = payload.email;
         const user: User = await this.usersService.findOneByEmail(email);
 
-        if (!user) throw new UnauthorizedException();
+        if (!user) throw new UnauthorizedException('Người dùng không tồn tại!');
 
         return payload;
     }

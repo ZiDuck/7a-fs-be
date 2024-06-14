@@ -12,6 +12,8 @@ export interface HttpExceptionResponse {
     readonly messages?: unknown[];
 
     readonly data?: unknown;
+
+    readonly trace?: string;
 }
 
 export interface ExceptionResponse {

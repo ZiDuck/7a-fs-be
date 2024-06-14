@@ -1,4 +1,16 @@
 {
     "typescript.preferences.importModuleSpecifier": "relative",
-    "cSpell.words": ["dtos", "Mqqt", "websockets"]
+    "cSpell.words": [
+        "cloudinary",
+        "dtos",
+        "Minio",
+        "Mqqt",
+        "PUBLICDIR",
+        "streamifier",
+        "websockets"
+    ],
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "eslint.validate": ["javascript", "typescript"],
 }

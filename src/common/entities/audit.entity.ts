@@ -1,10 +1,12 @@
-import { CreateDateColumn, Entity, UpdateDateColumn, BaseEntity as TypeOrmBaseEntity } from 'typeorm';
+import { Column, Entity } from 'typeorm';
+
+import { AppBaseEntity } from './base.entity';
 
 @Entity()
-export class AuditEntity extends TypeOrmBaseEntity {
-    @CreateDateColumn()
-    createdDate: Date;
+export class AuditEntity extends AppBaseEntity {
+    @Column({ nullable: false })
+    createdBy: string;
 
-    @UpdateDateColumn()
-    updatedDate: Date;
+    @Column({ nullable: true })
+    updatedBy: string;
 }

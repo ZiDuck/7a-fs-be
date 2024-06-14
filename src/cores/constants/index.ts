@@ -3,12 +3,64 @@ export const TEST = 'test';
 export const PRODUCTION = 'production';
 
 export enum RoleType {
-  ADMIN = 'ADMIN',
-  USER = 'USER',
-  GUEST = 'GUEST',
+    ADMIN = 'ADMIN',
+    USER = 'USER',
 }
 
 export enum OrderByDirection {
-  ASC = 'ASC',
-  DESC = 'DESC',
+    ASC = 'ASC',
+    DESC = 'DESC',
 }
+
+export enum NotificationType {
+    CREATE_USER = 'CREATE_USER',
+    UPDATE_USER = 'UPDATE_USER',
+    DElETE_USER = 'DElETE_USER',
+    RESTORE_USER = 'RESTORE_USER',
+    BACKUP_DATA = 'BACKUP_DATA',
+    CREATE_FORM = 'CREATE_FORM',
+    CREATE_FORM_QUESTION = 'CREATE_FORM_QUESTION',
+    UPDATE_FORM = 'UPDATE_FORM',
+    UPDATE_FORM_QUESTION = 'UPDATE_FORM_QUESTION',
+    DELETE_FORM = 'DELETE_FORM',
+    ACCEPT_FORM = 'ACCEPT_FORM',
+    CANCEL_FORM = 'CANCEL_FORM',
+    REJECT_FORM = 'REJECT_FORM',
+    CLOSE_FORM = 'CLOSE_FORM',
+    RESTORE_FORM = 'RESTORE_FORM',
+}
+
+export enum NotificationStatus {
+    SUCCESS = 'SUCCESS',
+    FAILED = 'FAILED',
+    WARNING = 'WARNING',
+}
+
+export enum ActionType {
+    CREATE_USER = 'CREATE_USER',
+    UPDATE_USER = 'UPDATE_USER',
+    DElETE_USER = 'DElETE_USER',
+    RESTORE_USER = 'RESTORE_USER',
+    BACKUP_DATA = 'BACKUP_DATA',
+    CREATE_FORM = 'CREATE_FORM',
+    CREATE_FORM_QUESTION = 'CREATE_FORM_QUESTION',
+    UPDATE_FORM = 'UPDATE_FORM',
+    UPDATE_FORM_QUESTION = 'UPDATE_FORM_QUESTION',
+    DELETE_FORM = 'DELETE_FORM',
+    // ACCEPT_FORM = 'ACCEPT_FORM',
+    // REJECT_FORM = 'REJECT_FORM',
+    // CLOSE_FORM = 'CLOSE_FORM',
+    UPDATE_STATUS = 'UPDATE_STATUS',
+    RESTORE_FORM = 'RESTORE_FORM',
+}
+
+export enum ActionStatus {
+    SUCCESS = 'SUCCESS',
+    FAILED = 'FAILED',
+    WARNING = 'WARNING',
+}
+
+export const AUTH_LOGGING_DATA = 'AUTH_LOGGING_DATA';
+export const FORM_LOGGING_DATA = 'FORM_LOGGING_DATA';
+export const USER_AUDIT = 'USER_AUDIT';
+export const FORM_AUDIT = 'FORM_AUDIT';

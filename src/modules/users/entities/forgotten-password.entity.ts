@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
+
 import { AppBaseEntity } from '../../../common/entities/base.entity';
 import { User } from './user.entity';
 

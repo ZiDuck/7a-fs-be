@@ -9,6 +9,6 @@ test/
 .eslintignore
 
 .gitignore
-
+.github/
 # Readme
 README.md

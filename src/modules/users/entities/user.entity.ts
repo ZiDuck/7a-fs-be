@@ -1,7 +1,9 @@
-import { Entity, Column, DeleteDateColumn, OneToMany, JoinColumn, ManyToOne, Relation, OneToOne } from 'typeorm';
-import { Role } from '../../roles/entities/role.entity';
+import { Column, DeleteDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Relation } from 'typeorm';
+
 import { AppBaseEntity } from '../../../common/entities/base.entity';
-import { UserSession } from 'src/modules/user-sessions/entities/user-session.entity';
+import { Notification } from '../../notifications/entities/notification.entity';
+import { Role } from '../../roles/entities/role.entity';
+import { UserSession } from '../../user-sessions/entities/user-session.entity';
 
 @Entity()
 export class User extends AppBaseEntity {
@@ -35,6 +37,12 @@ export class User extends AppBaseEntity {
     @JoinColumn({ referencedColumnName: 'id', name: 'roleId' })
     @ManyToOne(() => Role, (role: Role) => role.users)
     role: Relation<Role>;
+
+    @OneToMany(() => Notification, (notification: Notification) => notification.sentByUserId, { cascade: true })
+    notificationsSent: Relation<Notification>[];
+
+    @OneToMany(() => Notification, (notification: Notification) => notification.receivedByUserId, { cascade: true })
+    notificationsReceived: Relation<Notification>[];
 
     public getName(): string {
         return `${this.firstName} ${this.lastName}`;

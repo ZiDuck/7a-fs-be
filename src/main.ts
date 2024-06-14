@@ -3,13 +3,16 @@ import * as dotenvExpand from 'dotenv-expand';
 // Load environment variables from .env file
 dotenvExpand.expand(dotenv.config());
 
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { StorageDriver, initializeTransactionalContext } from 'typeorm-transactional';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { useContainer } from 'class-validator';
+import { initializeTransactionalContext, StorageDriver } from 'typeorm-transactional';
+
+import { AppModule } from './app.module';
 import { BusinessExceptionFilter, HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { UnauthorizedExceptionFilter } from './common/filters/unauthorized-exception.filter';
+import extraModels from './cores/swaggers/extra-model';
 
 async function bootstrap() {
     initializeTransactionalContext({
@@ -17,6 +20,8 @@ async function bootstrap() {
     });
 
     const app = await NestFactory.create(AppModule);
+
+    app.setGlobalPrefix('api');
 
     app.enableCors({
         origin: '*',
@@ -42,8 +47,15 @@ async function bootstrap() {
 
     // allows class-validator to use NestJS dependency injection container
     useContainer(app.select(AppModule), { fallbackOnErrors: true });
+    app.useGlobalPipes(
+        new ValidationPipe({
+            // transform: true,
+        }),
+    );
 
-    const document = SwaggerModule.createDocument(app, config);
+    const document = SwaggerModule.createDocument(app, config, {
+        extraModels: extraModels,
+    });
     SwaggerModule.setup('docs', app, document);
 
     await app.listen(process.env.PORT || 3000);

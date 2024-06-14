@@ -1,0 +1,4 @@
+export enum FormCategory {
+    PATIENT_CATEGORY = 'PATIENT_CATEGORY',
+    EMPLOYEE_CATEGORY = 'EMPLOYEE_CATEGORY',
+}

@@ -1,4 +1,5 @@
 import { Controller } from '@nestjs/common';
+
 import { UserSessionsService } from './user-sessions.service';
 
 @Controller('refresh-tokens')
