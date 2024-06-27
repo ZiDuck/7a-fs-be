@@ -1,7 +1,7 @@
 version: '3.8'
 services:
     7a-fs-api-stag:
-        container_name: 7a-fs-api-stag
+        container_name: 7a-fs-api-stag-jenkin
         image: qkitsoftware/7a-fs-api:${IMAGE_STAG_TAG}
         restart: always
         networks:
@@ -18,7 +18,7 @@ services:
             - POSTGRES_USER=${POSTGRES_USER}
             - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
             - POSTGRES_DATABASE=${POSTGRES_DATABASE}
-            - POSTGRES_PORT=${POSTGRES_PORT}
+            - POSTGRES_PORT=5432
             - POSTGRES_SCHEMA=${POSTGRES_SCHEMA}
             - PORT=${PORT}
             - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
@@ -92,7 +92,8 @@ services:
 
 volumes:
     fs-data-stag:
-        name: fs-data-stag
+        # name: fs-data-stag
+        external: true
 networks:
     app-network:
         name: app-network

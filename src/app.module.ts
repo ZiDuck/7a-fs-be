@@ -45,8 +45,6 @@ import { UsersModule } from './modules/users/users.module';
         ClsModule.forRoot({
             global: true,
             middleware: {
-                // automatically mount the
-                // ClsMiddleware for all routes
                 mount: true,
             },
         }),

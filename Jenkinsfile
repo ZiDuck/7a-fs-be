@@ -12,30 +12,33 @@ pipeline {
     }
 
     stages {
-        stage('Verify') {
-            steps {
-                echo 'Verifying code checkout...'
-                sh 'ls -la'
-            }
-        }
-
         stage('Build') {
             steps {
                 script {
                     echo 'Building image for deployment..'
-                    dockerImage = docker.build registry + ":$BUILD_NUMBER" 
-                    echo 'Pushing image to dockerhub..'
-                    docker.withRegistry( '', registryCredential ) {
-                        dockerImage.push()
-                        dockerImage.push('latest')
-                    }
+                    // dockerImage = docker.build registry + ":$BUILD_NUMBER" 
+                    dockerImage = docker.build registry + ":latest" 
+                    // echo 'Pushing image to dockerhub..'
+                    // docker.withRegistry( '', registryCredential ) {
+                    //     dockerImage.push()
+                    //     dockerImage.push('latest')
+                    // }
                 }
             }
         }
+
         stage('Deploy') {
             steps {
-                echo 'Deploying models..'
-                echo 'Running a script to trigger pull and start a docker container'
+                echo 'Checking for .env file and running Docker Compose for deployment..'
+                // Check for .env file and copy from example.env if not present
+                sh '''
+                if [ ! -f .env ]; then
+                  cp example.env .env
+                fi
+
+                docker compose -f ./docker-compose.stag.yml down
+                docker compose -f ./docker-compose.stag.yml up -d
+                '''
             }
         }
     }

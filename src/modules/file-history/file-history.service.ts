@@ -33,6 +33,9 @@ export class FileHistoryService {
 
         const result = await this.fileHistoryRepository.save(image);
 
+        console.log('result: ', result);
+        
+
         return result ? true : false;
     }
 
